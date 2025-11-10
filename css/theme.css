@@ -1,0 +1,807 @@
+/**
+ * Thème DSFR pour LimeSurvey
+ * Système de Design de l'État Français
+ *
+ * Ce thème utilise DSFR-Connect Bootstrap pour adapter LimeSurvey au DSFR
+ * Documentation DSFR : https://www.systeme-de-design.gouv.fr/
+ * DSFR-Connect : https://dsfr-connect.rame.fr/
+ */
+
+/* ============================================
+   IMPORTS DSFR NATIF
+   ============================================ */
+
+/*
+ * DSFR natif v1.11
+ *
+ * NOTE: On N'utilise PAS DSFR-Connect car nos templates sont déjà
+ * en DSFR natif (fr-header, fr-btn, etc.). DSFR-Connect est fait
+ * pour convertir les classes Bootstrap, mais on a déjà tout converti.
+ *
+ * Utiliser DSFR-Connect créerait des conflits car il s'attend à des
+ * classes Bootstrap (.navbar, .btn) alors qu'on utilise des classes
+ * DSFR natives (.fr-header, .fr-btn).
+ */
+@import url('https://unpkg.com/@gouvfr/dsfr@1.11/dist/dsfr.min.css');
+
+/* Import des icônes Remix Icon (utilisées par DSFR) */
+@import url('https://unpkg.com/@gouvfr/dsfr@1.11/dist/utility/icons/icons.min.css');
+
+/* ============================================
+   VARIABLES DSFR
+   ============================================ */
+
+:root {
+    /* Couleurs DSFR */
+    --blue-france: #000091;
+    --red-marianne: #E1000F;
+    --grey-main: #3A3A3A;
+    --grey-light: #F6F6F6;
+    --grey-medium: #DDDDDD;
+
+    /* Espacements */
+    --sp-1: 0.25rem;
+    --sp-2: 0.5rem;
+    --sp-3: 1rem;
+    --sp-4: 1.5rem;
+    --sp-5: 2rem;
+    --sp-6: 3rem;
+}
+
+/* ============================================
+   NEUTRALISATION BOOTSTRAP
+   ============================================ */
+
+/*
+ * Le thème hérite de vanilla qui charge Bootstrap.
+ * On neutralise les classes Bootstrap pour éviter les conflits avec DSFR.
+ */
+
+/* Désactiver le fond gris de Bootstrap */
+.bg-light {
+    background-color: #FFFFFF !important;
+}
+
+/* Neutraliser navbar Bootstrap (on utilise fr-header) */
+.navbar {
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.navbar-light,
+.navbar-expand-md {
+    background-color: transparent !important;
+}
+
+/* Neutraliser les containers Bootstrap */
+.container,
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: 100%;
+}
+
+/* Reset des boutons Bootstrap pour laisser DSFR gérer */
+.btn:not(.fr-btn) {
+    all: unset;
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    background-color: #FFFFFF;
+}
+
+body {
+    font-family: "Marianne", Arial, sans-serif !important;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #161616;
+    background-color: #FFFFFF !important; /* Fond blanc au lieu de gris */
+    margin: 0;
+    padding: 0;
+}
+
+/* Assurer que le body et article ont un fond blanc */
+body > article {
+    background-color: #FFFFFF !important;
+}
+
+/* Forcer le fond blanc pour tous les containers principaux */
+#outerframeContainer,
+.outerframe,
+.ls-survey-container,
+.survey-question-container {
+    background-color: #FFFFFF !important;
+}
+
+/* Assurer que les containers DSFR sont blancs */
+.fr-container {
+    background-color: transparent;
+}
+
+/* ============================================
+   HEADER DSFR (Navigation Bar)
+   ============================================ */
+
+/* Header principal */
+#survey-nav.navbar {
+    background-color: #FFFFFF !important;
+    border-bottom: 1px solid #DDDDDD !important;
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 18, 0.1), 0 8px 16px -16px rgba(0, 0, 18, 0.32);
+    min-height: 5rem;
+    padding: 0 !important;
+}
+
+/* Container du header */
+#survey-nav .container-fluid {
+    max-width: 78rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Logo / Brand */
+#survey-nav .navbar-brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--blue-france) !important;
+    padding: 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#survey-nav .logo-container img {
+    max-height: 3rem;
+    width: auto;
+}
+
+/* Bouton toggle mobile */
+#survey-nav .navbar-toggler {
+    border: 1px solid #3A3A3A;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    background: transparent;
+}
+
+#survey-nav .navbar-toggler:focus {
+    outline: 2px solid var(--blue-france);
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+/* Navigation items */
+#survey-nav .navbar-nav {
+    gap: 0.5rem;
+}
+
+#survey-nav .navbar-nav .nav-item {
+    margin: 0;
+}
+
+#survey-nav .navbar-nav .nav-link {
+    color: #161616 !important;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s;
+}
+
+#survey-nav .navbar-nav .nav-link:hover,
+#survey-nav .navbar-nav .nav-link:focus {
+    background-color: #F6F6F6;
+    color: var(--blue-france) !important;
+}
+
+/* Dropdown menus */
+#survey-nav .dropdown-menu {
+    border: 1px solid #DDDDDD;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 0.25rem;
+    padding: 0.5rem 0;
+}
+
+#survey-nav .dropdown-item {
+    padding: 0.75rem 1rem;
+    color: #161616;
+    transition: background-color 0.2s;
+}
+
+#survey-nav .dropdown-item:hover,
+#survey-nav .dropdown-item:focus {
+    background-color: #F6F6F6;
+    color: var(--blue-france);
+}
+
+/* ============================================
+   CONTENEUR PRINCIPAL
+   ============================================ */
+
+#outerframeContainer {
+    background-color: var(--grey-light);
+    min-height: 100vh;
+    padding-top: 6rem; /* Espace pour le header fixed */
+}
+
+.container-fluid {
+    max-width: 78rem;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* ============================================
+   BARRE DE PROGRESSION
+   ============================================ */
+
+.progress-wrapper,
+.progress-container {
+    margin-bottom: 2rem;
+}
+
+.progress {
+    height: 0.5rem;
+    background-color: #E3E3E3;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+    background-color: var(--blue-france) !important;
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #666;
+    text-align: center;
+}
+
+/* ============================================
+   GROUPES DE QUESTIONS
+   ============================================ */
+
+.group-container,
+.ls-group {
+    margin-bottom: 3rem;
+}
+
+.group-name,
+.ls-group-name h3 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--blue-france);
+    margin-bottom: 1rem;
+    line-height: 1.25;
+}
+
+.group-description,
+.ls-group-description {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+/* ============================================
+   QUESTIONS
+   ============================================ */
+
+.question-container,
+.ls-question,
+.question-wrapper {
+    background-color: #FFFFFF;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.question-text,
+.ls-question-text,
+.questiontext {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #161616;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.question-help,
+.ls-question-help,
+.question-help-text {
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+.question-mandatory,
+.asterisk {
+    color: var(--red-marianne);
+    font-weight: 700;
+    margin-left: 0.25rem;
+}
+
+/* ============================================
+   INPUTS & FORM CONTROLS (DSFR)
+   ============================================ */
+
+/* Inputs texte */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="date"],
+input[type="time"],
+textarea,
+/* Form controls removed - now using DSFR inputs (fr-input) */
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--blue-france);
+    border-bottom-color: var(--blue-france);
+    box-shadow: inset 0 -2px 0 0 var(--blue-france);
+    background-color: #FFFFFF;
+}
+
+input[type="text"]:disabled,
+input[type="email"]:disabled,
+textarea:disabled {
+    background-color: #E5E5E5;
+    color: #929292;
+    cursor: not-allowed;
+}
+
+textarea {
+    min-height: 5rem;
+    resize: vertical;
+}
+
+/* Selects removed - now using DSFR selects (fr-select) */
+
+select:focus {
+    outline: none;
+    border-color: var(--blue-france);
+    box-shadow: inset 0 -2px 0 0 var(--blue-france);
+    background-color: #FFFFFF;
+}
+
+/* ============================================
+   RADIO BUTTONS (DSFR)
+   ============================================ */
+
+/* Container pour les radios */
+.radio-item,
+.checkbox-item,
+.answer-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    position: relative;
+}
+
+/* IMPORTANT: Dans les tableaux, ces classes ne doivent PAS avoir de flex/margin */
+table .radio-item,
+table .checkbox-item,
+table .answer-item,
+table td.radio-item,
+table td.checkbox-item,
+table td.answer-item {
+    display: table-cell !important;
+    margin-bottom: 0 !important;
+    padding: 0.5rem !important;
+    position: static !important;
+}
+
+/* ============================================
+   RADIO/CHECKBOX - DSFR NATIF
+   ============================================ */
+
+/* Le DSFR gère les radio/checkbox dans .fr-radio-group et .fr-checkbox-group */
+/* Aucun override nécessaire - le DSFR fait tout */
+
+/* Dans les tableaux, centrer les inputs */
+table input[type="radio"],
+table input[type="checkbox"] {
+    margin: 0 auto;
+}
+
+/* Fin de la section radio/checkbox */
+
+/* ============================================
+   BOUTONS (DSFR)
+   ============================================ */
+
+/* Bouton primaire - NE PAS STYLER button[type="submit"] pour laisser DSFR gérer */
+.btn-primary,
+input[type="submit"],
+.ls-button-submit,
+.button-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: "Marianne", Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+    padding: 0.5rem 1rem;
+    background-color: var(--blue-france);
+    color: #FFFFFF !important;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    box-shadow: inset 0 0 0 1px var(--blue-france);
+}
+
+/* Laisser DSFR gérer les boutons avec classes DSFR */
+
+.btn-primary:hover,
+input[type="submit"]:hover {
+    background-color: #1212FF;
+    box-shadow: inset 0 0 0 1px #1212FF;
+}
+
+.btn-primary:active {
+    background-color: #2323FF;
+}
+
+.btn-primary:focus {
+    outline: 2px solid var(--blue-france);
+    outline-offset: 2px;
+}
+
+.btn-primary:disabled {
+    background-color: #E5E5E5;
+    color: #929292 !important;
+    cursor: not-allowed;
+    box-shadow: inset 0 0 0 1px #E5E5E5;
+}
+
+/* Bouton secondaire */
+.btn-secondary,
+.btn-outline,
+.ls-button-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: "Marianne", Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    color: var(--blue-france) !important;
+    border: 1px solid var(--blue-france);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover,
+.btn-outline:hover {
+    background-color: #F5F5FE;
+}
+
+.btn-secondary:active {
+    background-color: #ECECFE;
+}
+
+.btn-secondary:focus {
+    outline: 2px solid var(--blue-france);
+    outline-offset: 2px;
+}
+
+/* Bouton tertiaire (sans bordure) */
+.btn-link,
+.btn-tertiary {
+    background: transparent;
+    border: none;
+    color: var(--blue-france) !important;
+    text-decoration: underline;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.btn-link:hover,
+.btn-tertiary:hover {
+    background-color: #F5F5FE;
+    text-decoration: underline;
+}
+
+/* ============================================
+   NAVIGATION (Previous/Next)
+   ============================================ */
+
+.survey-navigation,
+#ls-button-submit,
+.navigator-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+/* Les boutons de navigation DSFR n'ont pas besoin de ces marges */
+.fr-container .fr-btn {
+    margin-top: 0 !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+}
+
+@media (max-width: 768px) {
+    .survey-navigation {
+        flex-direction: column;
+    }
+
+    .survey-navigation button,
+    .survey-navigation .btn {
+        width: 100%;
+    }
+}
+
+/* ============================================
+   MESSAGES & ALERTES (DSFR)
+   ============================================ */
+
+.alert,
+.alert-box,
+.ls-alert {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+    border-left: 4px solid;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+.alert::before {
+    content: '';
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* Info */
+.alert-info {
+    background-color: #E8EDFF;
+    border-left-color: #0063CB;
+    color: #0063CB;
+}
+
+/* Success */
+.alert-success {
+    background-color: #B8FEC9;
+    border-left-color: #18753C;
+    color: #18753C;
+}
+
+/* Warning */
+.alert-warning {
+    background-color: #FFE9E6;
+    border-left-color: #B34000;
+    color: #B34000;
+}
+
+/* Error/Danger */
+.alert-error,
+.alert-danger {
+    background-color: #FFE9E9;
+    border-left-color: #CE0500;
+    color: #CE0500;
+}
+
+/* ============================================
+   ERREURS DE VALIDATION
+   ============================================ */
+
+.error-message,
+.em_num_answers,
+.ls-em-error {
+    color: #CE0500;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.error-message::before,
+.em_num_answers::before {
+    content: '';
+    width: 1rem;
+    height: 1rem;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3e%3cpath fill='%23CE0500' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3e%3c/svg%3e");
+    background-size: contain;
+    flex-shrink: 0;
+}
+
+input.error,
+textarea.error,
+select.error,
+.has-error input,
+.has-error textarea,
+.has-error select {
+    border-color: #CE0500;
+    border-bottom-color: #CE0500;
+}
+
+input.error:focus,
+textarea.error:focus,
+select.error:focus {
+    box-shadow: inset 0 -2px 0 0 #CE0500;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.survey-footer {
+    background-color: #F6F6F6;
+    border-top: 1px solid #DDDDDD;
+    padding: 2rem 1rem;
+    margin-top: 3rem;
+}
+
+/* Footer DSFR fond blanc (override DSFR et custom) */
+footer.fr-footer,
+.fr-footer {
+    background-color: #FFFFFF !important;
+}
+
+.survey-footer .container-fluid {
+    max-width: 78rem;
+    margin: 0 auto;
+}
+
+.survey-footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.survey-footer-links {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.survey-footer-links a {
+    color: #161616;
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+
+.survey-footer-links a:hover {
+    text-decoration: underline;
+    color: var(--blue-france);
+}
+
+.survey-footer-bottom {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #DDDDDD;
+    font-size: 0.75rem;
+    color: #666;
+    text-align: center;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    body {
+        font-size: 0.875rem;
+    }
+
+    .container-fluid {
+        padding: 1rem 0.5rem;
+    }
+
+    .question-container {
+        padding: 1rem;
+    }
+
+    .question-text {
+        font-size: 1rem;
+    }
+
+    .survey-footer-content {
+        flex-direction: column;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITÉ
+   ============================================ */
+
+.sr-only,
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border-width: 0 !important;
+}
+
+.visually-hidden-focusable:focus {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+}
+
+/* Focus visible pour tous les éléments interactifs */
+*:focus-visible {
+    outline: 2px solid var(--blue-france);
+    outline-offset: 2px;
+}
+
+/* Skip links pour accessibilité */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--blue-france);
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    z-index: 100;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* ============================================
+   UTILITAIRES
+   ============================================ */
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* Spacing utilities removed - now using DSFR utilities (fr-mb-*w, fr-mt-*w, fr-p-*w) */

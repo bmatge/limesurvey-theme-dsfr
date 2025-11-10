@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Thème DSFR (Système de Design de l'État Français)
+    Pour LimeSurvey
+-->
+<config>
+    <!-- Métadonnées du thème -->
+    <metadata>
+        <name>dsfr</name>
+        <title>DSFR - Système de Design de l'État Français</title>
+        <type>theme</type>
+        <creationDate>2025-11-06</creationDate>
+        <author>Bertrand</author>
+        <authorEmail>Bertrand</authorEmail>
+        <authorUrl>https://github.com/bmatge</authorUrl>
+        <copyright>Copyright (C) 2025. Tous droits réservés.</copyright>
+        <license>GNU General Public License version 2 or later</license>
+        <version>1.0.1</version>
+        <apiVersion>3</apiVersion>
+        <description><![CDATA[Thème conforme au Système de Design de l'État Français (DSFR) pour les enquêtes LimeSurvey. <br><a href='https://www.systeme-de-design.gouv.fr/' target='_blank'>Découvrir le DSFR</a>]]></description>
+        <lastUpdate>2025-11-07 00:00:00</lastUpdate>
+        <!-- Thème autonome 100% DSFR -->
+    </metadata>
+
+    <!-- Compatibilité -->
+    <compatibility>
+        <version>6.0</version>
+    </compatibility>
+
+    <!-- Fichiers CSS et JavaScript -->
+    <files>
+        <css>
+            <!-- On remplace le CSS de base pour utiliser DSFR -->
+            <replace>css/theme.css</replace>
+            <replace>css/custom.css</replace>
+        </css>
+        <js>
+            <replace>scripts/theme.js</replace>
+            <replace>scripts/custom.js</replace>
+        </js>
+        <print_css>
+            <replace>css/print_theme.css</replace>
+        </print_css>
+    </files>
+
+    <!-- Options du thème (configurables dans l'interface admin) -->
+    <options>
+        <!-- Options simples -->
+        <container type="buttons" category="Options générales" width="4" title="Conteneur de l'enquête" options="on|off" optionlabels="Oui|Non">on</container>
+        <showpopups type="buttons" category="Options générales" width="4" title="Afficher les popups" options="1|0|-1" optionlabels="Popup|Sur la page|Non">1</showpopups>
+        <showclearall type="buttons" category="Options générales" width="4" title="Bouton 'Tout effacer'" options="on|off" optionlabels="Oui|Non">off</showclearall>
+        <questionhelptextposition type="buttons" category="Options générales" width="4" title="Position de l'aide" options="top|bottom" optionlabels="Haut|Bas">top</questionhelptextposition>
+        <fixnumauto type="buttons" category="Options générales" width="4" title="Correction automatique des valeurs numériques" options="enable|partial|disable" optionlabels="Oui|Pour expression|Non">enable</fixnumauto>
+
+        <!-- Images et logos -->
+        <brandlogo type="buttons" category="Images" width="4" title="Afficher le logo" options="on|off" optionlabels="Oui|Non">on</brandlogo>
+        <brandlogofile type="dropdown" category="Images" width="6" title="Fichier logo" parent="brandlogo">./files/logo.png</brandlogofile>
+        <hideprivacyinfo type="buttons" category="Options générales" width="4" title="Masquer les informations de confidentialité" options="on|off" optionlabels="Oui|Non">off</hideprivacyinfo>
+
+        <!-- Variantes DSFR (thème clair/sombre) -->
+        <dsfr_theme type="dropdown" category="DSFR" title="Variante du thème" width="4">light
+            <dropdownoptions>
+                <optgroup>
+                    <option value="light">Clair</option>
+                    <option value="dark">Sombre</option>
+                </optgroup>
+            </dropdownoptions>
+        </dsfr_theme>
+
+        <!-- Options spécifiques DSFR -->
+        <show_marianne type="buttons" category="DSFR" width="4" title="Afficher Marianne" options="on|off" optionlabels="Oui|Non">on</show_marianne>
+        <show_footer_links type="buttons" category="DSFR" width="4" title="Liens de pied de page" options="on|off" optionlabels="Oui|Non">on</show_footer_links>
+    </options>
+
+    <!-- Configuration du moteur de rendu -->
+    <engine>
+        <!-- Framework CSS : DSFR au lieu de Bootstrap -->
+        <!-- Note: Le DSFR sera chargé via CDN dans theme.css ou localement si installé via npm -->
+        <cssframework>
+            <name>dsfr</name>
+            <!-- Pour le moment, on utilise toujours Bootstrap comme base, mais on va l'override -->
+            <css replace="css/bootstrap.css">css/theme.css</css>
+        </cssframework>
+
+        <!-- Répertoire des vues (fichiers .twig) -->
+        <viewdirectory>views</viewdirectory>
+
+        <!-- Répertoire des fichiers (images, fonts, etc.) -->
+        <filesdirectory>files</filesdirectory>
+
+        <!-- Packages tiers à charger -->
+        <packages>
+            <add>pjax</add>
+            <add>moment</add>
+        </packages>
+
+        <!-- Page d'options : utilise la page core par défaut -->
+        <optionspage>core</optionspage>
+
+        <!-- Configuration de l'éditeur de templates -->
+        <template_editor>
+            <screens>
+                <question>
+                    <screen_title type="data" role="title" twig="on"><![CDATA[ {{gT('Question')}} ]]></screen_title>
+                    <file type="view" role="layout">layout_global.twig</file>
+                    <file type="view" role="subview">./subviews/footer/footer.twig</file>
+                    <file type="view" role="content">./subviews/content/main.twig</file>
+                    <file type="css">./css/theme.css</file>
+                    <file type="js">./scripts/theme.js</file>
+                    <file type="css">./css/custom.css</file>
+                    <file type="js">./scripts/custom.js</file>
+                </question>
+
+                <welcome>
+                    <screen_title type="data" role="title" twig="on"><![CDATA[ {{gT('Bienvenue')}} ]]></screen_title>
+                    <file type="view" role="layout">layout_global.twig</file>
+                    <file type="view" role="content">./subviews/content/firstpage.twig</file>
+                    <file type="css">./css/theme.css</file>
+                    <file type="js">./scripts/theme.js</file>
+                </welcome>
+
+                <completed>
+                    <screen_title type="data" role="title" twig="on"><![CDATA[ {{gT('Terminé')}} ]]></screen_title>
+                    <file type="view" role="layout">layout_global.twig</file>
+                    <file type="view" role="content">./subviews/content/submit.twig</file>
+                    <file type="css">./css/theme.css</file>
+                    <file type="js">./scripts/theme.js</file>
+                </completed>
+            </screens>
+        </template_editor>
+    </engine>
+
+    <!-- Désactiver le système de mise à jour pour les thèmes personnalisés -->
+    <updaters disabled="disabled">
+    </updaters>
+
+</config>

@@ -1,0 +1,64 @@
+{#
+/**
+ * Array Texts Question - DSFR Theme
+ * Type: ; (Array with Text Fields)
+ *
+ * This template renders a table where each cell contains a text input
+ *
+ * @var $name           Question name
+ * @var $aSubQuestions  Array of subquestions (rows)
+ * @var $aAnswers       Array of answer options (columns)
+ * @var $answerwidth    Answer column width
+ * @var $basename       Base name for aria labels
+ */
+#}
+
+<!-- Array Texts (Type ;) - DSFR -->
+<div class="fr-table fr-table--bordered fr-table--responsive">
+    {% if help %}
+        <div class="fr-hint-text fr-mb-2w">{{ help }}</div>
+    {% endif %}
+
+    <table class="array-texts-table">
+        <thead>
+            <tr>
+                <th scope="col" class="col-answers">
+                    {# Empty header for row labels #}
+                </th>
+                {% for answer in aAnswers %}
+                    <th scope="col" class="col-responses" style="{% if answerwidth %}width: {{ answerwidth }}%;{% endif %}">
+                        {{ answer.answer }}
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for subquestion in aSubQuestions %}
+                <tr class="answers-row">
+                    <th scope="row" class="answertext">
+                        {{ subquestion.question }}
+                    </th>
+                    {% for answer in aAnswers %}
+                        <td class="answer-item">
+                            <div class="fr-input-group">
+                                <label class="fr-label fr-sr-only" for="answer{{ name }}{{ subquestion.title }}_{{ answer.code }}">
+                                    {{ subquestion.question }} - {{ answer.answer }}
+                                </label>
+                                <input
+                                    type="text"
+                                    class="fr-input"
+                                    name="{{ name }}{{ subquestion.title }}_{{ answer.code }}"
+                                    id="answer{{ name }}{{ subquestion.title }}_{{ answer.code }}"
+                                    value="{{ attribute(_answers, subquestion.title ~ '_' ~ answer.code) }}"
+                                    aria-labelledby="ls-question-text-{{ basename }}"
+                                />
+                            </div>
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- end of Array Texts -->

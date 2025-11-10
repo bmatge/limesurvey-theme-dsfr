@@ -1,0 +1,58 @@
+{#
+/**
+ * Array Multi-Flexi Question - DSFR Theme
+ * Type: : (Array Multi-flexi / Array Numbers)
+ *
+ * This template renders a 2D matrix with dropdowns
+ * X-axis: Subquestions, Y-axis: Second dimension, Values: Answer options
+ *
+ * @var $name           Question name
+ * @var $aSubQuestions  Array of X-axis items
+ * @var $aQuestionAttributes Y-axis items
+ * @var $aAnswers       Array of answer options (for dropdowns)
+ * @var $basename       Base name for aria labels
+ */
+#}
+
+<!-- Array Multi-Flexi (Type :) - DSFR -->
+<div class="multiflexi-question">
+    {% if help %}
+        <div class="fr-hint-text fr-mb-3w">{{ help }}</div>
+    {% endif %}
+
+    {% for subquestion in aSubQuestions %}
+        <div class="fr-callout fr-callout--grey-light fr-mb-3w">
+            <h3 class="fr-callout__title">{{ subquestion.question }}</h3>
+
+            <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
+                {% for yaxis in yAxisArray %}
+                    <div class="fr-col-12 fr-col-md-6 fr-col-lg-4">
+                        <div class="fr-select-group">
+                            <label class="fr-label" for="answer{{ name }}{{ subquestion.title }}_{{ yaxis.code }}">
+                                {{ yaxis.answer }}
+                            </label>
+                            <select
+                                class="fr-select"
+                                name="{{ name }}{{ subquestion.title }}_{{ yaxis.code }}"
+                                id="answer{{ name }}{{ subquestion.title }}_{{ yaxis.code }}"
+                                aria-labelledby="ls-question-text-{{ basename }}"
+                            >
+                                <option value="">{{ gT('Please choose...') }}</option>
+                                {% for answer in aAnswers %}
+                                    <option
+                                        value="{{ answer.code }}"
+                                        {% if attribute(_answers, subquestion.title ~ '_' ~ yaxis.code) == answer.code %}selected="selected"{% endif %}
+                                    >
+                                        {{ answer.answer }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- end of Array Multi-Flexi -->

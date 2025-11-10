@@ -1,0 +1,63 @@
+{#
+/**
+ * Array Column Question - DSFR Theme
+ * Type: H (Array Column)
+ *
+ * Similar to Array Flexible but displayed with columns/answers as rows
+ *
+ * @var $name           Question name
+ * @var $aSubQuestions  Array of subquestions (become columns)
+ * @var $aAnswers       Array of answer options (become rows)
+ * @var $basename       Base name for aria labels
+ */
+#}
+
+<!-- Array Column (Type H) - DSFR -->
+<div class="fr-table fr-table--bordered fr-table--responsive">
+    {% if help %}
+        <div class="fr-hint-text fr-mb-2w">{{ help }}</div>
+    {% endif %}
+
+    <table class="array-column-table">
+        <thead>
+            <tr>
+                <th scope="col" class="col-answers">
+                    {# Empty header for row labels #}
+                </th>
+                {% for subquestion in aSubQuestions %}
+                    <th scope="col" class="col-subquestions">
+                        {{ subquestion.question }}
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for answer in aAnswers %}
+                <tr class="answers-row">
+                    <th scope="row" class="answertext">
+                        {{ answer.answer }}
+                    </th>
+                    {% for subquestion in aSubQuestions %}
+                        <td class="answer-item">
+                            <div class="fr-radio-group">
+                                <input
+                                    type="radio"
+                                    name="{{ name }}{{ subquestion.title }}"
+                                    id="answer{{ name }}{{ subquestion.title }}-{{ answer.code }}"
+                                    value="{{ answer.code }}"
+                                    {% if attribute(_answers, subquestion.title) == answer.code %}checked="checked"{% endif %}
+                                    class="fr-radio-input"
+                                />
+                                <label for="answer{{ name }}{{ subquestion.title }}-{{ answer.code }}" class="fr-label fr-sr-only">
+                                    {{ subquestion.question }} - {{ answer.answer }}
+                                </label>
+                            </div>
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- end of Array Column -->

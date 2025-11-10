@@ -1,0 +1,85 @@
+{#
+/**
+ * Array Dual Scale Question - DSFR Theme
+ * Type: 1 (Array Dual Scale)
+ *
+ * This template renders two scales for each subquestion
+ * Typically used for Importance vs Satisfaction matrices
+ *
+ * @var $name           Question name
+ * @var $aSubQuestions  Array of subquestions
+ * @var $aAnswers0      First scale answers
+ * @var $aAnswers1      Second scale answers
+ * @var $answerwidth    Answer column width
+ * @var $basename       Base name for aria labels
+ */
+#}
+
+<!-- Array Dual Scale (Type 1) - DSFR -->
+<div class="dual-scale-question">
+    {% if help %}
+        <div class="fr-hint-text fr-mb-3w">{{ help }}</div>
+    {% endif %}
+
+    {% for subquestion in aSubQuestions %}
+        <div class="fr-callout fr-callout--grey-light fr-mb-3w">
+            <h3 class="fr-callout__title">{{ subquestion.question }}</h3>
+
+            <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
+                <!-- Scale 1 (e.g., Importance) -->
+                <div class="fr-col-12 fr-col-md-6">
+                    <fieldset class="fr-fieldset">
+                        <legend class="fr-fieldset__legend fr-text--bold">
+                            {{ scale1_label|default(gT('Scale 1')) }}
+                        </legend>
+                        <div class="fr-fieldset__content">
+                            {% for answer in aAnswers0 %}
+                                <div class="fr-radio-group">
+                                    <input
+                                        type="radio"
+                                        name="{{ name }}{{ subquestion.title }}#0"
+                                        id="answer{{ name }}{{ subquestion.title }}-0-{{ answer.code }}"
+                                        value="{{ answer.code }}"
+                                        {% if attribute(_answers, subquestion.title ~ '#0') == answer.code %}checked="checked"{% endif %}
+                                        class="fr-radio-input"
+                                    />
+                                    <label for="answer{{ name }}{{ subquestion.title }}-0-{{ answer.code }}" class="fr-label">
+                                        {{ answer.answer }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </fieldset>
+                </div>
+
+                <!-- Scale 2 (e.g., Satisfaction) -->
+                <div class="fr-col-12 fr-col-md-6">
+                    <fieldset class="fr-fieldset">
+                        <legend class="fr-fieldset__legend fr-text--bold">
+                            {{ scale2_label|default(gT('Scale 2')) }}
+                        </legend>
+                        <div class="fr-fieldset__content">
+                            {% for answer in aAnswers1 %}
+                                <div class="fr-radio-group">
+                                    <input
+                                        type="radio"
+                                        name="{{ name }}{{ subquestion.title }}#1"
+                                        id="answer{{ name }}{{ subquestion.title }}-1-{{ answer.code }}"
+                                        value="{{ answer.code }}"
+                                        {% if attribute(_answers, subquestion.title ~ '#1') == answer.code %}checked="checked"{% endif %}
+                                        class="fr-radio-input"
+                                    />
+                                    <label for="answer{{ name }}{{ subquestion.title }}-1-{{ answer.code }}" class="fr-label">
+                                        {{ answer.answer }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- end of Array Dual Scale -->

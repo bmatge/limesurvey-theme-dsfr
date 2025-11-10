@@ -1,0 +1,35 @@
+{#
+/**
+ * Multiple Numeric Question - DSFR Theme
+ * Type: K (Multiple Numeric)
+ *
+ * This template renders multiple numeric input fields
+ * Similar to Multiple Short Text but enforces numeric input
+ *
+ * @var $name           Question name
+ * @var $aSubQuestions  Array of subquestions
+ * @var $basename       Base name for aria labels
+ */
+#}
+
+<!-- Multiple Numeric (Type K) - DSFR -->
+<fieldset class="fr-fieldset" aria-labelledby="ls-question-text-{{ basename }}">
+    <div class="fr-fieldset__content">
+        <ul class="ls-answers answers-list numeric-list">
+            {% for subquestion in aSubQuestions %}
+                {{ include('./survey/questions/answer/multiplenumeric/rows/answer_row.twig', {
+                    'myfname': name ~ subquestion.title,
+                    'question': subquestion.question,
+                    'dispVal': attribute(_answers, subquestion.title),
+                    'prefix': attribute(aQuestionAttributes, subquestion.title ~ '_prefix'),
+                    'suffix': attribute(aQuestionAttributes, subquestion.title ~ '_suffix'),
+                    'min_value': attribute(aQuestionAttributes, subquestion.title ~ '_min_value'),
+                    'max_value': attribute(aQuestionAttributes, subquestion.title ~ '_max_value'),
+                    'basename': basename
+                }) }}
+            {% endfor %}
+        </ul>
+    </div>
+</fieldset>
+
+<!-- end of Multiple Numeric -->

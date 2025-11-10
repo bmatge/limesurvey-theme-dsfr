@@ -1,0 +1,85 @@
+{#
+/**
+ * Multiple Choice with Comments Question - DSFR Theme
+ * Type: P (Multiple Choice with Comments)
+ *
+ * This template renders multiple checkboxes with comment fields
+ *
+ * @var $name           Question name
+ * @var $aSubQuestions  Array of subquestions
+ * @var $sRows          Number of rows for comments
+ * @var $basename       Base name for aria labels
+ */
+#}
+
+<!-- Multiple Choice with Comments (Type P) - DSFR -->
+<fieldset class="fr-fieldset" aria-labelledby="ls-question-text-{{ basename }}">
+    <div class="fr-fieldset__content">
+        <ul class="ls-answers answers-list checkbox-list">
+            {% for subquestion in aSubQuestions %}
+                {{ include('./survey/questions/answer/multiplechoice_with_comments/rows/answer_row.twig', {
+                    'myfname': name ~ subquestion.title,
+                    'answertext': subquestion.question,
+                    'value': attribute(_answers, subquestion.title),
+                    'commentValue': attribute(_answers, subquestion.title ~ 'comment'),
+                    'sRows': sRows,
+                    'basename': basename
+                }) }}
+            {% endfor %}
+        </ul>
+
+        {% if other == 'Y' %}
+            <!-- Other option with comment -->
+            <li class="answer-item checkbox-item other-item fr-mb-3w fr-mt-4w">
+                <div class="fr-grid-row fr-grid-row--gutters">
+                    <div class="fr-col-12 fr-col-md-6">
+                        <div class="fr-checkbox-group">
+                            <input
+                                type="checkbox"
+                                name="{{ name }}other"
+                                id="answer{{ name }}other"
+                                value="Y"
+                                {% if othervalue == 'Y' %}checked="checked"{% endif %}
+                                class="fr-checkbox-input"
+                            />
+                            <label for="answer{{ name }}other" class="fr-label">
+                                {{ gT('Other:') }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="fr-col-12 fr-col-md-6">
+                        <div class="fr-input-group">
+                            <label class="fr-label fr-sr-only" for="answer{{ name }}othertext">
+                                {{ gT('Other') }}
+                            </label>
+                            <input
+                                type="text"
+                                class="fr-input"
+                                name="{{ name }}othertext"
+                                id="answer{{ name }}othertext"
+                                value="{{ othertext }}"
+                                placeholder="{{ gT('Please specify...') }}"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="fr-mt-2w">
+                    <div class="fr-input-group">
+                        <label class="fr-label fr-sr-only" for="answer{{ name }}othercomment">
+                            {{ gT('Comment for other') }}
+                        </label>
+                        <textarea
+                            class="fr-input"
+                            name="{{ name }}othercomment"
+                            id="answer{{ name }}othercomment"
+                            rows="{% if sRows %}{{ sRows }}{% else %}3{% endif %}"
+                            placeholder="{{ gT('Your comment...') }}"
+                        >{{ othercomment }}</textarea>
+                    </div>
+                </div>
+            </li>
+        {% endif %}
+    </div>
+</fieldset>
+
+<!-- end of Multiple Choice with Comments -->

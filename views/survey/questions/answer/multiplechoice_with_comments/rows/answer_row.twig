@@ -1,0 +1,55 @@
+{#
+/**
+ * Multiple Choice with Comment Row - DSFR Theme
+ * Type: P (Multiple Choice with Comments)
+ *
+ * This template renders a checkbox with associated comment field
+ *
+ * @var $name           Question name
+ * @var $myfname        Full field name
+ * @var $answertext     Answer text
+ * @var $value          Current value (Y/N)
+ * @var $commentValue   Current comment value
+ * @var $sRows          Number of rows for comment textarea
+ * @var $basename       Base name for aria labels
+ */
+#}
+
+<!-- Multiple Choice with Comment Row - DSFR -->
+<li class="answer-item checkbox-item fr-mb-3w">
+    <div class="fr-grid-row fr-grid-row--gutters">
+        <!-- Checkbox column -->
+        <div class="fr-col-12 fr-col-md-6">
+            <div class="fr-checkbox-group">
+                <input
+                    type="checkbox"
+                    name="{{ myfname }}"
+                    id="answer{{ myfname }}"
+                    value="Y"
+                    {% if value == 'Y' %}checked="checked"{% endif %}
+                    class="fr-checkbox-input"
+                />
+                <label for="answer{{ myfname }}" class="fr-label">
+                    {{ answertext }}
+                </label>
+            </div>
+        </div>
+
+        <!-- Comment column -->
+        <div class="fr-col-12 fr-col-md-6">
+            <div class="fr-input-group">
+                <label class="fr-label fr-sr-only" for="answer{{ myfname }}comment">
+                    {{ gT('Comment for:') }} {{ answertext }}
+                </label>
+                <textarea
+                    class="fr-input"
+                    name="{{ myfname }}comment"
+                    id="answer{{ myfname }}comment"
+                    rows="{% if sRows %}{{ sRows }}{% else %}3{% endif %}"
+                    placeholder="{{ gT('Your comment...') }}"
+                >{{ commentValue }}</textarea>
+            </div>
+        </div>
+    </div>
+</li>
+<!-- end of Multiple Choice with Comment Row -->

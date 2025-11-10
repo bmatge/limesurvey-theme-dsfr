@@ -1,0 +1,183 @@
+{#
+LimeSurvey - DSFR Theme
+Copyright (C) 2007-2017 The LimeSurvey Project Team / Louis Gac
+Modified for DSFR (Système de Design de l'État Français)
+
+This file renders a DSFR-compliant header navigation bar.
+For the survey navigator ("Next", "Back", etc.), see: navigation/navigator.twig
+#}
+{% if not aSurveyInfo.popupPreview %}
+    {% set ShowMenu = (aSurveyInfo.aNavigator.load.show == "Y" or aSurveyInfo.aNavigator.save.show == "Y")
+        or ((aSurveyInfo.bShowClearAll == true or aSurveyInfo.bShowClearAll == null) and aSurveyInfo.options.showclearall == 'on')
+        or (aSurveyInfo.aQuestionIndex.bShow == true and aSurveyInfo.format != 'A')
+        or (aSurveyInfo.alanguageChanger.show)
+    %}
+
+    <!-- DSFR Header -->
+    <header role="banner" class="fr-header" id="survey-header">
+        <div class="fr-header__body">
+            <div class="fr-container">
+                <div class="fr-header__body-row">
+                    <div class="fr-header__brand fr-enlarge-link">
+                        <div class="fr-header__brand-top">
+                            <div class="fr-header__logo">
+                                {% if aSurveyInfo.options.show_marianne == "on" or aSurveyInfo.options.show_marianne is not defined %}
+                                    <a href="{{ aSurveyInfo.surveyUrl }}" title="{{ gT("Home") }} - {{ aSurveyInfo.name }}">
+                                        <p class="fr-logo">République<br>Française</p>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            {% if ShowMenu %}
+                                <div class="fr-header__navbar">
+                                    <button class="fr-btn--menu fr-btn"
+                                            data-fr-opened="false"
+                                            aria-controls="modal-header-menu"
+                                            aria-haspopup="menu"
+                                            id="button-menu"
+                                            title="{{ gT("Menu") }}">
+                                        {{ gT("Menu") }}
+                                    </button>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="fr-header__service">
+                            <p class="fr-header__service-title">{{ aSurveyInfo.name }}</p>
+                            {% if aSurveyInfo.description %}
+                                <p class="fr-header__service-tagline">{{ aSurveyInfo.description|striptags }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if ShowMenu %}
+                        <div class="fr-header__tools">
+                            <div class="fr-header__tools-links">
+                                <ul class="fr-btns-group">
+                                    {% if aSurveyInfo.aNavigator.save.show == "Y" %}
+                                        <li>
+                                            <a class="fr-btn fr-btn--secondary fr-btn--sm fr-icon-save-line fr-btn--icon-left"
+                                               href="{{ aSurveyInfo.aNavigator.save.url }}"
+                                               title="{{ gT("Save your responses so far") }}">
+                                                {{ gT("Save") }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+
+                                    {% if ((aSurveyInfo.bShowClearAll == true or aSurveyInfo.bShowClearAll == null) and aSurveyInfo.options.showclearall == 'on') %}
+                                        <li>
+                                            <a class="fr-btn fr-btn--tertiary fr-btn--sm fr-icon-delete-line fr-btn--icon-left"
+                                               href="{{ aSurveyInfo.clearallurl }}"
+                                               title="{{ gT("Clear all") }}">
+                                                {{ gT("Clear all") }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+
+                                    {% if aSurveyInfo.aQuestionIndex.bShow == true and aSurveyInfo.format != 'A' %}
+                                        <li>
+                                            <a class="fr-link fr-icon-list-unordered fr-link--icon-left"
+                                               href="#question-index-modal"
+                                               data-fr-opened="false"
+                                               aria-controls="question-index-modal"
+                                               title="{{ gT("Question index") }}">
+                                                {{ gT("Question index") }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+
+                                    {% if aSurveyInfo.alanguageChanger.show %}
+                                        <li>
+                                            <div class="fr-select-group">
+                                                <select class="fr-select fr-select--sm"
+                                                        id="language-changer"
+                                                        name="lang"
+                                                        aria-label="{{ gT("Choose language") }}"
+                                                        onchange="if(this.value)window.location.href=this.value">
+                                                    {% for language in aSurveyInfo.alanguageChanger.aListLang %}
+                                                        <option value="{{ language.url }}"
+                                                                {% if language.code == aSurveyInfo.languagecode %}selected{% endif %}>
+                                                            {{ language.language }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if ShowMenu %}
+            <div class="fr-header__menu fr-modal" id="modal-header-menu" aria-labelledby="button-menu">
+                <div class="fr-container">
+                    <button class="fr-btn--close fr-btn" aria-controls="modal-header-menu" title="{{ gT("Close") }}">
+                        {{ gT("Close") }}
+                    </button>
+                    <div class="fr-header__menu-links">
+                        <ul class="fr-btns-group fr-btns-group--inline-md">
+                            {% if aSurveyInfo.aNavigator.save.show == "Y" %}
+                                <li>
+                                    <a class="fr-btn fr-icon-save-line fr-btn--icon-left"
+                                       href="{{ aSurveyInfo.aNavigator.save.url }}">
+                                        {{ gT("Save") }}
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if aSurveyInfo.aNavigator.load.show == "Y" %}
+                                <li>
+                                    <a class="fr-btn fr-icon-upload-2-line fr-btn--icon-left"
+                                       href="{{ aSurveyInfo.aNavigator.load.url }}">
+                                        {{ gT("Load unfinished survey") }}
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if ((aSurveyInfo.bShowClearAll == true or aSurveyInfo.bShowClearAll == null) and aSurveyInfo.options.showclearall == 'on') %}
+                                <li>
+                                    <a class="fr-btn fr-icon-delete-line fr-btn--icon-left"
+                                       href="{{ aSurveyInfo.clearallurl }}">
+                                        {{ gT("Clear all") }}
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if aSurveyInfo.aQuestionIndex.bShow == true and aSurveyInfo.format != 'A' %}
+                                <li>
+                                    <a class="fr-link fr-icon-list-unordered fr-link--icon-left"
+                                       href="#question-index-modal"
+                                       data-fr-opened="false"
+                                       aria-controls="question-index-modal">
+                                        {{ gT("Question index") }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+
+                        {% if aSurveyInfo.alanguageChanger.show %}
+                            <div class="fr-mt-4w">
+                                <label class="fr-label" for="language-changer-mobile">{{ gT("Choose language") }}</label>
+                                <div class="fr-select-group">
+                                    <select class="fr-select"
+                                            id="language-changer-mobile"
+                                            name="lang"
+                                            onchange="if(this.value)window.location.href=this.value">
+                                        {% for language in aSurveyInfo.alanguageChanger.aListLang %}
+                                            <option value="{{ language.url }}"
+                                                    {% if language.code == aSurveyInfo.languagecode %}selected{% endif %}>
+                                                {{ language.language }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </header>
+{% endif %}

@@ -1,0 +1,190 @@
+{#
+/**
+ * Ranking Question - DSFR Theme
+ * Type: R (Ranking)
+ *
+ * This template renders a drag-and-drop ranking interface
+ * Users rank items by moving them between two lists
+ *
+ * @var $name           Question name
+ * @var $aAnswers       Array of answer options to rank
+ * @var $answerwidth    Answer column width
+ * @var $rankvalue      Current ranking values
+ * @var $basename       Base name for aria labels
+ */
+#}
+
+<!-- Ranking (Type R) - DSFR -->
+<div class="ranking-question">
+    {% if help %}
+        <div class="fr-hint-text fr-mb-3w">{{ help }}</div>
+    {% endif %}
+
+    <div class="fr-grid-row fr-grid-row--gutters">
+        <!-- Available choices (left column) -->
+        <div class="fr-col-12 fr-col-md-6">
+            <div class="fr-callout fr-callout--grey-light">
+                <p class="fr-callout__title">{{ gT('Available choices') }}</p>
+                <p class="fr-hint-text fr-mb-2w">{{ gT('Click to select, then click "Add to ranking" →') }}</p>
+
+                <ul id="ranking-source-{{ name }}" class="ranking-source-list" role="listbox" aria-label="{{ gT('Available choices') }}">
+                    {% for answer in aAnswers %}
+                        <li class="ranking-item fr-mb-2w" data-code="{{ answer.code }}" role="option">
+                            <button
+                                type="button"
+                                class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-arrow-right-line ranking-add-btn"
+                                onclick="addToRanking('{{ name }}', '{{ answer.code }}')"
+                                id="source-{{ name }}-{{ answer.code }}"
+                            >
+                                {{ answer.answer }}
+                            </button>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Ranked choices (right column) -->
+        <div class="fr-col-12 fr-col-md-6">
+            <div class="fr-callout">
+                <p class="fr-callout__title">{{ gT('Your ranking') }}</p>
+                <p class="fr-hint-text fr-mb-2w">{{ gT('Order by preference (1 = most preferred)') }}</p>
+
+                <ol id="ranking-target-{{ name }}" class="ranking-target-list" role="listbox" aria-label="{{ gT('Your ranking') }}">
+                    {% if rankvalue is defined and rankvalue is not empty %}
+                        {% for rank, code in rankvalue %}
+                            <li class="ranking-item ranked fr-mb-2w" data-code="{{ code }}" data-rank="{{ rank }}" role="option">
+                                <div class="fr-grid-row fr-grid-row--middle">
+                                    <div class="fr-col-2 fr-text--center">
+                                        <strong>{{ rank }}</strong>
+                                    </div>
+                                    <div class="fr-col-7">
+                                        {{ aAnswers[code].answer }}
+                                    </div>
+                                    <div class="fr-col-3 fr-text--right">
+                                        <button
+                                            type="button"
+                                            class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-arrow-left-line ranking-remove-btn"
+                                            onclick="removeFromRanking('{{ name }}', '{{ code }}')"
+                                            title="{{ gT('Remove') }}"
+                                        >
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-arrow-up-line"
+                                            onclick="moveUp('{{ name }}', '{{ code }}')"
+                                            title="{{ gT('Move up') }}"
+                                            {% if rank == 1 %}disabled{% endif %}
+                                        >
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-arrow-down-line"
+                                            onclick="moveDown('{{ name }}', '{{ code }}')"
+                                            title="{{ gT('Move down') }}"
+                                        >
+                                        </button>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="{{ name }}[]" value="{{ code }}" />
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="ranking-empty fr-text--center fr-p-3w">
+                            <em>{{ gT('No items ranked yet. Select items from the left.') }}</em>
+                        </li>
+                    {% endif %}
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Simple ranking management functions
+function addToRanking(qname, code) {
+    const sourceBtn = document.getElementById('source-' + qname + '-' + code);
+    const targetList = document.getElementById('ranking-target-' + qname);
+    const sourceList = document.getElementById('ranking-source-' + qname);
+
+    // Remove from source
+    sourceBtn.parentElement.style.display = 'none';
+
+    // Add to target
+    const rank = targetList.querySelectorAll('.ranked').length + 1;
+    const li = document.createElement('li');
+    li.className = 'ranking-item ranked fr-mb-2w';
+    li.dataset.code = code;
+    li.dataset.rank = rank;
+    li.innerHTML = `
+        <div class="fr-grid-row fr-grid-row--middle">
+            <div class="fr-col-2 fr-text--center"><strong>${rank}</strong></div>
+            <div class="fr-col-7">${sourceBtn.textContent}</div>
+            <div class="fr-col-3 fr-text--right">
+                <button type="button" class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-arrow-left-line" onclick="removeFromRanking('${qname}', '${code}')" title="{{ gT('Remove') }}"></button>
+                <button type="button" class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-arrow-up-line" onclick="moveUp('${qname}', '${code}')" title="{{ gT('Move up') }}"></button>
+                <button type="button" class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-arrow-down-line" onclick="moveDown('${qname}', '${code}')" title="{{ gT('Move down') }}"></button>
+            </div>
+        </div>
+        <input type="hidden" name="${qname}[]" value="${code}" />
+    `;
+    targetList.appendChild(li);
+
+    // Remove empty message if exists
+    const emptyMsg = targetList.querySelector('.ranking-empty');
+    if (emptyMsg) emptyMsg.remove();
+}
+
+function removeFromRanking(qname, code) {
+    const sourceBtn = document.getElementById('source-' + qname + '-' + code);
+    const targetList = document.getElementById('ranking-target-' + qname);
+    const targetItem = targetList.querySelector('[data-code="' + code + '"]');
+
+    // Remove from target
+    if (targetItem) targetItem.remove();
+
+    // Show in source
+    sourceBtn.parentElement.style.display = 'block';
+
+    // Renumber remaining items
+    const rankedItems = targetList.querySelectorAll('.ranked');
+    rankedItems.forEach((item, index) => {
+        item.dataset.rank = index + 1;
+        item.querySelector('strong').textContent = index + 1;
+    });
+
+    // Show empty message if no items
+    if (rankedItems.length === 0) {
+        targetList.innerHTML = '<li class="ranking-empty fr-text--center fr-p-3w"><em>{{ gT("No items ranked yet. Select items from the left.") }}</em></li>';
+    }
+}
+
+function moveUp(qname, code) {
+    const targetList = document.getElementById('ranking-target-' + qname);
+    const item = targetList.querySelector('[data-code="' + code + '"]');
+    if (item && item.previousElementSibling) {
+        targetList.insertBefore(item, item.previousElementSibling);
+        renumberRanking(qname);
+    }
+}
+
+function moveDown(qname, code) {
+    const targetList = document.getElementById('ranking-target-' + qname);
+    const item = targetList.querySelector('[data-code="' + code + '"]');
+    if (item && item.nextElementSibling) {
+        targetList.insertBefore(item.nextElementSibling, item);
+        renumberRanking(qname);
+    }
+}
+
+function renumberRanking(qname) {
+    const targetList = document.getElementById('ranking-target-' + qname);
+    const rankedItems = targetList.querySelectorAll('.ranked');
+    rankedItems.forEach((item, index) => {
+        item.dataset.rank = index + 1;
+        item.querySelector('strong').textContent = index + 1;
+    });
+}
+</script>
+
+<!-- end of Ranking -->

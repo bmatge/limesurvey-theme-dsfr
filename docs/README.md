@@ -1,189 +1,174 @@
 # Thème DSFR pour LimeSurvey
 
-Thème conforme au **Système de Design de l'État Français (DSFR)** pour les enquêtes LimeSurvey.
+Thème LimeSurvey conforme au [Système de Design de l'État Français (DSFR)](https://www.systeme-de-design.gouv.fr/).
 
-## 🎨 À propos
+## Description
 
-Ce thème applique les standards du [Système de Design de l'État Français](https://www.systeme-de-design.gouv.fr/) aux enquêtes LimeSurvey, garantissant :
+Ce thème permet de créer des enquêtes LimeSurvey respectant les standards du DSFR, incluant :
 
-- ✅ Conformité aux normes de l'État Français
-- ✅ Accessibilité RGAA
-- ✅ Responsive design
-- ✅ Thème clair/sombre
-- ✅ Compatibilité avec tous les types de questions LimeSurvey
+- Design conforme aux normes de l'État français
+- Accessibilité RGAA optimisée
+- Mode clair/sombre
+- Affichage responsive (mobile, tablette, desktop)
+- Support complet des types de questions LimeSurvey
+- Styles d'impression optimisés
 
-## 📦 Installation
+## Pré-requis
 
-### Avec Docker (recommandé pour le développement)
+- LimeSurvey 6.0 ou supérieur
+- Navigateur moderne supportant le DSFR
 
-1. **Cloner le dépôt** (si ce n'est pas déjà fait)
+## Installation
+
+### Méthode 1 : Installation manuelle
+
+1. Téléchargez ce repository (via Git ou ZIP)
+2. Copiez le dossier complet dans le répertoire des thèmes de votre installation LimeSurvey :
+   ```
+   /chemin/vers/limesurvey/themes/survey/dsfr/
+   ```
+3. Connectez-vous à l'interface d'administration LimeSurvey
+4. Allez dans **Configuration** → **Thèmes**
+5. Le thème "DSFR" devrait apparaître dans la liste
+6. Activez-le pour votre enquête
+
+### Méthode 2 : Installation via Git
+
 ```bash
-git clone [url-du-repo]
-cd LimeSurvey-DSFR
+cd /chemin/vers/limesurvey/themes/survey/
+git clone https://github.com/bmatge/limesurvey-theme-dsfr.git dsfr
 ```
 
-2. **Démarrer Docker**
-```bash
-docker-compose up -d
-```
+## Configuration
 
-3. **Accéder à LimeSurvey**
-   - URL : http://localhost:8080
-   - Identifiants admin : `admin` / `admin`
-
-4. **Activer le thème**
-   - Connectez-vous à l'interface d'administration
-   - Allez dans **Configuration** > **Thèmes**
-   - Sélectionnez le thème **DSFR** pour vos enquêtes
-
-### Installation manuelle
-
-Si vous avez déjà une instance LimeSurvey :
-
-1. Copiez le dossier `themes/survey/dsfr` vers votre installation LimeSurvey
-2. Dans l'admin LimeSurvey : **Configuration** > **Thèmes**
-3. Le thème DSFR apparaîtra dans la liste des thèmes disponibles
-
-## 🚀 Développement en temps réel
-
-Grâce au montage de volume Docker, vos modifications sont **instantanément visibles** :
-
-1. **Modifiez les fichiers** dans `themes/survey/dsfr/`
-   - CSS : `css/theme.css` ou `css/custom.css`
-   - JavaScript : `scripts/theme.js` ou `scripts/custom.js`
-
-2. **Rechargez la page** dans votre navigateur → les changements apparaissent immédiatement
-
-3. **Pour les modifications de config.xml** :
-   - Allez dans l'admin LimeSurvey
-   - **Configuration** > **Thèmes** > **DSFR** > **Réinitialiser**
-
-## 📁 Structure du thème
-
-```
-themes/survey/dsfr/
-├── config.xml              # Configuration du thème
-├── css/
-│   ├── theme.css          # Styles DSFR principaux
-│   ├── custom.css         # Vos styles personnalisés
-│   └── print_theme.css    # Styles d'impression
-├── scripts/
-│   ├── theme.js           # JavaScript DSFR
-│   └── custom.js          # Vos scripts personnalisés
-├── files/                  # Ressources (logos, images)
-├── views/                  # Templates Twig (optionnel)
-└── README.md              # Ce fichier
-```
-
-## ⚙️ Configuration
-
-Le thème propose plusieurs options configurables dans l'interface d'administration :
+Le thème propose plusieurs options configurables depuis l'interface d'administration LimeSurvey :
 
 ### Options générales
 - **Conteneur de l'enquête** : Activer/désactiver le conteneur
-- **Afficher les popups** : Gestion des messages
-- **Position de l'aide** : Haut ou bas des questions
+- **Affichage des popups** : Popup, sur la page, ou désactivé
+- **Bouton "Tout effacer"** : Afficher ou masquer
+- **Position de l'aide** : Haut ou bas
+- **Logo de marque** : Afficher et personnaliser le logo
 
 ### Options DSFR
 - **Variante du thème** : Clair ou sombre
-- **Afficher Marianne** : Logo de la République Française
-- **Liens de pied de page** : Mentions légales, accessibilité, etc.
+- **Afficher Marianne** : Logo officiel République Française
+- **Liens de pied de page** : Activer/désactiver
 
-## 🎨 Personnalisation
+## Types de questions supportés
 
-### CSS personnalisé
+Le thème supporte tous les types de questions LimeSurvey. Voir [QUESTION_TYPES_COMPATIBILITY.md](QUESTION_TYPES_COMPATIBILITY.md) pour la liste complète et les détails d'implémentation.
 
-Utilisez `css/custom.css` pour vos styles spécifiques :
+Types testés et validés :
+- Questions à choix unique et multiple
+- Questions matricielles
+- Questions textuelles (courtes et longues)
+- Questions numériques
+- Questions oui/non
+- Échelles de Likert
+- Et bien d'autres...
 
-```css
-/* Exemple : modifier la couleur primaire */
-:root {
-    --limesurvey-primary: #000091; /* Bleu France */
-}
+## Fichier de test
 
-/* Ajouter vos styles personnalisés */
-.ma-classe-custom {
-    /* ... */
-}
+Un fichier de test complet est fourni : [test_dsfr_all_question_types.lss](test_dsfr_all_question_types.lss)
+
+Pour l'utiliser :
+1. Importez ce fichier dans LimeSurvey (**Enquêtes** → **Créer, importer ou copier une enquête**)
+2. Activez le thème DSFR pour cette enquête
+3. Testez tous les types de questions
+
+Instructions détaillées : [CREATE_TEST_SURVEY.md](CREATE_TEST_SURVEY.md)
+
+## Documentation
+
+La documentation complète est disponible dans le dossier [docs/](docs/) :
+
+- [Architecture et décisions techniques](docs/ARCHITECTURE-DECISION.md)
+- [Statut du projet](docs/STATUS.md)
+- [Guide de test](docs/TESTING.md)
+- [Migration Bootstrap vers DSFR](MIGRATION_BOOTSTRAP_TO_DSFR.md)
+- [Problèmes connus](docs/KNOWN-ISSUES.md)
+
+## Structure du projet
+
+```
+dsfr/
+├── config.xml              # Configuration du thème
+├── css/                    # Styles CSS
+│   ├── theme.css          # Styles principaux DSFR
+│   ├── custom.css         # Personnalisations
+│   └── print_theme.css    # Styles d'impression
+├── scripts/               # JavaScript
+│   ├── theme.js           # Scripts principaux
+│   └── custom.js          # Scripts personnalisés
+├── views/                 # Templates Twig
+│   ├── layout_*.twig      # Layouts principaux
+│   └── subviews/          # Composants réutilisables
+├── survey/                # Templates de questions
+│   └── questions/
+│       └── answer/        # Réponses par type de question
+├── files/                 # Assets (logos, images)
+└── docs/                  # Documentation
 ```
 
-### JavaScript personnalisé
+## Développement
 
-Utilisez `scripts/custom.js` pour vos scripts :
+### Prérequis développement
 
-```javascript
-(function() {
-    'use strict';
+- Node.js et npm (pour les outils de développement)
+- Connaissance du système DSFR
+- Connaissance de Twig (moteur de templates LimeSurvey)
 
-    // Votre code ici
-
-})();
-```
-
-## 🔧 Commandes Docker utiles
+### Configuration de l'environnement
 
 ```bash
-# Démarrer les conteneurs
-docker-compose up -d
+# Installer les dépendances (si nécessaire)
+npm install
 
-# Voir les logs
-docker-compose logs -f limesurvey
-
-# Arrêter les conteneurs
-docker-compose down
-
-# Arrêter et supprimer les données
-docker-compose down -v
-
-# Redémarrer après des changements
-docker-compose restart limesurvey
+# Le thème utilise :
+# - Prettier pour le formatage
+# - Stylelint pour la validation CSS
+# - EditorConfig pour la cohérence de style
 ```
 
-## 📚 Ressources
+### Contribuer
 
-- [Documentation DSFR](https://www.systeme-de-design.gouv.fr/)
-- [Documentation LimeSurvey](https://manual.limesurvey.org/)
-- [Guide des thèmes LimeSurvey](https://manual.limesurvey.org/Themes)
-- [Composants DSFR](https://www.systeme-de-design.gouv.fr/composants)
+Les contributions sont les bienvenues ! Merci de :
 
-## 🐛 Dépannage
-
-### Le thème n'apparaît pas dans la liste
-
-1. Vérifiez que le dossier `themes/survey/dsfr` existe
-2. Vérifiez que `config.xml` est valide
-3. Videz le cache LimeSurvey : **Configuration** > **Paramètres globaux** > **Vider le cache**
-
-### Les modifications CSS/JS ne s'appliquent pas
-
-1. Rechargez la page avec **Ctrl + Shift + R** (vidage du cache navigateur)
-2. Vérifiez les erreurs dans la console du navigateur (F12)
-3. Pour `config.xml`, réinitialisez le thème dans l'admin
-
-### Le DSFR ne se charge pas
-
-1. Vérifiez votre connexion internet (le CSS/JS est chargé via CDN)
-2. Consultez la console du navigateur pour les erreurs de chargement
-3. Pour une installation hors ligne, installez le DSFR via npm
-
-## 🤝 Contribution
-
-Les contributions sont les bienvenues ! N'hésitez pas à :
-
-1. Forker le projet
-2. Créer une branche (`git checkout -b feature/amelioration`)
-3. Commiter vos changements (`git commit -m 'Ajout d'une fonctionnalité'`)
-4. Pousser vers la branche (`git push origin feature/amelioration`)
+1. Fork le projet
+2. Créer une branche pour votre fonctionnalité (`git checkout -b feature/AmazingFeature`)
+3. Committer vos changements (`git commit -m 'Add some AmazingFeature'`)
+4. Pusher vers la branche (`git push origin feature/AmazingFeature`)
 5. Ouvrir une Pull Request
 
-## 📄 Licence
+## Migration depuis Bootstrap
+
+Si vous avez un thème Bootstrap existant, consultez [MIGRATION_BOOTSTRAP_TO_DSFR.md](MIGRATION_BOOTSTRAP_TO_DSFR.md) pour les instructions de migration.
+
+## Licence
 
 GNU General Public License version 2 or later
 
-## 📧 Contact
+## Auteur
 
-Pour toute question ou suggestion, n'hésitez pas à ouvrir une issue sur GitHub.
+**Bertrand Matge**
+- GitHub: [@bmatge](https://github.com/bmatge)
+
+## Ressources
+
+- [Documentation DSFR](https://www.systeme-de-design.gouv.fr/)
+- [LimeSurvey Manual](https://manual.limesurvey.org/)
+- [Guide des thèmes LimeSurvey](https://manual.limesurvey.org/Themes)
+
+## Changelog
+
+### Version 1.0.1 (2025-11-07)
+- Migration complète Bootstrap → DSFR
+- Support de tous les types de questions
+- Styles d'impression optimisés
+- Documentation complète
+- Fichier de test avec tous les types de questions
 
 ---
 
-**Note** : Ce thème est en cours de développement. Les retours et contributions sont appréciés !
+**Note** : Ce thème est indépendant et n'est pas officiellement affilié au DSFR ou à l'État français. Il respecte les standards du DSFR pour faciliter la création d'enquêtes conformes aux normes gouvernementales françaises.

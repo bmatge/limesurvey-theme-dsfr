@@ -1,0 +1,15 @@
+# Fichiers à exclure des releases GitHub (archives ZIP/TAR)
+
+# Documentation (utile pour le développement, pas pour l'installation du thème)
+docs/ export-ignore
+
+# Fichier de test (utile pour le développement, pas pour l'installation du thème)
+test_dsfr_all_question_types.lss export-ignore
+
+# Fichiers de configuration du développement
+.editorconfig export-ignore
+.eslintrc.json export-ignore
+.prettierrc.json export-ignore
+.stylelintrc.json export-ignore
+.gitignore export-ignore
+.gitattributes export-ignore

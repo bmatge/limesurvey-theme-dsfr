@@ -138,10 +138,12 @@
             }
         });
 
+
+
         // Ajouter les classes DSFR aux inputs
         document.querySelectorAll('.form-control').forEach(function(input) {
             if (!input.classList.contains('dsfr-input')) {
-                input.classList.add('dsfr-input');
+                input.classList.add('fr-input');
             }
         });
 

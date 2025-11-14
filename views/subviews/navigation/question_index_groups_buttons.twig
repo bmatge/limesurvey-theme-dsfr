@@ -3,6 +3,7 @@
     Copyright (C) 2018 The LimeSurvey Project Team
     This file render group index
 #}
+{% if aSurveyInfo.aQuestionIndex and aSurveyInfo.aQuestionIndex.items %}
 <div class="list-group index-button-full">
   <div class="list-group-item">
       <div class="h4 list-group-item-heading">{{ gT("Question index") }}</div>
@@ -21,3 +22,4 @@
     <button type="submit" name="move" value="{{ indexItem.step }}" class="list-group-item {{ indexItem.coreClass }} {{ templateClass }}" >{{ indexItem.text }}</button>
   {% endfor %}
 </div>
+{% endif %}

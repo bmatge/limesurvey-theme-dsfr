@@ -796,3 +796,59 @@ footer.fr-footer,
 }
 
 /* Spacing utilities removed - now using DSFR utilities (fr-mb-*w, fr-mt-*w, fr-p-*w) */
+
+/* ============================================
+   TABLEAUX LIMESURVEY (Sans JavaScript DSFR)
+   ============================================ */
+
+/**
+ * Classes personnalisées pour les tableaux de questions LimeSurvey
+ * On n'utilise PAS fr-table car ça déclenche le JavaScript du DSFR
+ * qui transforme/vide le contenu. On reprend juste le style visuel.
+ */
+
+.ls-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+}
+
+.ls-table-bordered {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--border-default-grey);
+}
+
+.ls-table-bordered th,
+.ls-table-bordered td {
+    padding: 0.75rem;
+    border: 1px solid var(--border-default-grey);
+    text-align: left;
+    vertical-align: middle;
+}
+
+.ls-table-bordered thead th {
+    background-color: var(--background-alt-grey);
+    font-weight: 700;
+    color: var(--text-title-grey);
+}
+
+.ls-table-bordered tbody tr:nth-child(even) {
+    background-color: var(--background-alt-grey);
+}
+
+.ls-table-bordered tbody tr:hover {
+    background-color: var(--background-default-grey-hover);
+}
+
+/* Responsive sur petits écrans */
+@media (max-width: 768px) {
+    .ls-table-wrapper {
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .ls-table-bordered {
+        min-width: 600px;
+    }
+}

@@ -139,6 +139,14 @@
         });
 
 
+
+        // Ajouter les classes DSFR aux inputs
+        document.querySelectorAll('.form-control').forEach(function(input) {
+            if (!input.classList.contains('dsfr-input')) {
+                input.classList.add('fr-input');
+            }
+        });
+
         // Améliorer les radio/checkbox
         document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(function(input) {
             const parent = input.closest('.radio-item, .checkbox-item, .answer-item');

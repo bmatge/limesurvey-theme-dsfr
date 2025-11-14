@@ -3,6 +3,7 @@
     Copyright (C) 2018 The LimeSurvey Project Team
     This file render question index
 #}
+{% if aSurveyInfo.aQuestionIndex and aSurveyInfo.aQuestionIndex.items %}
 <div class="list-group index-button index-button-{{ aSurveyInfo.aQuestionIndex.type }}">
     <div class="list-group-item">
         <div class="h4 list-group-item-heading">{{ gT("Question index") }}</div>
@@ -30,3 +31,4 @@
     </div>
     {% endfor %}
 </div>
+{% endif %}

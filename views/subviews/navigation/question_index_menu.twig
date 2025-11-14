@@ -25,7 +25,7 @@ There is two possible displays for index, depending on Survey Mode:
 
 {# Question index in group by group mode #}
 
-{% if (aSurveyInfo.aQuestionIndex.bShow == true) %}
+{% if aSurveyInfo.aQuestionIndex and (aSurveyInfo.aQuestionIndex.bShow == true) %}
     {% if aSurveyInfo.format == 'G' %}
         <!-- Question index, group, {{ aSurveyInfo.aQuestionIndex.type }} -->
         <li class="dropdown nav-item ls-no-js-hidden fr-px-2w index-menu-{{ aSurveyInfo.aQuestionIndex.type }}">

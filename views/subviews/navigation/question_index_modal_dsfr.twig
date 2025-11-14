@@ -3,7 +3,7 @@ LimeSurvey - DSFR Theme
 Question Index Modal avec Sommaire DSFR
 #}
 
-{% if (aSurveyInfo.aQuestionIndex.bShow == true) and (aSurveyInfo.format != 'A') %}
+{% if aSurveyInfo.aQuestionIndex and (aSurveyInfo.aQuestionIndex.bShow == true) and (aSurveyInfo.format != 'A') %}
     <!-- DSFR Modal for Question Index -->
     <dialog id="question-index-modal" class="fr-modal" aria-labelledby="question-index-modal-title">
         <div class="fr-container fr-container--fluid fr-fr-container">

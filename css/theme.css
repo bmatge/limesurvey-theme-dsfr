@@ -1,0 +1,1873 @@
+/**
+ * Thème DSFR pour LimeSurvey
+ * Système de Design de l'État Français
+ *
+ * Ce thème utilise DSFR-Connect Bootstrap pour adapter LimeSurvey au DSFR
+ * Documentation DSFR : https://www.systeme-de-design.gouv.fr/
+ * DSFR-Connect : https://dsfr-connect.rame.fr/
+ */
+
+/* ============================================
+   IMPORTS DSFR NATIF
+   ============================================ */
+
+/*
+ * DSFR natif v1.11 - RESSOURCES LOCALES
+ *
+ * Les ressources DSFR sont hébergées localement dans le dossier ../dsfr-dist/
+ * pour garantir l'autonomie du thème et éviter les dépendances externes.
+ *
+ * NOTE: On N'utilise PAS DSFR-Connect car nos templates sont déjà
+ * en DSFR natif (fr-header, fr-btn, etc.). DSFR-Connect est fait
+ * pour convertir les classes Bootstrap, mais on a déjà tout converti.
+ *
+ * Pour mettre à jour DSFR, voir ../dsfr-dist/README.md
+ */
+@import url('../dsfr-dist/css/dsfr.min.css');
+
+/* Import des icônes Remix Icon (utilisées par DSFR) */
+@import url('../dsfr-dist/css/icons.min.css');
+
+/* ============================================
+   VARIABLES DSFR
+   ============================================ */
+
+:root {
+    /* Couleurs DSFR */
+    --blue-france: #000091;
+    --red-marianne: #E1000F;
+    --grey-main: #3A3A3A;
+    --grey-light: #F6F6F6;
+    --grey-medium: #DDDDDD;
+
+    /* Espacements */
+    --sp-1: 0.25rem;
+    --sp-2: 0.5rem;
+    --sp-3: 1rem;
+    --sp-4: 1.5rem;
+    --sp-5: 2rem;
+    --sp-6: 3rem;
+}
+
+/* ============================================
+   NEUTRALISATION BOOTSTRAP
+   ============================================ */
+
+/*
+ * Le thème hérite de vanilla qui charge Bootstrap.
+ * On neutralise les classes Bootstrap pour éviter les conflits avec DSFR.
+ */
+
+/* Désactiver le fond gris de Bootstrap */
+.bg-light {
+    background-color: #FFFFFF !important;
+}
+
+/* Neutraliser navbar Bootstrap (on utilise fr-header) */
+.navbar {
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.navbar-light,
+.navbar-expand-md {
+    background-color: transparent !important;
+}
+
+/* Neutraliser les containers Bootstrap */
+.container,
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: 100%;
+}
+
+/* Reset des boutons Bootstrap pour laisser DSFR gérer */
+.btn:not(.fr-btn) {
+    all: unset;
+}
+
+/* Neutraliser form-control de Bootstrap sur les inputs/textarea */
+input[type="text"].form-control,
+input[type="email"].form-control,
+input[type="number"].form-control,
+input[type="tel"].form-control,
+input[type="url"].form-control,
+input[type="date"].form-control,
+input[type="time"].form-control,
+input[type="search"].form-control,
+input[type="password"].form-control,
+textarea.form-control,
+.form-control {
+    border: none !important;
+    box-shadow: inset 0 -2px 0 0 #3A3A3A !important;
+    background-color: #EEEEEE !important;
+    border-radius: 0.25rem 0.25rem 0 0 !important;
+}
+
+/* Neutraliser form-control au focus */
+input[type="text"].form-control:focus,
+input[type="email"].form-control:focus,
+input[type="number"].form-control:focus,
+input[type="tel"].form-control:focus,
+input[type="url"].form-control:focus,
+input[type="date"].form-control:focus,
+input[type="time"].form-control:focus,
+input[type="search"].form-control:focus,
+input[type="password"].form-control:focus,
+textarea.form-control:focus,
+.form-control:focus {
+    background-color: #EEEEEE !important;
+    box-shadow: inset 0 -2px 0 0 #3A3A3A !important;
+    outline: 2px solid #0a76f6 !important;
+    outline-offset: 2px !important;
+    border: none !important;
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    background-color: #FFFFFF;
+}
+
+body {
+    font-family: "Marianne", Arial, sans-serif !important;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #161616;
+    background-color: #FFFFFF !important; /* Fond blanc au lieu de gris */
+    margin: 0;
+    padding: 0;
+}
+
+/* Assurer que le body et article ont un fond blanc */
+body > article {
+    background-color: #FFFFFF !important;
+}
+
+/* Forcer le fond blanc pour tous les containers principaux */
+#outerframeContainer,
+.outerframe,
+.ls-survey-container,
+.survey-question-container {
+    background-color: #FFFFFF !important;
+}
+
+/* Assurer que les containers DSFR sont blancs */
+.fr-container {
+    background-color: transparent;
+}
+
+/* ============================================
+   HEADER DSFR (Navigation Bar)
+   ============================================ */
+
+/* Header principal */
+#survey-nav.navbar {
+    background-color: #FFFFFF !important;
+    border-bottom: 1px solid #DDDDDD !important;
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 18, 0.1), 0 8px 16px -16px rgba(0, 0, 18, 0.32);
+    min-height: 5rem;
+    padding: 0 !important;
+}
+
+/* Container du header */
+#survey-nav .container-fluid {
+    max-width: 78rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Logo / Brand */
+#survey-nav .navbar-brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--blue-france) !important;
+    padding: 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#survey-nav .logo-container img {
+    max-height: 3rem;
+    width: auto;
+}
+
+/* Bouton toggle mobile */
+#survey-nav .navbar-toggler {
+    border: 1px solid #3A3A3A;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    background: transparent;
+}
+
+#survey-nav .navbar-toggler:focus {
+    outline: 2px solid var(--blue-france);
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+/* Navigation items */
+#survey-nav .navbar-nav {
+    gap: 0.5rem;
+}
+
+#survey-nav .navbar-nav .nav-item {
+    margin: 0;
+}
+
+#survey-nav .navbar-nav .nav-link {
+    color: #161616 !important;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s;
+}
+
+#survey-nav .navbar-nav .nav-link:hover,
+#survey-nav .navbar-nav .nav-link:focus {
+    background-color: #F6F6F6;
+    color: var(--blue-france) !important;
+}
+
+/* Dropdown menus */
+#survey-nav .dropdown-menu {
+    border: 1px solid #DDDDDD;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 0.25rem;
+    padding: 0.5rem 0;
+}
+
+#survey-nav .dropdown-item {
+    padding: 0.75rem 1rem;
+    color: #161616;
+    transition: background-color 0.2s;
+}
+
+#survey-nav .dropdown-item:hover,
+#survey-nav .dropdown-item:focus {
+    background-color: #F6F6F6;
+    color: var(--blue-france);
+}
+
+/* ============================================
+   CONTENEUR PRINCIPAL
+   ============================================ */
+
+#outerframeContainer {
+    background-color: var(--grey-light);
+    min-height: 100vh;
+    padding-top: 6rem; /* Espace pour le header fixed */
+}
+
+.container-fluid {
+    max-width: 78rem;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* ============================================
+   BARRE DE PROGRESSION
+   ============================================ */
+
+.progress-wrapper,
+.progress-container {
+    margin-bottom: 2rem;
+}
+
+.progress {
+    height: 0.5rem;
+    background-color: #E3E3E3;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+    background-color: var(--blue-france) !important;
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #666;
+    text-align: center;
+}
+
+/* ============================================
+   GROUPES DE QUESTIONS
+   ============================================ */
+
+.group-container,
+.ls-group {
+    margin-bottom: 3rem;
+}
+
+.group-name,
+.ls-group-name h3 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--blue-france);
+    margin-bottom: 1rem;
+    line-height: 1.25;
+}
+
+.group-description,
+.ls-group-description {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+/* ============================================
+   QUESTIONS
+   ============================================ */
+
+.question-container,
+.ls-question,
+.question-wrapper {
+    background-color: #FFFFFF;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.question-text,
+.ls-question-text,
+.questiontext {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #161616;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.question-help,
+.ls-question-help,
+.question-help-text {
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+.question-mandatory,
+.asterisk {
+    color: var(--red-marianne);
+    font-weight: 700;
+    margin-left: 0.25rem;
+}
+
+/* ============================================
+   VALIDATION MESSAGES - DSFR STYLE
+   ============================================ */
+
+/* Messages de validation (info) - style DSFR */
+.question-valid-container {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-top: 0.25rem;
+    color: #666;
+}
+
+/* Messages d'erreur EM - style DSFR */
+.ls-em-error,
+.em_num_answers {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-top: 0.25rem;
+    color: #CE0500;
+    font-weight: 400;
+}
+
+/* État d'erreur sur l'input */
+input.error,
+textarea.error,
+select.error {
+    border-color: #CE0500 !important;
+    box-shadow: inset 0 -2px 0 0 #CE0500 !important;
+}
+
+
+/* ============================================
+   INPUTS & FORM CONTROLS (DSFR)
+   ============================================ */
+
+/*
+ * Neutralisation Bootstrap pour les champs de formulaire
+ * Bootstrap ajoute des bordures et styles qui entrent en conflit avec DSFR
+ */
+.form-control,
+input.form-control,
+textarea.form-control,
+select.form-control {
+    all: unset;
+    display: block;
+    width: 100%;
+}
+
+/*
+ * Styles DSFR pour les champs input/textarea
+ * Conformément aux spécifications DSFR v1.11
+ * https://www.systeme-de-design.gouv.fr/
+ */
+
+/* Inputs texte - État normal */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="date"],
+input[type="time"],
+input[type="search"],
+input[type="password"],
+textarea {
+    /* Fond gris DSFR */
+    background-color: #EEEEEE;
+
+    /* Bordure uniquement en bas (gris foncé/noir) */
+    border: none;
+    border-radius: 0.25rem 0.25rem 0 0;
+    box-shadow: inset 0 -2px 0 0 #3A3A3A;
+
+    /* Typographie */
+    color: #161616;
+    font-family: "Marianne", Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5rem;
+
+    /* Espacement */
+    padding: 0.5rem 1rem;
+
+    /* Layout */
+    display: block;
+    width: 100%;
+    max-height: 2.5rem;
+}
+
+/* Textarea spécifique */
+textarea {
+    min-height: 5rem;
+    max-height: none;
+    resize: vertical;
+}
+
+/* État focus - CRITIQUE pour DSFR */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="search"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+    /* IMPORTANT: Le fond gris doit RESTER au focus */
+    background-color: #EEEEEE !important;
+
+    /* La bordure en bas reste grise (ne change PAS en bleu) */
+    box-shadow: inset 0 -2px 0 0 #3A3A3A;
+
+    /* Outline DSFR pour la prise de focus (accessibilité) - C'EST ÇA qui devient bleu */
+    outline: 2px solid #0a76f6;
+    outline-offset: 2px;
+}
+
+/* État disabled */
+input[type="text"]:disabled,
+input[type="email"]:disabled,
+input[type="number"]:disabled,
+input[type="tel"]:disabled,
+input[type="url"]:disabled,
+input[type="date"]:disabled,
+input[type="time"]:disabled,
+input[type="search"]:disabled,
+input[type="password"]:disabled,
+textarea:disabled {
+    background-color: #E5E5E5;
+    color: #929292;
+    box-shadow: inset 0 -2px 0 0 #CECECE;
+    cursor: not-allowed;
+}
+
+/* Placeholder style DSFR */
+input::placeholder,
+textarea::placeholder {
+    color: #666666;
+    font-style: italic;
+    opacity: 1;
+}
+
+/* ============================================
+   SELECT / LISTE DÉROULANTE (DSFR)
+   ============================================ */
+
+/*
+ * Styles DSFR pour les <select>
+ * https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/liste-deroulante
+ */
+
+/* Select - État normal */
+select,
+.fr-select,
+select.form-control {
+    /* Apparence native désactivée */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    /* Fond gris DSFR */
+    background-color: #EEEEEE;
+
+    /* Icône flèche DSFR (chevron down) */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23161616' d='m12 13.1 5-4.9 1.4 1.4-6.4 6.3-6.4-6.4L7 8.1l5 5z'/%3E%3C/svg%3E");
+    background-position: calc(100% - 1rem) 50%;
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+
+    /* Bordure uniquement en bas (gris foncé/noir) */
+    border: none;
+    border-radius: 0.25rem 0.25rem 0 0;
+    box-shadow: inset 0 -2px 0 0 #3A3A3A;
+
+    /* Typographie */
+    color: #161616;
+    font-family: "Marianne", Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5rem;
+
+    /* Espacement - Plus d'espace à droite pour l'icône */
+    padding: 0.5rem 2.5rem 0.5rem 1rem;
+
+    /* Layout */
+    display: block;
+    width: 100%;
+}
+
+/* Select - État focus */
+select:focus,
+.fr-select:focus,
+select.form-control:focus {
+    /* Le fond gris reste */
+    background-color: #EEEEEE !important;
+
+    /* La bordure reste grise/noire */
+    box-shadow: inset 0 -2px 0 0 #3A3A3A;
+
+    /* Outline bleu pour la prise de focus */
+    outline: 2px solid #0a76f6;
+    outline-offset: 2px;
+}
+
+/* Select - État disabled */
+select:disabled,
+.fr-select:disabled {
+    background-color: #E5E5E5;
+    color: #929292;
+    box-shadow: inset 0 -2px 0 0 #CECECE;
+    cursor: not-allowed;
+}
+
+/* Groupe de select DSFR */
+.fr-select-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.fr-select-group:last-child {
+    margin-bottom: 0;
+}
+
+/* ============================================
+   MESSAGES & VALIDATION DSFR
+   ============================================ */
+
+/*
+ * Styles DSFR pour les messages de validation
+ * https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/champ-de-saisie
+ */
+
+/* Groupe de messages */
+.fr-messages-group {
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* Message individuel */
+.fr-message {
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    margin: 0.25rem 0;
+    padding: 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+/* Message info (bleu) */
+.fr-message--info {
+    color: #0063CB;
+}
+
+.fr-message--info::before {
+    content: "";
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%230063CB' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-top: 0.125rem;
+}
+
+/* Message succès (vert) */
+.fr-message--valid {
+    color: #18753C;
+}
+
+.fr-message--valid::before {
+    content: "";
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2318753C' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-top: 0.125rem;
+}
+
+/* Message erreur (rouge) */
+.fr-message--error {
+    color: #CE0500;
+}
+
+.fr-message--error::before {
+    content: "";
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23CE0500' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-top: 0.125rem;
+}
+
+/* États fr-input-group --error et --valid */
+.fr-input-group--error .fr-input,
+.fr-input-group--error .fr-select {
+    box-shadow: inset 0 -2px 0 0 #CE0500;
+}
+
+.fr-input-group--valid .fr-input,
+.fr-input-group--valid .fr-select {
+    box-shadow: inset 0 -2px 0 0 #18753C;
+}
+
+/* Label hint text */
+.fr-label .fr-hint-text {
+    display: block;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    color: #666666;
+    font-weight: 400;
+    margin-top: 0.25rem;
+}
+
+/* ============================================
+   RADIO BUTTONS (DSFR)
+   ============================================ */
+
+/* Container pour les radios */
+.radio-item,
+.checkbox-item,
+.answer-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    position: relative;
+}
+
+/* Exception: items numériques avec grille DSFR - ne pas appliquer flex */
+.answer-item.numeric-item,
+.answer-item.text-item {
+    display: block;
+}
+
+/* IMPORTANT: Dans les tableaux, ces classes ne doivent PAS avoir de flex/margin */
+table .radio-item,
+table .checkbox-item,
+table .answer-item,
+table td.radio-item,
+table td.checkbox-item,
+table td.answer-item {
+    display: table-cell !important;
+    margin-bottom: 0 !important;
+    padding: 0.5rem !important;
+    position: static !important;
+}
+
+/* ============================================
+   RADIO/CHECKBOX - DSFR NATIF
+   ============================================ */
+
+/* Le DSFR gère les radio/checkbox dans .fr-radio-group et .fr-checkbox-group */
+/* Aucun override nécessaire - le DSFR fait tout */
+
+/* Dans les tableaux, centrer les inputs */
+table input[type="radio"],
+table input[type="checkbox"] {
+    margin: 0 auto;
+}
+
+/* Fin de la section radio/checkbox */
+
+/* ============================================
+   BOUTONS (DSFR)
+   ============================================ */
+
+/* Bouton primaire - NE PAS STYLER button[type="submit"] pour laisser DSFR gérer */
+.btn-primary,
+input[type="submit"],
+.ls-button-submit,
+.button-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: "Marianne", Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+    padding: 0.5rem 1rem;
+    background-color: var(--blue-france);
+    color: #FFFFFF !important;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    box-shadow: inset 0 0 0 1px var(--blue-france);
+}
+
+/* Laisser DSFR gérer les boutons avec classes DSFR */
+
+.btn-primary:hover,
+input[type="submit"]:hover {
+    background-color: #1212FF;
+    box-shadow: inset 0 0 0 1px #1212FF;
+}
+
+.btn-primary:active {
+    background-color: #2323FF;
+}
+
+.btn-primary:focus {
+    outline: 2px solid var(--blue-france);
+    outline-offset: 2px;
+}
+
+.btn-primary:disabled {
+    background-color: #E5E5E5;
+    color: #929292 !important;
+    cursor: not-allowed;
+    box-shadow: inset 0 0 0 1px #E5E5E5;
+}
+
+/* Bouton secondaire */
+.btn-secondary,
+.btn-outline,
+.ls-button-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: "Marianne", Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    color: var(--blue-france) !important;
+    border: 1px solid var(--blue-france);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover,
+.btn-outline:hover {
+    background-color: #F5F5FE;
+}
+
+.btn-secondary:active {
+    background-color: #ECECFE;
+}
+
+.btn-secondary:focus {
+    outline: 2px solid var(--blue-france);
+    outline-offset: 2px;
+}
+
+/* Bouton tertiaire (sans bordure) */
+.btn-link,
+.btn-tertiary {
+    background: transparent;
+    border: none;
+    color: var(--blue-france) !important;
+    text-decoration: underline;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.btn-link:hover,
+.btn-tertiary:hover {
+    background-color: #F5F5FE;
+    text-decoration: underline;
+}
+
+/* ============================================
+   NAVIGATION (Previous/Next)
+   ============================================ */
+
+.survey-navigation,
+#ls-button-submit,
+.navigator-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+/* Les boutons de navigation DSFR n'ont pas besoin de ces marges */
+.fr-container .fr-btn {
+    margin-top: 0 !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+}
+
+@media (max-width: 768px) {
+    .survey-navigation {
+        flex-direction: column;
+    }
+
+    .survey-navigation button,
+    .survey-navigation .btn {
+        width: 100%;
+    }
+}
+
+/* ============================================
+   MESSAGES & ALERTES (DSFR)
+   ============================================ */
+
+.alert,
+.alert-box,
+.ls-alert {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+    border-left: 4px solid;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+.alert::before {
+    content: '';
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* Info */
+.alert-info {
+    background-color: #E8EDFF;
+    border-left-color: #0063CB;
+    color: #0063CB;
+}
+
+/* Success */
+.alert-success {
+    background-color: #B8FEC9;
+    border-left-color: #18753C;
+    color: #18753C;
+}
+
+/* Warning */
+.alert-warning {
+    background-color: #FFE9E6;
+    border-left-color: #B34000;
+    color: #B34000;
+}
+
+/* Error/Danger */
+.alert-error,
+.alert-danger {
+    background-color: #FFE9E9;
+    border-left-color: #CE0500;
+    color: #CE0500;
+}
+
+/* ============================================
+   ERREURS DE VALIDATION
+   ============================================ */
+
+.error-message,
+.em_num_answers,
+.ls-em-error {
+    color: #CE0500;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.error-message::before,
+.em_num_answers::before {
+    content: '';
+    width: 1rem;
+    height: 1rem;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3e%3cpath fill='%23CE0500' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3e%3c/svg%3e");
+    background-size: contain;
+    flex-shrink: 0;
+}
+
+input.error,
+textarea.error,
+select.error,
+.has-error input,
+.has-error textarea,
+.has-error select {
+    border-color: #CE0500;
+    border-bottom-color: #CE0500;
+}
+
+input.error:focus,
+textarea.error:focus,
+select.error:focus {
+    box-shadow: inset 0 -2px 0 0 #CE0500;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.survey-footer {
+    background-color: #F6F6F6;
+    border-top: 1px solid #DDDDDD;
+    padding: 2rem 1rem;
+    margin-top: 3rem;
+}
+
+/* Footer DSFR fond blanc (override DSFR et custom) */
+footer.fr-footer,
+.fr-footer {
+    background-color: #FFFFFF !important;
+}
+
+.survey-footer .container-fluid {
+    max-width: 78rem;
+    margin: 0 auto;
+}
+
+.survey-footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.survey-footer-links {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.survey-footer-links a {
+    color: #161616;
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+
+.survey-footer-links a:hover {
+    text-decoration: underline;
+    color: var(--blue-france);
+}
+
+.survey-footer-bottom {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #DDDDDD;
+    font-size: 0.75rem;
+    color: #666;
+    text-align: center;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    body {
+        font-size: 0.875rem;
+    }
+
+    .container-fluid {
+        padding: 1rem 0.5rem;
+    }
+
+    .question-container {
+        padding: 1rem;
+    }
+
+    .question-text {
+        font-size: 1rem;
+    }
+
+    .survey-footer-content {
+        flex-direction: column;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITÉ
+   ============================================ */
+
+.sr-only,
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border-width: 0 !important;
+}
+
+.visually-hidden-focusable:focus {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+}
+
+/* Focus visible pour tous les éléments interactifs */
+*:focus-visible {
+    outline: 2px solid var(--blue-france);
+    outline-offset: 2px;
+}
+
+/* Skip links pour accessibilité */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--blue-france);
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    z-index: 100;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* ============================================
+   UTILITAIRES
+   ============================================ */
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* Spacing utilities removed - now using DSFR utilities (fr-mb-*w, fr-mt-*w, fr-p-*w) */
+
+/* ============================================
+   CORRECTIONS TABLEAUX DSFR
+   ============================================ */
+
+/* Le DSFR avec --bordered applique un fond gris clair (--background-alt-grey)
+   par défaut à toutes les cellules tbody td.
+
+   Selon la doc DSFR, les tableaux doivent avoir un fond blanc par défaut,
+   avec possibilité d'alternance de couleurs pour les lignes.
+
+   On surcharge ici pour respecter le comportement attendu de LimeSurvey
+   avec alternance ls-odd/ls-even */
+
+/* Reset du fond gris par défaut du DSFR sur tous les td */
+.fr-table--bordered table tbody td {
+    background-color: transparent !important;
+}
+
+/* Application manuelle de l'alternance avec les classes LimeSurvey */
+.fr-table--bordered table tbody tr.ls-odd td,
+.fr-table--bordered table tbody tr.ls-odd th {
+    background-color: var(--background-alt-grey, #f6f6f6) !important;
+}
+
+.fr-table--bordered table tbody tr.ls-even td,
+.fr-table--bordered table tbody tr.ls-even th {
+    background-color: #ffffff !important;
+}
+
+/* Labels de colonnes pour vue mobile - cachés en desktop */
+.ls-label-xs-visibility {
+    display: none;
+}
+
+/* Afficher les labels en vue mobile (< 768px) */
+@media (max-width: 767px) {
+    .ls-label-xs-visibility {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: var(--text-label-grey, #161616);
+    }
+
+    /* ============================================
+       LINÉARISATION TABLEAUX EN VUE MOBILE
+       Force l'affichage en cartes verticales
+       ============================================ */
+
+    /* Masquer le tableau natif et forcer le mode bloc */
+    .fr-table table,
+    .fr-table--bordered table,
+    div[class*="fr-table"] table {
+        border: 0 !important;
+        display: block !important;
+    }
+
+    /* Cacher complètement les en-têtes de colonnes */
+    .fr-table table thead,
+    .fr-table--bordered table thead,
+    div[class*="fr-table"] table thead {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* Tbody en mode bloc */
+    .fr-table table tbody,
+    .fr-table--bordered table tbody,
+    div[class*="fr-table"] table tbody {
+        display: block !important;
+    }
+
+    /* Chaque ligne devient une carte */
+    .fr-table table tbody tr,
+    .fr-table--bordered table tbody tr,
+    div[class*="fr-table"] table tbody tr {
+        display: block !important;
+        margin-bottom: 1.5rem !important;
+        border: 1px solid var(--border-default-grey, #ddd) !important;
+        padding: 1rem !important;
+        background-color: #ffffff !important;
+        border-radius: 0.25rem !important;
+    }
+
+    /* Toutes les cellules en mode bloc vertical */
+    .fr-table table tbody tr th,
+    .fr-table--bordered table tbody tr th,
+    .fr-table table tbody tr td,
+    .fr-table--bordered table tbody tr td,
+    div[class*="fr-table"] table tbody tr th,
+    div[class*="fr-table"] table tbody tr td {
+        display: block !important;
+        text-align: left !important;
+        border: none !important;
+        padding: 0.5rem 0 !important;
+        background-color: transparent !important;
+        width: 100% !important;
+    }
+
+    /* Header de ligne (th) mis en évidence */
+    .fr-table table tbody tr th,
+    .fr-table--bordered table tbody tr th,
+    div[class*="fr-table"] table tbody tr th {
+        font-size: 1.125rem !important;
+        margin-bottom: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+        border-bottom: 1px solid var(--border-default-grey, #ddd) !important;
+    }
+
+    /* Les fr-input-group doivent rester en bloc */
+    .fr-table table tbody tr td .fr-input-group,
+    .fr-table--bordered table tbody tr td .fr-input-group,
+    div[class*="fr-table"] table tbody tr td .fr-input-group {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    /* Les inputs doivent prendre toute la largeur */
+    .fr-table table tbody tr td .fr-input,
+    .fr-table--bordered table tbody tr td .fr-input,
+    div[class*="fr-table"] table tbody tr td .fr-input {
+        width: 100% !important;
+    }
+}
+
+/* ============================================
+   MULTIPLE NUMERIC QUESTIONS - GRID FIX
+   ============================================ */
+
+/* Neutraliser les styles de liste par défaut - UNIQUEMENT pour questions numériques */
+ul.numeric-list {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+/* Items de liste - retirer les puces et marges - UNIQUEMENT pour items numériques */
+ul.numeric-list li,
+li.numeric-item {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+/* Forcer les lignes de grille dynamiques (total/remaining) sans puces */
+li.ls-group-total,
+li.ls-group-remaining,
+li.ls-group-dynamic {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+/* S'assurer que les colonnes prennent 100% sur mobile */
+@media (max-width: 47.99em) {
+    ul.numeric-list .fr-col-12.fr-col-md-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}
+
+/* ============================================
+   ARRAY TABLES - DSFR STYLE
+   ============================================ */
+
+/* Styles DSFR pour les tableaux type Array (Question 26) */
+.ls-table-wrapper table.table-array-radio,
+.ls-table-wrapper table.radio-array {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: transparent;
+}
+
+/* Bordures DSFR pour le tableau */
+.ls-table-wrapper table.table-array-radio,
+.ls-table-wrapper table.radio-array {
+    border: 1px solid var(--border-default-grey, #ddd);
+}
+
+.ls-table-wrapper table.table-array-radio th,
+.ls-table-wrapper table.table-array-radio td,
+.ls-table-wrapper table.radio-array th,
+.ls-table-wrapper table.radio-array td {
+    border: 1px solid var(--border-default-grey, #ddd);
+    padding: 0.75rem;
+    text-align: left;
+}
+
+/* En-têtes de colonnes */
+.ls-table-wrapper table.table-array-radio thead th,
+.ls-table-wrapper table.radio-array thead th {
+    background-color: var(--background-contrast-grey, #f6f6f6);
+    font-weight: 700;
+    color: #161616;
+    text-align: center;
+}
+
+/* Surcharge de la bordure Bootstrap pour utiliser la couleur DSFR */
+.ls-table-wrapper table.table-array-radio > :not(:first-child),
+.ls-table-wrapper table.radio-array > :not(:first-child) {
+    border-top-color: var(--border-default-grey, #ddd);
+}
+
+/* Bordures renforcées en haut de la ligne d'en-tête */
+.ls-table-wrapper table.table-array-radio thead tr.ls-heading th,
+.ls-table-wrapper table.table-array-radio thead tr.ls-heading td,
+.ls-table-wrapper table.radio-array thead tr.ls-heading th,
+.ls-table-wrapper table.radio-array thead tr.ls-heading td {
+    border-top-color: var(--border-default-grey, #ddd);
+}
+
+/* Bordures renforcées en bas de la ligne d'en-tête */
+.ls-table-wrapper table.table-array-radio thead tr.ls-heading th,
+.ls-table-wrapper table.table-array-radio thead tr.ls-heading td,
+.ls-table-wrapper table.radio-array thead tr.ls-heading th,
+.ls-table-wrapper table.radio-array thead tr.ls-heading td {
+    border-bottom: 2px solid rgb(22, 22, 22);
+}
+
+/* En-têtes de lignes (première colonne) */
+.ls-table-wrapper table.table-array-radio tbody th.answertext,
+.ls-table-wrapper table.radio-array tbody th.answertext {
+    background-color: var(--background-contrast-grey, #f6f6f6);
+    font-weight: 700;
+    color: #161616;
+}
+
+/* Cellules avec radio buttons - centrage */
+.ls-table-wrapper table.table-array-radio td.answer_cell,
+.ls-table-wrapper table.table-array-radio td[class*="answer_cell_"],
+.ls-table-wrapper table.radio-array td.answer_cell,
+.ls-table-wrapper table.radio-array td[class*="answer_cell_"] {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Fond blanc uniforme pour toutes les lignes */
+.ls-table-wrapper table.table-array-radio tbody tr,
+.ls-table-wrapper table.radio-array tbody tr {
+    background-color: #ffffff;
+}
+
+/* Hover sur les lignes */
+.ls-table-wrapper table.table-array-radio tbody tr:hover,
+.ls-table-wrapper table.radio-array tbody tr:hover {
+    background-color: var(--background-contrast-blue-france, #e3e3fd);
+}
+
+/* Responsive - scroll horizontal sur mobile */
+@media (max-width: 48em) {
+    .ls-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* ============================================
+   ARRAY COLUMN TABLES - DSFR STYLE (Question 27)
+   ============================================ */
+
+/* Styles DSFR pour les tableaux type Array Column */
+.ls-table-wrapper table.array-radio {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: transparent;
+    border: 1px solid var(--border-default-grey, #ddd);
+}
+
+.ls-table-wrapper table.array-radio th,
+.ls-table-wrapper table.array-radio td {
+    border: 1px solid var(--border-default-grey, #ddd);
+    padding: 0.75rem;
+    text-align: left;
+}
+
+/* En-têtes de colonnes */
+.ls-table-wrapper table.array-radio thead th {
+    background-color: var(--background-contrast-grey, #f6f6f6);
+    font-weight: 700;
+    color: #161616;
+    text-align: center;
+}
+
+/* Surcharge de la bordure Bootstrap pour utiliser la couleur DSFR */
+.ls-table-wrapper table.array-radio > :not(:first-child) {
+    border-top-color: var(--border-default-grey, #ddd);
+}
+
+/* Bordures renforcées en haut de la ligne d'en-tête */
+.ls-table-wrapper table.array-radio thead tr.ls-heading th,
+.ls-table-wrapper table.array-radio thead tr.ls-heading td {
+    border-top-color: var(--border-default-grey, #ddd);
+}
+
+/* Bordures renforcées en bas de la ligne d'en-tête */
+.ls-table-wrapper table.array-radio thead tr.ls-heading th,
+.ls-table-wrapper table.array-radio thead tr.ls-heading td {
+    border-bottom: 2px solid rgb(22, 22, 22);
+}
+
+/* En-têtes de lignes (première colonne) */
+.ls-table-wrapper table.array-radio tbody th.answertext {
+    background-color: var(--background-contrast-grey, #f6f6f6);
+    font-weight: 700;
+    color: #161616;
+}
+
+/* Cellules avec radio buttons - centrage */
+.ls-table-wrapper table.array-radio td.answer_cell,
+.ls-table-wrapper table.array-radio td[class*="answer_cell_"] {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Fond blanc uniforme pour toutes les lignes */
+.ls-table-wrapper table.array-radio tbody tr {
+    background-color: #ffffff;
+}
+
+/* Hover sur les lignes */
+.ls-table-wrapper table.array-radio tbody tr:hover {
+    background-color: var(--background-contrast-blue-france, #e3e3fd);
+}
+
+/* Radio buttons DSFR dans les tableaux array-radio */
+.ls-table-wrapper table.array-radio .fr-radio-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.ls-table-wrapper table.array-radio .fr-radio-input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid #3a3a3a;
+    border-radius: 50%;
+    background-color: #fff;
+    cursor: pointer;
+    position: relative;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.ls-table-wrapper table.array-radio .fr-radio-input:checked {
+    border-color: #000091;
+    background-color: #fff;
+}
+
+.ls-table-wrapper table.array-radio .fr-radio-input:checked::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background-color: #000091;
+}
+
+.ls-table-wrapper table.array-radio .fr-radio-input:hover {
+    border-color: #000091;
+}
+
+.ls-table-wrapper table.array-radio .fr-radio-input:focus {
+    outline: 2px solid #0a76f6;
+    outline-offset: 2px;
+}
+
+/* ============================================
+   INCREASE/SAME/DECREASE TABLES - DSFR STYLE (Question 30)
+   ============================================ */
+
+/* Styles DSFR pour les tableaux type Increase/Same/Decrease */
+.array-increase-same-decrease table.radio-array {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: transparent;
+    border: 1px solid var(--border-default-grey, #ddd) !important;
+}
+
+.array-increase-same-decrease table.radio-array th,
+.array-increase-same-decrease table.radio-array td {
+    border: 1px solid var(--border-default-grey, #ddd) !important;
+    padding: 0.75rem;
+    text-align: left;
+}
+
+/* En-têtes de colonnes */
+.array-increase-same-decrease table.radio-array thead th {
+    background-color: var(--background-contrast-grey, #f6f6f6) !important;
+    font-weight: 700;
+    color: #161616 !important;
+    text-align: center;
+}
+
+/* Surcharge de la bordure Bootstrap pour utiliser la couleur DSFR */
+.array-increase-same-decrease table.radio-array > :not(:first-child) {
+    border-top-color: var(--border-default-grey, #ddd) !important;
+}
+
+/* Bordures renforcées en haut de la ligne d'en-tête */
+.array-increase-same-decrease table.radio-array thead tr.ls-heading th,
+.array-increase-same-decrease table.radio-array thead tr.ls-heading td,
+.array-increase-same-decrease table.radio-array thead tr.ls-header th,
+.array-increase-same-decrease table.radio-array thead tr.ls-header td {
+    border-top-color: var(--border-default-grey, #ddd) !important;
+}
+
+/* Bordures renforcées en bas de la ligne d'en-tête */
+.array-increase-same-decrease table.radio-array thead tr.ls-heading th,
+.array-increase-same-decrease table.radio-array thead tr.ls-heading td,
+.array-increase-same-decrease table.radio-array thead tr.ls-header th,
+.array-increase-same-decrease table.radio-array thead tr.ls-header td {
+    border-bottom: 2px solid rgb(22, 22, 22) !important;
+}
+
+/* En-têtes de lignes (première colonne) */
+.array-increase-same-decrease table.radio-array tbody th.answertext {
+    background-color: var(--background-contrast-grey, #f6f6f6) !important;
+    font-weight: 700;
+    color: #161616 !important;
+}
+
+/* Cellules avec radio buttons - centrage */
+.array-increase-same-decrease table.radio-array td.answer_cell,
+.array-increase-same-decrease table.radio-array td[class*="answer_cell_"] {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Fond blanc uniforme pour toutes les lignes */
+.array-increase-same-decrease table.radio-array tbody tr {
+    background-color: #ffffff !important;
+}
+
+/* Hover sur les lignes */
+.array-increase-same-decrease table.radio-array tbody tr:hover {
+    background-color: var(--background-contrast-blue-france, #e3e3fd) !important;
+}
+
+/* ============================================
+   YES/NO/UNCERTAIN TABLES - DSFR STYLE (Question 31)
+   ============================================ */
+
+/* Styles DSFR pour les tableaux type Yes/No/Uncertain */
+.array-yes-uncertain-no table.radio-array {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: transparent;
+    border: 1px solid var(--border-default-grey, #ddd) !important;
+}
+
+.array-yes-uncertain-no table.radio-array th,
+.array-yes-uncertain-no table.radio-array td {
+    border: 1px solid var(--border-default-grey, #ddd) !important;
+    padding: 0.75rem;
+    text-align: left;
+}
+
+/* En-têtes de colonnes */
+.array-yes-uncertain-no table.radio-array thead th {
+    background-color: var(--background-contrast-grey, #f6f6f6) !important;
+    font-weight: 700;
+    color: #161616 !important;
+    text-align: center;
+}
+
+/* Surcharge de la bordure Bootstrap pour utiliser la couleur DSFR */
+.array-yes-uncertain-no table.radio-array > :not(:first-child) {
+    border-top-color: var(--border-default-grey, #ddd) !important;
+}
+
+/* Bordures renforcées en haut de la ligne d'en-tête */
+.array-yes-uncertain-no table.radio-array thead tr.ls-heading th,
+.array-yes-uncertain-no table.radio-array thead tr.ls-heading td {
+    border-top-color: var(--border-default-grey, #ddd) !important;
+}
+
+/* Bordures renforcées en bas de la ligne d'en-tête */
+.array-yes-uncertain-no table.radio-array thead tr.ls-heading th,
+.array-yes-uncertain-no table.radio-array thead tr.ls-heading td {
+    border-bottom: 2px solid rgb(22, 22, 22) !important;
+}
+
+/* En-têtes de lignes (première colonne) */
+.array-yes-uncertain-no table.radio-array tbody th.answertext {
+    background-color: var(--background-contrast-grey, #f6f6f6) !important;
+    font-weight: 700;
+    color: #161616 !important;
+}
+
+/* Cellules avec radio buttons - centrage */
+.array-yes-uncertain-no table.radio-array td.answer_cell,
+.array-yes-uncertain-no table.radio-array td[class*="answer_cell_"] {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Fond blanc uniforme pour toutes les lignes */
+.array-yes-uncertain-no table.radio-array tbody tr {
+    background-color: #ffffff !important;
+}
+
+/* Hover sur les lignes */
+.array-yes-uncertain-no table.radio-array tbody tr:hover {
+    background-color: var(--background-contrast-blue-france, #e3e3fd) !important;
+}
+
+/* ============================================
+   DUAL SCALE TABLES - DSFR STYLE (Question 33)
+   ============================================ */
+
+/* Styles DSFR pour les tableaux type Dual Scale */
+.ls-table-wrapper table.array-flexible-dual-scale,
+table.array-flexible-dual-scale {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: transparent;
+    border: 1px solid var(--border-default-grey, #ddd);
+}
+
+.ls-table-wrapper table.array-flexible-dual-scale th,
+.ls-table-wrapper table.array-flexible-dual-scale td,
+table.array-flexible-dual-scale th,
+table.array-flexible-dual-scale td {
+    border: 1px solid var(--border-default-grey, #ddd);
+    padding: 0.75rem;
+    text-align: left;
+}
+
+/* En-têtes de colonnes */
+.ls-table-wrapper table.array-flexible-dual-scale thead th,
+table.array-flexible-dual-scale thead th {
+    background-color: var(--background-contrast-grey, #f6f6f6);
+    font-weight: 700;
+    color: #161616;
+    text-align: center;
+}
+
+/* Surcharge de la bordure Bootstrap pour utiliser la couleur DSFR */
+.ls-table-wrapper table.array-flexible-dual-scale > :not(:first-child),
+table.array-flexible-dual-scale > :not(:first-child) {
+    border-top-color: var(--border-default-grey, #ddd);
+}
+
+/* Bordures renforcées en haut de la ligne d'en-tête */
+.ls-table-wrapper table.array-flexible-dual-scale thead tr.ls-heading th,
+.ls-table-wrapper table.array-flexible-dual-scale thead tr.ls-heading td,
+table.array-flexible-dual-scale thead tr.ls-heading th,
+table.array-flexible-dual-scale thead tr.ls-heading td {
+    border-top-color: var(--border-default-grey, #ddd);
+}
+
+/* Bordures renforcées en bas de la ligne d'en-tête */
+.ls-table-wrapper table.array-flexible-dual-scale thead tr.ls-heading th,
+.ls-table-wrapper table.array-flexible-dual-scale thead tr.ls-heading td,
+table.array-flexible-dual-scale thead tr.ls-heading th,
+table.array-flexible-dual-scale thead tr.ls-heading td {
+    border-bottom: 2px solid rgb(22, 22, 22);
+}
+
+/* En-têtes de lignes (première colonne) */
+.ls-table-wrapper table.array-flexible-dual-scale tbody th.answertext,
+table.array-flexible-dual-scale tbody th.answertext {
+    background-color: var(--background-contrast-grey, #f6f6f6);
+    font-weight: 700;
+    color: #161616;
+}
+
+/* Cellules avec radio buttons - centrage */
+.ls-table-wrapper table.array-flexible-dual-scale td.answer_cell,
+.ls-table-wrapper table.array-flexible-dual-scale td[class*="answer_cell_"],
+table.array-flexible-dual-scale td.answer_cell,
+table.array-flexible-dual-scale td[class*="answer_cell_"] {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Fond blanc uniforme pour toutes les lignes */
+.ls-table-wrapper table.array-flexible-dual-scale tbody tr,
+table.array-flexible-dual-scale tbody tr {
+    background-color: #ffffff;
+}
+
+/* Hover sur les lignes */
+.ls-table-wrapper table.array-flexible-dual-scale tbody tr:hover,
+table.array-flexible-dual-scale tbody tr:hover {
+    background-color: var(--background-contrast-blue-france, #e3e3fd);
+}
+
+/* En-têtes de groupe pour dual scale (gauche/droite) */
+.ls-table-wrapper table.array-flexible-dual-scale thead tr.ls-heading.groups th.dsheader,
+table.array-flexible-dual-scale thead tr.ls-heading.groups th.dsheader {
+    background-color: var(--background-contrast-grey, #f6f6f6);
+    font-weight: 700;
+    color: #161616;
+    border-bottom: 2px solid rgb(22, 22, 22);
+}
+
+/* Séparateurs dans les tableaux dual scale */
+.ls-table-wrapper table.array-flexible-dual-scale td.dual_scale_separator,
+table.array-flexible-dual-scale td.dual_scale_separator {
+    background-color: var(--background-contrast-grey, #f6f6f6);
+    text-align: center;
+    font-weight: 500;
+}
+
+/* ============================================
+   DUAL SCALE DROPDOWN TABLES - DSFR STYLE (Question 33)
+   ============================================ */
+
+/* Cibler les tableaux dual scale avec dropdown via leurs classes spécifiques */
+.ls-table-wrapper table:has(.left-header, .right-header),
+.ls-table-wrapper table:has(.ddarrayseparator) {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: transparent;
+    border: 1px solid var(--border-default-grey, #ddd) !important;
+}
+
+.ls-table-wrapper table:has(.left-header, .right-header) th,
+.ls-table-wrapper table:has(.left-header, .right-header) td,
+.ls-table-wrapper table:has(.ddarrayseparator) th,
+.ls-table-wrapper table:has(.ddarrayseparator) td {
+    border: 1px solid var(--border-default-grey, #ddd) !important;
+    padding: 0.75rem;
+    text-align: left;
+}
+
+/* En-têtes de colonnes Scale A / Scale B */
+.ls-table-wrapper table thead th.left-header,
+.ls-table-wrapper table thead th.right-header {
+    background-color: var(--background-contrast-grey, #f6f6f6) !important;
+    font-weight: 700;
+    color: #161616 !important;
+    text-align: center;
+}
+
+/* Surcharge de la bordure Bootstrap */
+.ls-table-wrapper table:has(.ddarrayseparator) > :not(:first-child) {
+    border-top-color: var(--border-default-grey, #ddd) !important;
+}
+
+/* Bordures renforcées en bas de la ligne d'en-tête */
+.ls-table-wrapper table thead tr.ls-heading th.left-header,
+.ls-table-wrapper table thead tr.ls-heading th.right-header,
+.ls-table-wrapper table thead tr.ls-heading td {
+    border-bottom: 2px solid rgb(22, 22, 22) !important;
+}
+
+/* En-têtes de lignes (première colonne) */
+.ls-table-wrapper table:has(.ddarrayseparator) tbody th.answertext {
+    background-color: var(--background-contrast-grey, #f6f6f6) !important;
+    font-weight: 700;
+    color: #161616 !important;
+}
+
+/* Cellules avec dropdown - centrage */
+.ls-table-wrapper table td.dropdown-item {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Séparateur central - masqué */
+.ls-table-wrapper table td.ddarrayseparator {
+    width: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background-color: transparent !important;
+}
+
+/* Colonne séparatrice dans colgroup - masquée */
+.ls-table-wrapper table col.ddarrayseparator {
+    width: 0 !important;
+}
+
+/* Fond blanc uniforme pour toutes les lignes */
+.ls-table-wrapper table:has(.ddarrayseparator) tbody tr {
+    background-color: #ffffff !important;
+}
+
+/* Hover sur les lignes */
+.ls-table-wrapper table:has(.ddarrayseparator) tbody tr:hover {
+    background-color: var(--background-contrast-blue-france, #e3e3fd) !important;
+}
+
+/* Style DSFR pour les select */
+.ls-table-wrapper table td.dropdown-item select.form-select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--border-default-grey, #ddd);
+    border-radius: 0.25rem;
+    background-color: #fff;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.ls-table-wrapper table td.dropdown-item select.form-select:focus {
+    outline: 2px solid #0a76f6;
+    outline-offset: 2px;
+    border-color: #000091;
+}
+
+/* ========================================
+   Question Type: Ranking (Type R)
+   ======================================== */
+
+/* Remove list bullets/numbers from ranking lists */
+.ranking-source-list,
+.ranking-target-list {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+/* Full width for ranking items */
+.ranking-item {
+    width: 100%;
+}
+
+/* Source items styling (same as ranked but clickable) */
+.ranking-source-list .ranking-item-content {
+    background-color: var(--background-alt-blue-france, #f5f5fe);
+    border: 1px solid var(--border-default-grey, #ddd);
+    border-radius: 0.25rem;
+    padding: 1rem 1rem;
+    width: 80%;
+    cursor: pointer;
+    display: block;
+    text-align: left;
+}
+
+.ranking-source-list .ranking-item-content:hover {
+    background-color: #e8edff;
+}
+
+/* Ranked items styling */
+.ranking-item.ranked {
+    background-color: var(--background-alt-blue-france, #f5f5fe);
+    border: 1px solid var(--border-default-grey, #ddd);
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+}
+
+/* Button group in ranked items */
+.ranking-item.ranked .fr-col-4 {
+    display: flex;
+    gap: 0.25rem;
+    justify-content: flex-end;
+    align-items: center;
+}

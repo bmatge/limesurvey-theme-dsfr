@@ -1,0 +1,47 @@
+{#
+/**
+ * Yes/No Question - DSFR Theme
+ * Radio buttons with DSFR fr-radio-group
+ */
+#}
+
+<!-- Yes/No DSFR -->
+<fieldset class="fr-fieldset" aria-labelledby="ls-question-text-{{ basename }}">
+    <div class="fr-fieldset__content">
+        <div class="fr-grid-row fr-grid-row--gutters">
+            <!-- Yes -->
+            <div class="fr-col-12 fr-col-sm-6 fr-col-md-4">
+                <div class="fr-radio-group">
+                    <input type="radio" name="{{ name }}" id="answer{{ name }}Y" value="Y" {{ yChecked }}>
+                    <label class="fr-label" for="answer{{ name }}Y">
+                        <span class="ri-checkbox-circle-line" aria-hidden="true"></span> {{ gT('Yes') }}
+                    </label>
+                </div>
+            </div>
+
+            <!-- No -->
+            <div class="fr-col-12 fr-col-sm-6 fr-col-md-4">
+                <div class="fr-radio-group">
+                    <input type="radio" name="{{ name }}" id="answer{{ name }}N" value="N" {{ nChecked }}>
+                    <label class="fr-label" for="answer{{ name }}N">
+                        <span class="ri-close-circle-line" aria-hidden="true"></span> {{ gT('No') }}
+                    </label>
+                </div>
+            </div>
+
+            <!-- No answer -->
+            {% if noAnswer %}
+                <div class="fr-col-12 fr-col-sm-6 fr-col-md-4">
+                    <div class="fr-radio-group">
+                        <input type="radio" name="{{ name }}" id="answer{{ name }}" value="" {{ naChecked }}>
+                        <label class="fr-label" for="answer{{ name }}">
+                            {{ gT('No answer') }}
+                        </label>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</fieldset>
+
+{{ C.Html.hiddenField('java' ~ name, value, ({'id' : 'java' ~ name,'disabled' : true})) }}

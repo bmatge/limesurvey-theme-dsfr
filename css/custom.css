@@ -1,0 +1,390 @@
+/**
+ * CSS personnalisé pour le thème DSFR
+ *
+ * Ce fichier contient les styles personnalisés qui complètent
+ * le DSFR pour des besoins spécifiques de LimeSurvey.
+ */
+
+/* ============================================
+   LAYOUT FIXES
+   ============================================ */
+
+/* Ajustements pour le layout global */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+body > article {
+    flex: 1;
+}
+
+/* ============================================
+   COMPATIBILITÉ LIMESURVEY
+   ============================================ */
+
+/* Assurer que les classes Bootstrap ne cassent pas le DSFR */
+.container-fluid {
+    max-width: 100%;
+}
+
+/* Navigation responsive */
+.fr-text-right {
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+    .fr-text-right {
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    /* Navigation mobile en colonne */
+    .fr-grid-row--center .fr-col-sm-6 {
+        text-align: center !important;
+    }
+}
+
+/* ============================================
+   STEPPER DSFR - Fallback visuel
+   ============================================ */
+
+/* DSFR gère le stepper - minimal override */
+.fr-stepper__steps {
+    position: relative;
+    overflow: hidden;
+}
+
+.fr-stepper__steps::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #000091;
+    transition: width 0.3s ease;
+}
+
+/* Calcul de la largeur basé sur les data attributes */
+.fr-stepper__steps[data-fr-current-step="1"][data-fr-steps="1"]::after { width: 100%; }
+.fr-stepper__steps[data-fr-current-step="1"][data-fr-steps="2"]::after { width: 50%; }
+.fr-stepper__steps[data-fr-current-step="2"][data-fr-steps="2"]::after { width: 100%; }
+.fr-stepper__steps[data-fr-current-step="1"][data-fr-steps="3"]::after { width: 33.33%; }
+.fr-stepper__steps[data-fr-current-step="2"][data-fr-steps="3"]::after { width: 66.66%; }
+.fr-stepper__steps[data-fr-current-step="3"][data-fr-steps="3"]::after { width: 100%; }
+.fr-stepper__steps[data-fr-current-step="1"][data-fr-steps="4"]::after { width: 25%; }
+.fr-stepper__steps[data-fr-current-step="2"][data-fr-steps="4"]::after { width: 50%; }
+.fr-stepper__steps[data-fr-current-step="3"][data-fr-steps="4"]::after { width: 75%; }
+.fr-stepper__steps[data-fr-current-step="4"][data-fr-steps="4"]::after { width: 100%; }
+.fr-stepper__steps[data-fr-current-step="1"][data-fr-steps="5"]::after { width: 20%; }
+.fr-stepper__steps[data-fr-current-step="2"][data-fr-steps="5"]::after { width: 40%; }
+.fr-stepper__steps[data-fr-current-step="3"][data-fr-steps="5"]::after { width: 60%; }
+.fr-stepper__steps[data-fr-current-step="4"][data-fr-steps="5"]::after { width: 80%; }
+.fr-stepper__steps[data-fr-current-step="5"][data-fr-steps="5"]::after { width: 100%; }
+
+/* ============================================
+   COMPOSANTS LIMESURVEY SPÉCIFIQUES
+   ============================================ */
+
+/* ============================================
+   FIX SCROLL TABLEAUX + VISIBILITÉ
+   ============================================ */
+
+/* Désactiver scroll anchoring */
+html, body {
+    overflow-anchor: none !important;
+}
+
+/* Supprimer padding-top excessif */
+#outerframeContainer {
+    padding-top: 0 !important;
+}
+
+/* Masquer les labels xs-visibility (accessibilité seulement, pas visuels) */
+table .ls-label-xs-visibility {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+}
+
+/* Centrer radios/checkbox dans cellules */
+table td {
+    text-align: center;
+}
+
+table td input[type="radio"],
+table td input[type="checkbox"] {
+    display: inline-block;
+    margin: 0 auto;
+}
+
+/* ============================================
+   BLOCS QUESTIONS - Style Card DSFR
+   ============================================ */
+
+.question-container,
+.group-description-card {
+    background-color: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    border-radius: 0;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Questions conditionnelles - EM ajoute ces classes */
+.ls-hidden,
+.ls-irrelevant {
+    display: none !important;
+}
+
+/* ============================================
+   MESSAGES VALIDATION - Simple
+   ============================================ */
+
+/* Copier EXACTEMENT le style fr-message DSFR */
+.ls-questionhelp,
+.ls-question-message {
+    /* Base fr-message */
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    margin-top: 0.25rem;
+    padding: 0;
+    display: block;
+}
+
+.question-valid-container {
+    margin-top: 0.5rem;
+}
+
+/* Info (bleu France DSFR) */
+.ls-em-success,
+.ls-em-tip:not(.ls-em-error):not(.em_num_answers) {
+    color: #000091 !important;
+}
+
+/* Erreur (rouge DSFR) */
+.ls-em-error {
+    color: #CE0500 !important;
+}
+
+/* Warning (orange DSFR warning-main-525) */
+.em_num_answers,
+.em_validation_q,
+.em_commented_checkbox {
+    color: #D64D00 !important;
+}
+
+/* ============================================
+   SLIDERS - Couleurs DSFR
+   ============================================ */
+
+.slider-track {
+    background-color: #E5E5E5;
+    height: 4px;
+}
+
+.slider-selection {
+    background-color: #000091 !important;
+}
+
+.slider-handle {
+    background-color: #000091 !important;
+    border: 2px solid #FFF;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.slider-handle:hover {
+    background-color: #1212FF !important;
+}
+
+/* ============================================
+   LABELS - Alignement gauche
+   ============================================ */
+
+/* Override base.css qui met text-align: right */
+.form-horizontal .control-label {
+    text-align: left !important;
+}
+
+/* ============================================
+   ALERTES - DSFR Style
+   ============================================ */
+
+.alert {
+    padding: 1rem 1.5rem;
+    border-left: 4px solid;
+    border-radius: 0;
+}
+
+.alert-warning {
+    background-color: #FFE9E6;
+    border-left-color: #B34000;
+}
+
+.alert .h4,
+.alert strong {
+    color: #CE0500 !important;
+}
+
+/* Cartes d'erreur Bootstrap → DSFR */
+.card {
+    border: 1px solid #DDDDDD;
+    border-radius: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.card-title {
+    margin-bottom: 1rem;
+}
+
+/* ============================================
+   INPUTS - Bordures DSFR
+   ============================================ */
+
+/*
+ * SUPPRIMÉ - Les styles des inputs sont maintenant gérés dans theme.css
+ * pour éviter les conflits avec Bootstrap et assurer la conformité DSFR
+ * Voir theme.css lignes 342-452 pour les styles DSFR complets
+ */
+
+/* ============================================
+   BOUTONS NAVIGATION - Secondary
+   ============================================ */
+
+.fr-btn--secondary {
+    background-color: transparent !important;
+    color: #000091 !important;
+    border: 1px solid #000091 !important;
+    box-shadow: inset 0 0 0 1px #000091 !important;
+}
+
+.fr-btn--secondary:hover {
+    background-color: #F5F5FE !important;
+}
+
+/* ============================================
+   QUESTION - Masquer numéro/code redondants
+   ============================================ */
+
+.question-number,
+.question-code {
+    display: none !important;
+}
+
+/* ============================================
+   RANKING QUESTIONS - DSFR Styles
+   ============================================ */
+
+/* List group (Bootstrap classes used by vanilla ranking) */
+.list-group {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0.5rem;
+    background-color: #f6f6f6;
+    border: 1px solid #dddddd;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.list-group-item:hover {
+    background-color: #f5f5fe;
+    border-color: #000091;
+}
+
+/* Ranking items with drag handle */
+.sortable-item {
+    user-select: none;
+}
+
+.sortable-item.grabable:hover {
+    cursor: grab;
+}
+
+.sortable-item.grabable:active {
+    cursor: grabbing;
+}
+
+/* Drag handle icon */
+.selector__dragHandle {
+    color: #666;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.sortable-item:hover .selector__dragHandle {
+    opacity: 1;
+}
+
+/* Sortable placeholder during drag */
+.sortable-ghost {
+    opacity: 0.4;
+    background-color: #e5e5e5;
+}
+
+.sortable-chosen {
+    background-color: #f5f5fe !important;
+    border-color: #000091 !important;
+}
+
+/* Subtitles for lists */
+.sortable-subtitle {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+/* Empty state */
+.ls-remove {
+    min-height: 50px;
+    border: 2px dashed #dddddd;
+    background-color: #fafafa;
+}
+
+/* Ranking columns spacing */
+.ranking-available-items,
+.ranking-sorted-items {
+    min-height: 100px;
+}
+
+/* Hide elements in no-JS mode */
+.ls-no-js-hidden {
+    display: block;
+}
+
+.ls-js-hidden-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Float utility */
+.float-end {
+    float: right;
+}
+
+/* Hidden utility */
+.d-none {
+    display: none !important;
+}
+
+/* TODO: Ajouter les styles spécifiques ici au fur et à mesure */

@@ -1,0 +1,44 @@
+{#
+/**
+ * Long Free Text Question - DSFR Theme
+ * Type: T (Long Free Text)
+ *
+ * This template renders a large textarea for long-form text responses
+ *
+ * @var $name           Question name
+ * @var $value          Current value
+ * @var $rows           Number of rows (default from question settings)
+ * @var $columns        Number of columns
+ * @var $maxlength      Maximum character length
+ * @var $inputsize      Input size class
+ * @var $kpclass        Additional CSS classes
+ * @var $basename       Base name for aria labels
+ */
+#}
+
+<!-- Long Free Text (Type T) - DSFR -->
+<div class="fr-input-group {% if empty(kpclass) == false %}{{ kpclass }}{% endif %}">
+    {% if help %}
+        <div class="fr-hint-text">{{ help }}</div>
+    {% endif %}
+
+    <textarea
+        class="fr-input {{ inputsize }}"
+        name="{{ name }}"
+        id="answer{{ name }}"
+        rows="{% if rows %}{{ rows }}{% else %}5{% endif %}"
+        {% if columns %}cols="{{ columns }}"{% endif %}
+        {% if maxlength %}maxlength="{{ maxlength }}"{% endif %}
+        {% if readonly %}readonly="readonly"{% endif %}
+        aria-labelledby="ls-question-text-{{ basename }}"
+        {% if help %}aria-describedby="help-{{ basename }}"{% endif %}
+    >{{ value }}</textarea>
+</div>
+
+{# Hidden field for ExpressionScript Engine #}
+{{ C.Html.hiddenField("java"~name, value, ({
+    'id': "java"~name,
+    'disabled': true
+})) }}
+
+<!-- end of Long Free Text -->

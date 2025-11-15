@@ -1,0 +1,46 @@
+{#
+/**
+ * Huge Free Text Question - DSFR Theme
+ * Type: U (Huge Free Text)
+ *
+ * This template renders a very large textarea (typically 20-30 rows)
+ * Similar to Long Free Text but with more rows
+ *
+ * @var $name           Question name
+ * @var $value          Current value
+ * @var $rows           Number of rows (typically 20-30)
+ * @var $maxlength      Maximum character length
+ * @var $basename       Base name for aria labels
+ */
+#}
+
+<!-- Huge Free Text (Type U) - DSFR -->
+<div class="fr-input-group">
+    {% if help %}
+        <div class="fr-hint-text fr-mb-2w">{{ help }}</div>
+    {% endif %}
+
+    <textarea
+        class="fr-input"
+        name="{{ name }}"
+        id="answer{{ name }}"
+        rows="{% if rows %}{{ rows }}{% else %}20{% endif %}"
+        {% if maxlength %}maxlength="{{ maxlength }}"{% endif %}
+        {% if readonly %}readonly="readonly"{% endif %}
+        aria-labelledby="ls-question-text-{{ basename }}"
+    >{{ value }}</textarea>
+
+    {% if maxlength %}
+        <p class="fr-hint-text fr-mt-1w">
+            {{ gT('Maximum characters:') }} {{ maxlength }}
+        </p>
+    {% endif %}
+</div>
+
+{# Hidden field for ExpressionScript Engine #}
+{{ C.Html.hiddenField("java"~name, value, ({
+    'id': "java"~name,
+    'disabled': true
+})) }}
+
+<!-- end of Huge Free Text -->

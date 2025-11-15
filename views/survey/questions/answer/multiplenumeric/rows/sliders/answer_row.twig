@@ -1,0 +1,79 @@
+{#
+/**
+ * Multiple Numerical - Slider Answer Row - DSFR Theme
+ *
+ * @var $myfname
+ * @var $labelText
+ * @var $extraclass
+ * @var $alert
+ * @var $sLabelWidth
+ * @var $sInputContainerWidth
+ * @var $slider_orientation
+ * @var $slider_min
+ * @var $slider_max
+ * @var $slider_step
+ * @var $slider_value
+ * @var $slider_handle
+ * @var $slider_reset
+ * @var $slider_reversed
+ * @var $slider_position
+ * @var $slider_default_set
+ * @var $slider_custom_handle
+ * @var $prefix
+ * @var $suffix
+ * @var $sSeparator
+ * @var $integeronly
+ * @var $qid
+ */
+#}
+
+<li id='javatbd{{ myfname }}' class="question-item answer-item numeric-item text-item slider-item {{ extraclass }}{% if alert %} ls-error-mandatory has-error fr-input-group--error{% endif %} fr-mb-3w">
+    <div class="fr-grid-row fr-grid-row--gutters ls-slider-item-row">
+        <label id="label-{{ myfname }}" class='fr-label fr-col-12 fr-col-md-{{ sLabelWidth }}{% if sLabelWidth == 0 %} fr-hidden{% endif %}' for="answer{{ myfname }}">
+            {{ processString(labelText) }}
+        </label>
+        <div class='fr-col-12 fr-col-md-{{ sInputContainerWidth }}'>
+            {% if slider_orientation is same as('horizontal') %}
+                {% include './survey/questions/answer/multiplenumeric/rows/sliders/horizontal_slider.twig' %}
+            {% endif %}
+            {% if slider_orientation is same as('vertical') %}
+                {% include './survey/questions/answer/multiplenumeric/rows/sliders/vertical_slider.twig' %}
+            {% endif %}
+        </div>
+    </div>
+</li>
+
+{% set script %}
+    window.activeSliders = window.activeSliders || {};
+    if(window.activeSliders.s{{ myfname }}){
+        window.activeSliders.s{{ myfname }}.unsetSlider();
+        delete window.activeSliders.s{{ myfname }};
+    }
+    window.activeSliders.s{{ myfname }} = new LSSlider({
+        'qid': "{{ qid }}",
+        'element': "{{ myfname }}slid",
+        'rootElement': "{{ myfname }}",
+        'labelElement': "label-{{ myfname }}",
+        'value' : '{{ slider_value }}',
+        'min' : {{ slider_min }},
+        'max' : {{ slider_max }},
+        'step' : {{ slider_step }},
+        'orientation' : "{{ slider_orientation }}",
+        'handle' : "{{ slider_handle }}",
+        'tooltip' : 'always',
+        'reset' : "{{ slider_reset }}",
+        'prefix' : "{{ processString(prefix,1) }}",
+        'suffix' : "{{ processString(suffix,1) }}",
+        'separator' : "{{ sSeparator }}",
+        'number' : true,
+        'integer' : {{ integeronly }},
+        'position' : parseFloat({{ slider_position }}),
+        'custom_handle' : "{{ slider_custom_handle }}",
+        'setPosition' : "{{ slider_default_set }}",
+        'reversed' : {{ slider_reversed }},
+    });
+    window.activeSliders.s{{ myfname }}.init();
+{% endset %}
+{{ registerScript( 'SliderQuestion'~myfname, script, 'POS_POSTSCRIPT') }}
+
+<!-- end of answer_row -->

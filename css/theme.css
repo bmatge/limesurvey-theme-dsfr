@@ -22,8 +22,10 @@
  * pour convertir les classes Bootstrap, mais on a déjà tout converti.
  *
  * Pour mettre à jour DSFR, voir ../dsfr-dist/README.md
+ *
+ * NOTE CSP: Version sans data URIs pour compatibilité CSP strict
  */
-@import url('../dsfr-dist/css/dsfr.min.css');
+@import url('../dsfr-dist/css/dsfr-no-datauri.min.css');
 
 /* Import des icônes DSFR avec SVG externes (répertoire icons/ copié dans css/) */
 @import url('../dsfr-dist/css/icons.min.css');

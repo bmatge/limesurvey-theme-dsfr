@@ -1,35 +1,47 @@
-{#
-/**
- * Multiple Numeric Question - DSFR Theme
+{# /**
+ * Multiple Numerical Question - DSFR Theme (with sliders)
  * Type: K (Multiple Numeric)
  *
- * This template renders multiple numeric input fields
- * Similar to Multiple Short Text but enforces numeric input
- *
- * @var $name           Question name
- * @var $aSubQuestions  Array of subquestions
- * @var $basename       Base name for aria labels
- */
-#}
+ * @var $aRows              : Array of rows with data
+ * @var $rowTemplate        : Template to use for each row
+ * @var $dynamicTemplate    : Template for dynamic rows (total/remaining)
+ * @var $coreClass          : Core CSS classes
+ * @var $basename           : Base name for aria labels
+ * @var $id                 : Question ID
+ * @var $sumRemainingEqn    : Remaining sum equation
+ * @var $sumEqn             : Total sum equation
+ * @var $sLabelWidth        : Label column width
+ * @var $sInputContainerWidth : Input container width
+ * @var $prefix             : Prefix text
+ * @var $suffix             : Suffix text
+ */ #}
 
-<!-- Multiple Numeric (Type K) - DSFR -->
-<fieldset class="fr-fieldset" aria-labelledby="ls-question-text-{{ basename }}">
-    <div class="fr-fieldset__content">
-        <ul class="ls-answers answers-list numeric-list">
-            {% for subquestion in aSubQuestions %}
-                {{ include('./survey/questions/answer/multiplenumeric/rows/answer_row.twig', {
-                    'myfname': name ~ subquestion.title,
-                    'question': subquestion.question,
-                    'dispVal': attribute(_answers, subquestion.title),
-                    'prefix': attribute(aQuestionAttributes, subquestion.title ~ '_prefix'),
-                    'suffix': attribute(aQuestionAttributes, subquestion.title ~ '_suffix'),
-                    'min_value': attribute(aQuestionAttributes, subquestion.title ~ '_min_value'),
-                    'max_value': attribute(aQuestionAttributes, subquestion.title ~ '_max_value'),
-                    'basename': basename
-                }) }}
+<!-- Multiple Numerical - DSFR -->
+<ul class="{{coreClass}} ls-answers answers-list numeric-list" role="group" aria-labelledby="ls-question-text-{{basename}}">
+    {% block rows %}
+        {% if aRows is empty %}
+            {% include './survey/questions/answer/multiplenumeric/empty.twig' %}
+        {% else %}
+            {% for aRow in aRows %}
+                {% include rowTemplate with aRow %}
             {% endfor %}
-        </ul>
-    </div>
-</fieldset>
+        {% endif %}
+    {% endblock %}
 
-<!-- end of Multiple Numeric -->
+    {% block dynamic %}
+        {{
+            include(dynamicTemplate|default("./survey/questions/answer/multiplenumeric/rows/dynamic.twig"),
+                {
+                'id' : id,
+                'sumRemainingEqn' : sumRemainingEqn,
+                'sumEqn' : sumEqn,
+                'sLabelWidth' : sLabelWidth,
+                'sInputContainerWidth' : sInputContainerWidth,
+                'prefix' : prefix,
+                'suffix' : suffix,
+                }
+            )|raw
+        }}
+    {% endblock %}
+</ul>
+<!-- end of Multiple Numerical -->

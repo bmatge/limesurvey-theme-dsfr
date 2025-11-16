@@ -83,28 +83,21 @@
             <div class="{{ aSurveyInfo.class.saveform }} fr-col-lg-8 fr-col-offset-2--lg" {{ aSurveyInfo.attr.saveform }}>
 
                 <!-- Saved name  -->
-                <div class="{{ aSurveyInfo.class.saveformfr-grid-row }} fr-mb-3w" {{ aSurveyInfo.attr.saveformrow }}>
-                    <label class="{{ aSurveyInfo.class.saveformrowlabel }} fr-label" {{ aSurveyInfo.attr.saveformrowlabel }}>
+                <div class="fr-input-group {{ aSurveyInfo.class.saveformfr-grid-row }} fr-mb-3w" {{ aSurveyInfo.attr.saveformrow }}>
+                    <label class="{{ aSurveyInfo.class.saveformrowlabel }} fr-label" {{ aSurveyInfo.attr.saveformrowlabel }} for="{{ aSurveyInfo.id.saveformrowcolinput }}">
                         {{ gT("Saved name:") }}
-                        <small class="{{ aSurveyInfo.class.saveformrowlabelsmall }} fr-text--error asterisk fa fa-asterisk fr-float-left small" {{ aSurveyInfo.attr.saveformrowlabelsmall }} >&nbsp;</small>
-                        <span class="{{ aSurveyInfo.class.saveformrowlabelspan }} fr-sr-only fr-text--error asterisk"  {{ aSurveyInfo.attr.saveformrowlabelspan }} >{{ gT("Mandatory") }}<span>
+                        <span class="{{ aSurveyInfo.class.saveformrowlabelspan }} fr-hint-text"  {{ aSurveyInfo.attr.saveformrowlabelspan }} >{{ gT("Required") }}</span>
                     </label>
-                    <div class="{{ aSurveyInfo.class.saveformrowcol }} input-cell" {{ aSurveyInfo.attr.saveformrowcol }}>
-                        <input class="{{ aSurveyInfo.class.saveformrowcolinput }} fr-input" {{ aSurveyInfo.attr.saveformrowcolinput }} id="{{ aSurveyInfo.id.saveformrowcolinput }}" >
-                    </div>
+                    <input class="{{ aSurveyInfo.class.saveformrowcolinput }} fr-input" {{ aSurveyInfo.attr.saveformrowcolinput }} id="{{ aSurveyInfo.id.saveformrowcolinput }}" required>
                 </div>
 
                 <!-- Password -->
-                <div class="{{ aSurveyInfo.class.passwordfr-grid-row }} fr-mb-3w" {{ aSurveyInfo.attr.passwordrow }}>
-                    <label class='{{ aSurveyInfo.class.passwordrowcol }} fr-label'  {{ aSurveyInfo.attr.passwordrowcol }} >
+                <div class="fr-input-group {{ aSurveyInfo.class.passwordfr-grid-row }} fr-mb-3w" {{ aSurveyInfo.attr.passwordrow }}>
+                    <label class='{{ aSurveyInfo.class.passwordrowcol }} fr-label'  {{ aSurveyInfo.attr.passwordrowcol }} for='loadpassword'>
                         {{ gT("Password:") }}
-                        <small class="{{ aSurveyInfo.class.passwordrowcolsmall }} fr-text--error asterisk fa fa-asterisk fr-float-left small" {{ aSurveyInfo.attr.passwordrowcolsmall }}>&nbsp;</small>
-                        <span class="{{ aSurveyInfo.class.passwordrowcolspan }} fr-sr-only fr-text--error asterisk" {{ aSurveyInfo.attr.passwordrowcolspan }}>{{ gT("Mandatory") }}<span>
+                        <span class="{{ aSurveyInfo.class.passwordrowcolspan }} fr-hint-text" {{ aSurveyInfo.attr.passwordrowcolspan }}>{{ gT("Required") }}</span>
                     </label>
-
-                    <div class='{{ aSurveyInfo.class.passwordrowinput }}'>
-                        <input class='fr-input' {{ aSurveyInfo.attr.passwordrowinputi }} >
-                    </div>
+                    <input class='fr-input' type='password' id='loadpassword' name='loadpass' {{ aSurveyInfo.attr.passwordrowinputi }} required>
                 </div>
 
                 {% if aSurveyInfo.aLoadForm.aCaptcha.show %}

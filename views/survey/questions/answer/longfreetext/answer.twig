@@ -26,17 +26,17 @@
         class="fr-input {{ inputsize }}"
         name="{{ name }}"
         id="answer{{ name }}"
-        rows="{% if rows %}{{ rows }}{% else %}5{% endif %}"
-        {% if columns %}cols="{{ columns }}"{% endif %}
+        rows="{% if drows %}{{ drows }}{% else %}5{% endif %}"
+        {% if inputsize %}cols="{{ inputsize }}"{% endif %}
         {% if maxlength %}maxlength="{{ maxlength }}"{% endif %}
         {% if readonly %}readonly="readonly"{% endif %}
         aria-labelledby="ls-question-text-{{ basename }}"
         {% if help %}aria-describedby="help-{{ basename }}"{% endif %}
-    >{{ value }}</textarea>
+    >{{ dispVal }}</textarea>
 </div>
 
 {# Hidden field for ExpressionScript Engine #}
-{{ C.Html.hiddenField("java"~name, value, ({
+{{ C.Html.hiddenField("java"~name, dispVal, ({
     'id': "java"~name,
     'disabled': true
 })) }}

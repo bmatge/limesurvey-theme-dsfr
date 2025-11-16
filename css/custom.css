@@ -62,7 +62,7 @@ body > article {
     top: 0;
     left: 0;
     height: 100%;
-    background-color: #000091;
+    background-color: var(--background-action-high-blue-france);
     transition: width 0.3s ease;
 }
 
@@ -126,12 +126,12 @@ table td input[type="checkbox"] {
 
 .question-container,
 .group-description-card {
-    background-color: #FFFFFF;
-    border: 1px solid #DDDDDD;
+    background-color: var(--background-raised-grey);
+    border: 1px solid var(--border-default-grey);
     border-radius: 0;
     padding: 1.5rem;
     margin-bottom: 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--overlap-shadow);
 }
 
 /* Questions conditionnelles - EM ajoute ces classes */
@@ -162,42 +162,62 @@ table td input[type="checkbox"] {
 /* Info (bleu France DSFR) */
 .ls-em-success,
 .ls-em-tip:not(.ls-em-error):not(.em_num_answers) {
-    color: #000091 !important;
+    color: var(--text-action-high-blue-france) !important;
 }
 
 /* Erreur (rouge DSFR) */
 .ls-em-error {
-    color: #CE0500 !important;
+    color: var(--error-425) !important;
 }
 
 /* Warning (orange DSFR warning-main-525) */
 .em_num_answers,
 .em_validation_q,
 .em_commented_checkbox {
-    color: #D64D00 !important;
+    color: var(--warning-425) !important;
 }
 
 /* ============================================
-   SLIDERS - Couleurs DSFR
+   SLIDERS - Couleurs DSFR (legacy Bootstrap)
    ============================================ */
 
 .slider-track {
-    background-color: #E5E5E5;
+    background-color: var(--background-disabled-grey);
     height: 4px;
 }
 
 .slider-selection {
-    background-color: #000091 !important;
+    background-color: var(--background-action-high-blue-france) !important;
 }
 
 .slider-handle {
-    background-color: #000091 !important;
-    border: 2px solid #FFF;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    background-color: var(--background-action-high-blue-france) !important;
+    border: 2px solid var(--background-default-grey);
+    box-shadow: var(--raised-shadow);
 }
 
 .slider-handle:hover {
-    background-color: #1212FF !important;
+    background-color: var(--background-action-high-blue-france-hover) !important;
+}
+
+/* ============================================
+   DSFR RANGE (HTML5 native sliders)
+   ============================================ */
+
+/* Reduce margin for range groups inside slider items */
+.ls-slider-item-row .fr-range-group {
+    margin-bottom: 0;
+}
+
+/* Style the range output value display */
+.fr-range__output {
+    font-weight: 700;
+    color: var(--text-action-high-blue-france);
+}
+
+/* Ensure text-end utility works for right-aligned labels */
+.text-end {
+    text-align: right !important;
 }
 
 /* ============================================
@@ -220,20 +240,20 @@ table td input[type="checkbox"] {
 }
 
 .alert-warning {
-    background-color: #FFE9E6;
-    border-left-color: #B34000;
+    background-color: var(--background-contrast-warning);
+    border-left-color: var(--warning-425);
 }
 
 .alert .h4,
 .alert strong {
-    color: #CE0500 !important;
+    color: var(--error-425) !important;
 }
 
 /* Cartes d'erreur Bootstrap → DSFR */
 .card {
-    border: 1px solid #DDDDDD;
+    border: 1px solid var(--border-default-grey);
     border-radius: 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--raised-shadow);
 }
 
 .card-body {
@@ -248,19 +268,11 @@ table td input[type="checkbox"] {
    INPUTS - Bordures DSFR
    ============================================ */
 
-input[type="text"],
-input[type="email"],
-input[type="number"],
-textarea,
-.form-control {
-    border-color: #CECECE !important;
-}
-
-input:focus,
-textarea:focus {
-    border-color: #000091 !important;
-    box-shadow: inset 0 -2px 0 0 #000091;
-}
+/*
+ * SUPPRIMÉ - Les styles des inputs sont maintenant gérés dans theme.css
+ * pour éviter les conflits avec Bootstrap et assurer la conformité DSFR
+ * Voir theme.css lignes 342-452 pour les styles DSFR complets
+ */
 
 /* ============================================
    BOUTONS NAVIGATION - Secondary
@@ -268,13 +280,13 @@ textarea:focus {
 
 .fr-btn--secondary {
     background-color: transparent !important;
-    color: #000091 !important;
-    border: 1px solid #000091 !important;
-    box-shadow: inset 0 0 0 1px #000091 !important;
+    color: var(--text-action-high-blue-france) !important;
+    border: 1px solid var(--border-action-high-blue-france) !important;
+    box-shadow: inset 0 0 0 1px var(--border-action-high-blue-france) !important;
 }
 
 .fr-btn--secondary:hover {
-    background-color: #F5F5FE !important;
+    background-color: var(--background-action-low-blue-france-hover) !important;
 }
 
 /* ============================================
@@ -284,6 +296,320 @@ textarea:focus {
 .question-number,
 .question-code {
     display: none !important;
+}
+
+/* ============================================
+   RANKING QUESTIONS - DSFR Styles
+   ============================================ */
+
+/* List group (Bootstrap classes used by vanilla ranking) */
+.list-group {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0.5rem;
+    background-color: var(--background-alt-grey);
+    border: 1px solid var(--border-default-grey);
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.list-group-item:hover {
+    background-color: var(--background-action-low-blue-france-hover);
+    border-color: var(--border-action-high-blue-france);
+}
+
+/* Ranking items with drag handle */
+.sortable-item {
+    user-select: none;
+}
+
+.sortable-item.grabable:hover {
+    cursor: grab;
+}
+
+.sortable-item.grabable:active {
+    cursor: grabbing;
+}
+
+/* Drag handle icon */
+.selector__dragHandle {
+    color: #666;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.sortable-item:hover .selector__dragHandle {
+    opacity: 1;
+}
+
+/* Sortable placeholder during drag */
+.sortable-ghost {
+    opacity: 0.4;
+    background-color: var(--background-disabled-grey);
+}
+
+.sortable-chosen {
+    background-color: var(--background-action-low-blue-france-hover) !important;
+    border-color: var(--border-action-high-blue-france) !important;
+}
+
+/* Subtitles for lists */
+.sortable-subtitle {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+/* Empty state */
+.ls-remove {
+    min-height: 50px;
+    border: 2px dashed var(--border-default-grey);
+    background-color: var(--background-alt-grey);
+}
+
+/* Ranking columns spacing */
+.ranking-available-items,
+.ranking-sorted-items {
+    min-height: 100px;
+}
+
+/* Hide elements in no-JS mode */
+.ls-no-js-hidden {
+    display: block;
+}
+
+.ls-js-hidden-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Float utility */
+.float-end {
+    float: right;
+}
+
+/* Hidden utility */
+.d-none {
+    display: none !important;
+}
+
+/* ============================================
+   ALERTES DSFR DE VALIDATION
+   ============================================ */
+
+/* Alerte de validation convertie depuis modale Bootstrap */
+.dsfr-validation-alert {
+    margin-bottom: 2rem;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animation de fade-out */
+.fr-alert--fade-out {
+    animation: fadeOut 0.5s ease-out forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+/* Espacement du bouton fermer dans l'alerte */
+.fr-alert .fr-btn--close {
+    margin-top: 1rem;
+}
+
+/* Groupe de boutons dans les alertes */
+.fr-alert .fr-btns-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.fr-alert .fr-btns-group button {
+    flex: 0 1 auto;
+}
+
+/* Responsive : boutons en colonne sur mobile */
+@media (max-width: 576px) {
+    .fr-alert .fr-btns-group {
+        flex-direction: column;
+    }
+
+    .fr-alert .fr-btns-group button {
+        width: 100%;
+    }
+}
+
+/* ============================================
+   MASQUER MODALES BOOTSTRAP VIDES
+   ============================================ */
+
+/* Masquer la modale Bootstrap par défaut */
+.modal {
+    display: none !important;
+}
+
+/* Ne l'afficher QUE si elle a du contenu valide ET la classe dsfr-show */
+.modal.dsfr-show {
+    display: block !important;
+}
+
+/* Supprimer le backdrop Bootstrap */
+.modal-backdrop {
+    display: none !important;
+}
+
+/* ============================================
+   VALIDATION DSFR - Questions en erreur
+   ============================================ */
+
+/* Question container en erreur */
+.question-container.has-error,
+.question-container.fr-input-group--error {
+    border-left: 4px solid var(--border-plain-error);
+    background-color: var(--background-contrast-error);
+    padding-left: calc(1.5rem - 4px); /* Compenser la bordure */
+}
+
+/* Messages d'erreur inline sous les questions */
+.fr-error-text,
+.question-valid-container .ls-em-error,
+.question-valid-container .em_validation_q {
+    display: block;
+    color: var(--text-default-error);
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    margin-top: 0.25rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--background-contrast-error);
+    border-left: 4px solid var(--border-plain-error);
+}
+
+/* Inputs/textarea/select en erreur */
+input.error,
+input.fr-input--error,
+textarea.error,
+textarea.fr-input--error,
+select.error,
+select.fr-select--error {
+    border-color: var(--border-plain-error) !important;
+    box-shadow: inset 0 -2px 0 0 var(--border-plain-error) !important;
+}
+
+/* Radio/checkbox en erreur */
+.has-error input[type="radio"],
+.has-error input[type="checkbox"],
+.fr-input-group--error input[type="radio"],
+.fr-input-group--error input[type="checkbox"] {
+    outline: 2px solid var(--border-plain-error);
+    outline-offset: 2px;
+}
+
+/* Label de question obligatoire */
+.question-text-container .mandatory,
+.asterisk {
+    color: var(--text-default-error);
+    font-weight: bold;
+}
+
+/* Icône d'erreur (optionnel) */
+.fr-error-text::before {
+    content: "";
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ce0500'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E");
+    background-size: contain;
+    vertical-align: middle;
+}
+
+/* ============================================
+   MULTIPLE CHOICE WITH COMMENTS - Alignement
+   ============================================ */
+
+/* Aligner verticalement checkbox et champ de commentaire */
+.checkbox-text-item .fr-grid-row {
+    align-items: center;
+}
+
+/* Ajuster l'espacement du checkbox-group pour l'alignement */
+.checkbox-text-item .fr-checkbox-group {
+    margin-bottom: 0;
+}
+
+/* S'assurer que le champ input a la même hauteur visuelle */
+.checkbox-text-item .fr-input-group {
+    margin-bottom: 0;
+}
+
+/* Supprimer le ::after sur les labels des checkbox avec commentaires */
+.checkbox-text-item .fr-checkbox-group .fr-label::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* ============================================
+   DATE PICKER - Alignement des séparateurs
+   ============================================ */
+
+/* Utilitaires Bootstrap manquants dans DSFR */
+.d-flex {
+    display: flex !important;
+}
+
+.align-items-center {
+    align-items: center !important;
+}
+
+.justify-content-center {
+    justify-content: center !important;
+}
+
+/* ============================================
+   INPUT TEXT - Alignement à gauche
+   ============================================ */
+
+/* Aligner le texte à gauche dans tous les champs texte */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+textarea,
+.fr-input {
+    text-align: left !important;
 }
 
 /* TODO: Ajouter les styles spécifiques ici au fur et à mesure */

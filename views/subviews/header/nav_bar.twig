@@ -27,13 +27,23 @@ For the survey navigator ("Next", "Back", etc.), see: navigation/navigator.twig
                                     </a>
                                 {% endif %}
                             </div>
+                            <!-- pour le logo opérateur 
+                            {% if aSurveyInfo.options.brandlogo == "on" and aSurveyInfo.options.brandlogofile %}
+                                <div class="fr-header__operator">
+                                    <a href="{{ aSurveyInfo.surveyUrl }}" title="{{ gT("Home") }} - {{ aSurveyInfo.name }}">
+                                        <img class="fr-responsive-img" style="width: 3.5rem"
+                                             src="{{ aSurveyInfo.options.brandlogofile }}"
+                                             alt="{{ aSurveyInfo.name }}" />
+                                    </a>
+                                </div>
+                            {% endif %}
+                            -->
                             {% if ShowMenu %}
                                 <div class="fr-header__navbar">
                                     <button class="fr-btn--menu fr-btn"
                                             data-fr-opened="false"
-                                            aria-controls="modal-header-menu"
-                                            aria-haspopup="menu"
-                                            id="button-menu"
+                                            aria-controls="header-menu"
+                                            id="header-menu-btn"
                                             title="{{ gT("Menu") }}">
                                         {{ gT("Menu") }}
                                     </button>
@@ -41,9 +51,9 @@ For the survey navigator ("Next", "Back", etc.), see: navigation/navigator.twig
                             {% endif %}
                         </div>
                         <div class="fr-header__service">
-                            <p class="fr-header__service-title">{{ aSurveyInfo.name }}</p>
+                            <p class="fr-header__service-title fr-text--sm">Ministère de l'Économie, des Finances et de la Souveraineté industrielle, énergétique et numérique</p>
                             {% if aSurveyInfo.description %}
-                                <p class="fr-header__service-tagline">{{ aSurveyInfo.description|striptags }}</p>
+                                <p class="fr-header__service-tagline">{{ aSurveyInfo.name }}</p>
                             {% endif %}
                         </div>
                     </div>
@@ -51,58 +61,55 @@ For the survey navigator ("Next", "Back", etc.), see: navigation/navigator.twig
                     {% if ShowMenu %}
                         <div class="fr-header__tools">
                             <div class="fr-header__tools-links">
-                                <ul class="fr-btns-group">
-                                    {% if aSurveyInfo.aNavigator.save.show == "Y" %}
-                                        <li>
-                                            <a class="fr-btn fr-btn--secondary fr-btn--sm fr-icon-save-line fr-btn--icon-left"
-                                               href="{{ aSurveyInfo.aNavigator.save.url }}"
-                                               title="{{ gT("Save your responses so far") }}">
-                                                {{ gT("Save") }}
-                                            </a>
-                                        </li>
-                                    {% endif %}
+                                {% if aSurveyInfo.aQuestionIndex.bShow == true and aSurveyInfo.format != 'A' %}
+                                    <a href="#question-index-modal"
+                                       data-fr-opened="false"
+                                       aria-controls="question-index-modal"
+                                       class="fr-btn--team fr-btn"
+                                       title="{{ gT("Question index") }}">
+                                        {{ gT("Question index") }}
+                                    </a>
+                                {% endif %}
 
-                                    {% if ((aSurveyInfo.bShowClearAll == true or aSurveyInfo.bShowClearAll == null) and aSurveyInfo.options.showclearall == 'on') %}
-                                        <li>
-                                            <a class="fr-btn fr-btn--tertiary fr-btn--sm fr-icon-delete-line fr-btn--icon-left"
-                                               href="{{ aSurveyInfo.clearallurl }}"
-                                               title="{{ gT("Clear all") }}">
-                                                {{ gT("Clear all") }}
-                                            </a>
-                                        </li>
-                                    {% endif %}
+                                {# Sélecteur de thème clair/sombre #}
+                                <div class="fr-header__tools-links">
+                                    <button class="fr-btn fr-icon-theme-fill fr-btn--icon-left"
+                                            aria-label="{{ gT("Display settings") }}"
+                                            id="fr-theme-toggle"
+                                            title="{{ gT("Switch theme (light/dark)") }}">
+                                        <span class="fr-hidden-lg">{{ gT("Theme") }}</span>
+                                    </button>
+                                </div>
 
-                                    {% if aSurveyInfo.aQuestionIndex.bShow == true and aSurveyInfo.format != 'A' %}
-                                        <li>
-                                            <a class="fr-link fr-icon-list-unordered fr-link--icon-left"
-                                               href="#question-index-modal"
-                                               data-fr-opened="false"
-                                               aria-controls="question-index-modal"
-                                               title="{{ gT("Question index") }}">
-                                                {{ gT("Question index") }}
-                                            </a>
-                                        </li>
-                                    {% endif %}
-
-                                    {% if aSurveyInfo.alanguageChanger.show %}
-                                        <li>
-                                            <div class="fr-select-group">
-                                                <select class="fr-select fr-select--sm"
-                                                        id="language-changer"
-                                                        name="lang"
-                                                        aria-label="{{ gT("Choose language") }}"
-                                                        onchange="if(this.value)window.location.href=this.value">
-                                                    {% for language in aSurveyInfo.alanguageChanger.aListLang %}
-                                                        <option value="{{ language.url }}"
-                                                                {% if language.code == aSurveyInfo.languagecode %}selected{% endif %}>
-                                                            {{ language.language }}
-                                                        </option>
+                                {% if aSurveyInfo.alanguageChanger.show %}
+                                    {% set aLCD = aSurveyInfo.alanguageChanger.datas %}
+                                    <div id="header-translate" class="fr-translate fr-nav">
+                                        <div class="fr-nav__item">
+                                            <button aria-controls="translate-collapse"
+                                                    aria-expanded="false"
+                                                    title="{{ gT("Select a language") }}"
+                                                    type="button"
+                                                    class="fr-translate__btn fr-btn">
+                                                {{ aLCD.sSelected|upper }}<span class="fr-hidden-lg">&nbsp;- {{ gT(aLCD.aListLang[aLCD.sSelected]) }}</span>
+                                            </button>
+                                            <div class="fr-collapse fr-translate__menu fr-menu" id="translate-collapse">
+                                                <ul class="fr-menu__list">
+                                                    {% for langCode, langName in aLCD.aListLang %}
+                                                        <li>
+                                                            <a class="fr-translate__language fr-nav__link"
+                                                               hreflang="{{ langCode }}"
+                                                               lang="{{ langCode }}"
+                                                               href="{{ aLCD.targetUrl }}{% if '?' in aLCD.targetUrl %}&{% else %}?{% endif %}lang={{ langCode }}"
+                                                               {% if langCode == aLCD.sSelected %}aria-current="true"{% endif %}>
+                                                                {{ langCode|upper }} - {{ gT(langName) }}
+                                                            </a>
+                                                        </li>
                                                     {% endfor %}
-                                                </select>
+                                                </ul>
                                             </div>
-                                        </li>
-                                    {% endif %}
-                                </ul>
+                                        </div>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     {% endif %}
@@ -111,67 +118,59 @@ For the survey navigator ("Next", "Back", etc.), see: navigation/navigator.twig
         </div>
 
         {% if ShowMenu %}
-            <div class="fr-header__menu fr-modal" id="modal-header-menu" aria-labelledby="button-menu">
+            <div class="fr-header__menu fr-modal" id="header-menu" aria-labelledby="header-menu-btn">
                 <div class="fr-container">
-                    <button class="fr-btn--close fr-btn" aria-controls="modal-header-menu" title="{{ gT("Close") }}">
+                    <button aria-controls="header-menu"
+                            title="{{ gT("Close") }}"
+                            type="button"
+                            class="fr-btn--close fr-btn">
                         {{ gT("Close") }}
                     </button>
                     <div class="fr-header__menu-links">
-                        <ul class="fr-btns-group fr-btns-group--inline-md">
-                            {% if aSurveyInfo.aNavigator.save.show == "Y" %}
-                                <li>
-                                    <a class="fr-btn fr-icon-save-line fr-btn--icon-left"
-                                       href="{{ aSurveyInfo.aNavigator.save.url }}">
-                                        {{ gT("Save") }}
-                                    </a>
-                                </li>
-                            {% endif %}
+                        {% if aSurveyInfo.aQuestionIndex.bShow == true and aSurveyInfo.format != 'A' %}
+                            <a href="#question-index-modal"
+                               data-fr-opened="false"
+                               aria-controls="question-index-modal"
+                               class="fr-btn--team fr-btn"
+                               title="{{ gT("Question index") }}">
+                                {{ gT("Question index") }}
+                            </a>
+                        {% endif %}
 
-                            {% if aSurveyInfo.aNavigator.load.show == "Y" %}
-                                <li>
-                                    <a class="fr-btn fr-icon-upload-2-line fr-btn--icon-left"
-                                       href="{{ aSurveyInfo.aNavigator.load.url }}">
-                                        {{ gT("Load unfinished survey") }}
-                                    </a>
-                                </li>
-                            {% endif %}
-
-                            {% if ((aSurveyInfo.bShowClearAll == true or aSurveyInfo.bShowClearAll == null) and aSurveyInfo.options.showclearall == 'on') %}
-                                <li>
-                                    <a class="fr-btn fr-icon-delete-line fr-btn--icon-left"
-                                       href="{{ aSurveyInfo.clearallurl }}">
-                                        {{ gT("Clear all") }}
-                                    </a>
-                                </li>
-                            {% endif %}
-
-                            {% if aSurveyInfo.aQuestionIndex.bShow == true and aSurveyInfo.format != 'A' %}
-                                <li>
-                                    <a class="fr-link fr-icon-list-unordered fr-link--icon-left"
-                                       href="#question-index-modal"
-                                       data-fr-opened="false"
-                                       aria-controls="question-index-modal">
-                                        {{ gT("Question index") }}
-                                    </a>
-                                </li>
-                            {% endif %}
-                        </ul>
+                        {# Sélecteur de thème clair/sombre (mobile) #}
+                        <button class="fr-btn fr-icon-theme-fill fr-btn--icon-left"
+                                aria-label="{{ gT("Display settings") }}"
+                                id="fr-theme-toggle-mobile"
+                                title="{{ gT("Switch theme (light/dark)") }}">
+                            {{ gT("Theme") }}
+                        </button>
 
                         {% if aSurveyInfo.alanguageChanger.show %}
-                            <div class="fr-mt-4w">
-                                <label class="fr-label" for="language-changer-mobile">{{ gT("Choose language") }}</label>
-                                <div class="fr-select-group">
-                                    <select class="fr-select"
-                                            id="language-changer-mobile"
-                                            name="lang"
-                                            onchange="if(this.value)window.location.href=this.value">
-                                        {% for language in aSurveyInfo.alanguageChanger.aListLang %}
-                                            <option value="{{ language.url }}"
-                                                    {% if language.code == aSurveyInfo.languagecode %}selected{% endif %}>
-                                                {{ language.language }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
+                            {% set aLCD = aSurveyInfo.alanguageChanger.datas %}
+                            <div id="header-translate-mobile" class="fr-translate fr-nav">
+                                <div class="fr-nav__item">
+                                    <button aria-controls="translate-collapse-mobile"
+                                            aria-expanded="false"
+                                            title="{{ gT("Select a language") }}"
+                                            type="button"
+                                            class="fr-translate__btn fr-btn">
+                                        {{ aLCD.sSelected|upper }}<span class="fr-hidden-lg">&nbsp;- {{ gT(aLCD.aListLang[aLCD.sSelected]) }}</span>
+                                    </button>
+                                    <div class="fr-collapse fr-translate__menu fr-menu" id="translate-collapse-mobile">
+                                        <ul class="fr-menu__list">
+                                            {% for langCode, langName in aLCD.aListLang %}
+                                                <li>
+                                                    <a class="fr-translate__language fr-nav__link"
+                                                       hreflang="{{ langCode }}"
+                                                       lang="{{ langCode }}"
+                                                       href="{{ aLCD.targetUrl }}{% if '?' in aLCD.targetUrl %}&{% else %}?{% endif %}lang={{ langCode }}"
+                                                       {% if langCode == aLCD.sSelected %}aria-current="true"{% endif %}>
+                                                        {{ langCode|upper }} - {{ gT(langName) }}
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         {% endif %}

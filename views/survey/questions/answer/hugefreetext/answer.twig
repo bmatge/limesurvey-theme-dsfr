@@ -24,11 +24,11 @@
         class="fr-input"
         name="{{ name }}"
         id="answer{{ name }}"
-        rows="{% if rows %}{{ rows }}{% else %}20{% endif %}"
+        rows="{% if drows %}{{ drows }}{% else %}20{% endif %}"
         {% if maxlength %}maxlength="{{ maxlength }}"{% endif %}
         {% if readonly %}readonly="readonly"{% endif %}
         aria-labelledby="ls-question-text-{{ basename }}"
-    >{{ value }}</textarea>
+    >{{ dispVal }}</textarea>
 
     {% if maxlength %}
         <p class="fr-hint-text fr-mt-1w">
@@ -38,7 +38,7 @@
 </div>
 
 {# Hidden field for ExpressionScript Engine #}
-{{ C.Html.hiddenField("java"~name, value, ({
+{{ C.Html.hiddenField("java"~name, dispVal, ({
     'id': "java"~name,
     'disabled': true
 })) }}

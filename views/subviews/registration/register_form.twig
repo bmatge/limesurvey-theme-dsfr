@@ -26,27 +26,24 @@
             {{ include('./subviews/navigation/language_changer.twig') }}
         </div>
         {# Participants first name #}
-        <div class='{{ aSurveyInfo.class.registerformcolrow }} fr-mb-3w' {{ aSurveyInfo.attr.registerformcolrow }}>
+        <div class='fr-input-group {{ aSurveyInfo.class.registerformcolrow }} fr-mb-3w' {{ aSurveyInfo.attr.registerformcolrow }}>
             <label for='register_firstname' class='{{ aSurveyInfo.class.registerformcolrowlabel }} fr-label '>{{ gT("First name:") }}</label>
-            <div class="">
-                {{ C.Html.textField('register_firstname', aSurveyInfo.sFirstName, ({'id' : 'register_firstname','class' : 'fr-input'})) }}
-            </div>
+            {{ C.Html.textField('register_firstname', aSurveyInfo.sFirstName, ({'id' : 'register_firstname','class' : 'fr-input'})) }}
         </div>
 
         {# Participants last name #}
-        <div class='{{ aSurveyInfo.class.registerformcolrowb }} fr-mb-3w' {{ aSurveyInfo.attr.registerformcolrowb }}>
-            <label {{ aSurveyInfo.attr.registerformcolrowblabel }}  class='{{ aSurveyInfo.class.registerformcolrowblabel }} fr-label '>{{ gT("Last name:") }}</label>
-            <div {{ aSurveyInfo.attr.registerformcolrowbdiv }} >
-                {{ C.Html.textField('register_lastname', aSurveyInfo.sLastName, ({'id' : 'register_lastname', 'class' : 'fr-input'})) }}
-            </div>
+        <div class='fr-input-group {{ aSurveyInfo.class.registerformcolrowb }} fr-mb-3w' {{ aSurveyInfo.attr.registerformcolrowb }}>
+            <label {{ aSurveyInfo.attr.registerformcolrowblabel }} for='register_lastname' class='{{ aSurveyInfo.class.registerformcolrowblabel }} fr-label '>{{ gT("Last name:") }}</label>
+            {{ C.Html.textField('register_lastname', aSurveyInfo.sLastName, ({'id' : 'register_lastname', 'class' : 'fr-input'})) }}
         </div>
 
         {# Participants email #}
-        <div class='{{ aSurveyInfo.class.registerformcolrowc }} fr-mb-3w' {{ aSurveyInfo.attr.registerformcolrowc }}>
-            <label {{ aSurveyInfo.attr.registerformcolrowclabel }} class='{{ aSurveyInfo.class.registerformcolrowclabel }}  fr-label'> {{ gT("Email address:") }} {{ include('./subviews/registration/required.twig') }}</label>
-            <div {{ aSurveyInfo.attr.registerformcolrowcdiv }}  >
-                {{ C.Html.emailField('register_email', aSurveyInfo.sEmail, ({'id' : 'register_email','class' : 'fr-input input-sm','required' : true})) }}
-            </div>
+        <div class='fr-input-group {{ aSurveyInfo.class.registerformcolrowc }} fr-mb-3w' {{ aSurveyInfo.attr.registerformcolrowc }}>
+            <label {{ aSurveyInfo.attr.registerformcolrowclabel }} for='register_email' class='{{ aSurveyInfo.class.registerformcolrowclabel }}  fr-label'>
+                {{ gT("Email address:") }}
+                <span class="fr-hint-text">{{ gT("Required") }}</span>
+            </label>
+            {{ C.Html.emailField('register_email', aSurveyInfo.sEmail, ({'id' : 'register_email','class' : 'fr-input','required' : true})) }}
         </div>
 
         {# Loop to add extra attributes #}

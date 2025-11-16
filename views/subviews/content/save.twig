@@ -94,58 +94,49 @@
 
             <!-- Name and Password -->
             <div class='{{ aSurveyInfo.class.saveformsurvey }} fr-col-lg-8 fr-col-offset-2--lg' {{ aSurveyInfo.attr.saveformsurvey }}>
-                <div class='{{ aSurveyInfo.class.saveformsurveydiva }} fr-mb-3w' {{ aSurveyInfo.attr.saveformsurveydiva }}>
-
+                <div class='fr-input-group {{ aSurveyInfo.class.saveformsurveydiva }} fr-mb-3w' {{ aSurveyInfo.attr.saveformsurveydiva }}>
                     <!-- Saved name  -->
-                    <label class='{{ aSurveyInfo.class.saveformsurveydivalabel }} fr-label' {{ aSurveyInfo.attr.saveformsurveydivalabel }}>
+                    <label class='{{ aSurveyInfo.class.saveformsurveydivalabel }} fr-label' {{ aSurveyInfo.attr.saveformsurveydivalabel }} for='savename'>
                         {{ gT("Name:") }}
-                        <small class="{{ aSurveyInfo.class.saveformsurveydivalabelsmall }} fr-text--error asterisk fa fa-asterisk fr-float-left small " {{ aSurveyInfo.attr.saveformsurveydivalabelsmall }} >&nbsp;</small>
-                        <span class="{{ aSurveyInfo.class.saveformsurveydivalabelspan }} fr-sr-only fr-text--error asterisk" {{ aSurveyInfo.attr.saveformsurveydivalabelspan }}>{{ gT("Mandatory") }}<span>
+                        <span class="{{ aSurveyInfo.class.saveformsurveydivalabelspan }} fr-hint-text" {{ aSurveyInfo.attr.saveformsurveydivalabelspan }}>{{ gT("Required") }}</span>
                     </label>
-                    <div class='{{ aSurveyInfo.class.saveformsurveydivb }}' {{ aSurveyInfo.attr.saveformsurveydivb }}>
 
-                        {% set htmlOptions = {
-                                'id'          : 'savename',
-                                'name'        : 'savename',
-                                'class'       : 'fr-input',
-                                'required'    : true,
-                            }
-                        %}
+                    {% set htmlOptions = {
+                            'id'          : 'savename',
+                            'name'        : 'savename',
+                            'class'       : 'fr-input',
+                            'required'    : true,
+                        }
+                    %}
 
-                        {# using CHtml::textField because it encode (and break XSS) #}
-                        {{ C.Html.textField(
-                                'savename',
-                                getPost('savename'),
-                                (htmlOptions)
-                        )  }}
-                    </div>
-
+                    {# using CHtml::textField because it encode (and break XSS) #}
+                    {{ C.Html.textField(
+                            'savename',
+                            getPost('savename'),
+                            (htmlOptions)
+                    )  }}
                 </div>
 
                 <!-- Password -->
-                <div class='{{ aSurveyInfo.class.saveformsurveydivc }} fr-grid-row fr-mb-3w' {{ aSurveyInfo.attr.saveformsurveydivc }}>
-                    <label class='{{ aSurveyInfo.class.saveformsurveydivclabel }} fr-label' {{ aSurveyInfo.attr.saveformsurveydivclabel }}>
+                <div class='fr-input-group {{ aSurveyInfo.class.saveformsurveydivc }} fr-mb-3w' {{ aSurveyInfo.attr.saveformsurveydivc }}>
+                    <label class='{{ aSurveyInfo.class.saveformsurveydivclabel }} fr-label' {{ aSurveyInfo.attr.saveformsurveydivclabel }} for='savepass'>
                         {{ gT("Password:") }}
-                        <small class="{{ aSurveyInfo.class.saveformsurveydivcsmall }} fr-text--error asterisk fa fa-asterisk fr-float-left small" {{ aSurveyInfo.attr.saveformsurveydivcsmall }} >&nbsp;</small>
-                        <span class="{{ aSurveyInfo.class.saveformsurveydivcspan }} fr-sr-only fr-text--error asterisk" {{ aSurveyInfo.attr.saveformsurveydivcspan }}>{{ gT("Mandatory") }}<span>
+                        <span class="{{ aSurveyInfo.class.saveformsurveydivcspan }} fr-hint-text" {{ aSurveyInfo.attr.saveformsurveydivcspan }}>{{ gT("Required") }}</span>
                     </label>
 
-                    <div class='{{ aSurveyInfo.class.saveformsurveydivcdiv }}' {{ aSurveyInfo.attr.saveformsurveydivcdiv }}>
+                    {% set htmlOptions = {
+                            'id'          : 'savepass',
+                            'name'        : 'savepass',
+                            'class'       : 'fr-input',
+                            'required'    : true,
+                        }
+                    %}
 
-                        {% set htmlOptions = {
-                                'id'          : 'savepass',
-                                'name'        : 'savepass',
-                                'class'       : 'fr-input',
-                                'required'    : true,
-                            }
-                        %}
-
-                        {{ C.Html.passwordField(
-                                'savepass',
-                                '',
-                                (htmlOptions)
-                        )  }}
-                    </div>
+                    {{ C.Html.passwordField(
+                            'savepass',
+                            '',
+                            (htmlOptions)
+                    )  }}
                 </div>
 
                 <!-- Confirm password -->
@@ -174,25 +165,23 @@
                 </div>
 
                 <!-- Email -->
-                <div class='{{ aSurveyInfo.class.saveformsurveydive }}  mb-3' {{ aSurveyInfo.attr.saveformsurveydive }}>
-                    <label class='{{ aSurveyInfo.class.saveformsurveydivelabel }} fr-label' {{ aSurveyInfo.attr.saveformsurveydivelabel }} >
+                <div class='fr-input-group {{ aSurveyInfo.class.saveformsurveydive }} fr-mb-3w' {{ aSurveyInfo.attr.saveformsurveydive }}>
+                    <label class='{{ aSurveyInfo.class.saveformsurveydivelabel }} fr-label' {{ aSurveyInfo.attr.saveformsurveydivelabel }} for='saveemail'>
                         {{ gT("Your email address:") }}
                     </label>
-                    <div class='{{ aSurveyInfo.class.saveformsurveydivediv }}' {{ aSurveyInfo.attr.saveformsurveydivediv }}>
 
-                        {% set htmlOptions = {
-                                'id'          : 'saveemail',
-                                'name'        : 'saveemail',
-                                'class'       : 'fr-input',
-                            }
-                        %}
+                    {% set htmlOptions = {
+                            'id'          : 'saveemail',
+                            'name'        : 'saveemail',
+                            'class'       : 'fr-input',
+                        }
+                    %}
 
-                        {{ C.Html.emailField(
-                                'saveemail',
-                                '',
-                                (htmlOptions)
-                        )  }}
-                    </div>
+                    {{ C.Html.emailField(
+                            'saveemail',
+                            '',
+                            (htmlOptions)
+                    )  }}
                 </div>
 
 

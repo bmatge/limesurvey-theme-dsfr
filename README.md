@@ -51,9 +51,33 @@ Le thème propose plusieurs options configurables depuis l'interface d'administr
 - **Logo de marque** : Afficher et personnaliser le logo
 
 ### Options DSFR
-- **Variante du thème** : Clair ou sombre
 - **Afficher Marianne** : Logo officiel République Française
 - **Liens de pied de page** : Activer/désactiver
+
+## Mode clair/sombre
+
+Le thème DSFR supporte nativement le mode clair et le mode sombre, conforme aux spécifications du DSFR.
+
+### Sélecteur de thème
+
+Un bouton de basculement clair/sombre est disponible dans l'en-tête de chaque enquête :
+- 🖥️ **Desktop** : Icône dans les liens rapides à côté du sélecteur de langue
+- 📱 **Mobile** : Bouton dans le menu hamburger
+
+### Fonctionnement
+
+1. **Préférence utilisateur** : Le choix est sauvegardé dans le navigateur (localStorage)
+2. **Détection système** : Si aucune préférence n'est définie, le thème suit le mode du système d'exploitation
+3. **Persistence** : Le choix est conservé entre les sessions
+
+### Implémentation technique
+
+Le thème utilise les **design tokens DSFR** qui s'adaptent automatiquement :
+- `var(--background-default-grey)` : Blanc en mode clair, gris foncé en mode sombre
+- `var(--text-default-grey)` : Noir en mode clair, blanc en mode sombre
+- `var(--border-default-grey)` : Gris clair en clair, gris moyen en sombre
+
+Plus de détails : [docs/DARK_THEME_PROGRESS.md](docs/DARK_THEME_PROGRESS.md)
 
 ## Types de questions supportés
 
@@ -89,12 +113,43 @@ La documentation complète est disponible dans le dossier [docs/](docs/) :
 - [Migration Bootstrap vers DSFR](MIGRATION_BOOTSTRAP_TO_DSFR.md)
 - [Problèmes connus](docs/KNOWN-ISSUES.md)
 
+## Ressources DSFR locales (autonomie complète)
+
+**Ce thème est 100% autonome et ne dépend d'aucun CDN externe.**
+
+Toutes les ressources DSFR (CSS, JavaScript, fonts, icônes) sont hébergées localement dans le dossier `dsfr-dist/`. Cela garantit :
+
+- ✅ **Fonctionnement hors-ligne** : Le thème fonctionne sans connexion internet
+- ✅ **Performance** : Pas de latence liée aux CDN externes
+- ✅ **Sécurité** : Contrôle total sur les ressources chargées
+- ✅ **Conformité** : Respect des exigences de souveraineté numérique
+- ✅ **Stabilité** : Aucune dépendance aux CDN (unpkg, jsdelivr, etc.)
+
+### Mise à jour des ressources DSFR
+
+Pour mettre à jour vers une nouvelle version de DSFR :
+
+```bash
+# Exécuter le script de mise à jour
+./update-dsfr.sh [VERSION]
+
+# Exemple pour DSFR 1.12
+./update-dsfr.sh 1.12
+```
+
+Documentation complète : [dsfr-dist/README.md](dsfr-dist/README.md)
+
 ## Structure du projet
 
 ```
 dsfr/
 ├── config.xml              # Configuration du thème
-├── css/                    # Styles CSS
+├── dsfr-dist/             # 🆕 Ressources DSFR locales (autonomie complète)
+│   ├── css/               # CSS DSFR (dsfr.min.css, icons.min.css)
+│   ├── js/                # JavaScript DSFR (module et nomodule)
+│   ├── fonts/             # Fonts Marianne et Spectral
+│   └── README.md          # Documentation de mise à jour
+├── css/                    # Styles CSS du thème
 │   ├── theme.css          # Styles principaux DSFR
 │   ├── custom.css         # Personnalisations
 │   └── print_theme.css    # Styles d'impression
@@ -108,6 +163,7 @@ dsfr/
 │   └── questions/
 │       └── answer/        # Réponses par type de question
 ├── files/                 # Assets (logos, images)
+├── update-dsfr.sh         # 🆕 Script de mise à jour DSFR
 └── docs/                  # Documentation
 ```
 
@@ -161,6 +217,25 @@ GNU General Public License version 2 or later
 - [Guide des thèmes LimeSurvey](https://manual.limesurvey.org/Themes)
 
 ## Changelog
+
+### Version 1.0.5 (2025-11-16)
+- 🌓 **Support complet du mode sombre DSFR**
+  - Sélecteur de thème clair/sombre dans le header (desktop + mobile)
+  - Persistence de la préférence utilisateur (localStorage)
+  - Détection automatique du mode système (prefers-color-scheme)
+  - Conversion de ~130 couleurs codées en dur vers variables DSFR
+  - Tous les composants supportent le mode sombre (forms, buttons, tables, alerts, etc.)
+- 📚 Documentation complète du support du thème sombre
+  - [docs/DARK_THEME_AUDIT.md](docs/DARK_THEME_AUDIT.md) - Audit des couleurs
+  - [docs/DARK_THEME_PROGRESS.md](docs/DARK_THEME_PROGRESS.md) - Statut d'implémentation
+
+### Version 1.0.4 (2025-11-15)
+- 🆕 **Internalisation complète des ressources DSFR** (autonomie 100%)
+  - Toutes les ressources DSFR hébergées localement dans `dsfr-dist/`
+  - Suppression de toutes les dépendances CDN externes
+  - Fonctionnement garanti hors-ligne
+- Script de mise à jour automatique `update-dsfr.sh`
+- Documentation complète de mise à jour dans `dsfr-dist/README.md`
 
 ### Version 1.0.1 (2025-11-07)
 - Migration complète Bootstrap → DSFR

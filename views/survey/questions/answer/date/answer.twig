@@ -6,161 +6,106 @@
  * This template renders a date/time input with DSFR styling
  *
  * @var $name           Question name
- * @var $value          Current value
- * @var $dateformat     Date format (from LimeSurvey settings)
- * @var $dropdown_dates Use dropdown selects instead of date input (0 or 1)
- * @var $date_min       Minimum date
- * @var $date_max       Maximum date
- * @var $show_time      Include time picker (0 or 1)
  * @var $basename       Base name for aria labels
+ * @var $coreClass      Core CSS classes
+ * @var $dayvalue       Selected day value
+ * @var $monthvalue     Selected month value
+ * @var $yearvalue      Selected year value
+ * @var $hourvalue      Selected hour value
+ * @var $minutevalue    Selected minute value
+ * @var $dateoutput     Date output div
+ * @var $checkconditionFunction
+ * @var $dateformat     Date format
+ * @var $yearmin        Minimum year
+ * @var $yearmax        Maximum year
+ * @var $dropdown_dates Use dropdown selects
+ * @var $dropdown_size  Dropdown size
  */
 #}
 
 <!-- Date/Time (Type D) - DSFR -->
-<div class="fr-input-group">
-    {% if help %}
-        <div class="fr-hint-text fr-mb-2w">{{ help }}</div>
-    {% endif %}
-
-    {% if dropdown_dates == 1 %}
-        {# Dropdown variant: 3 selects (day, month, year) #}
-        <div class="fr-grid-row fr-grid-row--gutters">
-            <!-- Day -->
-            <div class="fr-col-4">
-                <div class="fr-select-group">
-                    <label class="fr-label" for="day{{ name }}">
-                        {{ gT('Day') }}
-                    </label>
-                    <select
-                        class="fr-select"
-                        name="day{{ name }}"
-                        id="day{{ name }}"
-                        aria-labelledby="ls-question-text-{{ basename }}"
-                    >
-                        <option value="">--</option>
-                        {% for day in 1..31 %}
-                            <option value="{{ '%02d'|format(day) }}" {% if dayvalue == '%02d'|format(day) %}selected="selected"{% endif %}>
-                                {{ day }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-
-            <!-- Month -->
-            <div class="fr-col-4">
-                <div class="fr-select-group">
-                    <label class="fr-label" for="month{{ name }}">
-                        {{ gT('Month') }}
-                    </label>
-                    <select
-                        class="fr-select"
-                        name="month{{ name }}"
-                        id="month{{ name }}"
-                        aria-labelledby="ls-question-text-{{ basename }}"
-                    >
-                        <option value="">--</option>
-                        <option value="01" {% if monthvalue == '01' %}selected{% endif %}>{{ gT('January') }}</option>
-                        <option value="02" {% if monthvalue == '02' %}selected{% endif %}>{{ gT('February') }}</option>
-                        <option value="03" {% if monthvalue == '03' %}selected{% endif %}>{{ gT('March') }}</option>
-                        <option value="04" {% if monthvalue == '04' %}selected{% endif %}>{{ gT('April') }}</option>
-                        <option value="05" {% if monthvalue == '05' %}selected{% endif %}>{{ gT('May') }}</option>
-                        <option value="06" {% if monthvalue == '06' %}selected{% endif %}>{{ gT('June') }}</option>
-                        <option value="07" {% if monthvalue == '07' %}selected{% endif %}>{{ gT('July') }}</option>
-                        <option value="08" {% if monthvalue == '08' %}selected{% endif %}>{{ gT('August') }}</option>
-                        <option value="09" {% if monthvalue == '09' %}selected{% endif %}>{{ gT('September') }}</option>
-                        <option value="10" {% if monthvalue == '10' %}selected{% endif %}>{{ gT('October') }}</option>
-                        <option value="11" {% if monthvalue == '11' %}selected{% endif %}>{{ gT('November') }}</option>
-                        <option value="12" {% if monthvalue == '12' %}selected{% endif %}>{{ gT('December') }}</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Year -->
-            <div class="fr-col-4">
-                <div class="fr-select-group">
-                    <label class="fr-label" for="year{{ name }}">
-                        {{ gT('Year') }}
-                    </label>
-                    <select
-                        class="fr-select"
-                        name="year{{ name }}"
-                        id="year{{ name }}"
-                        aria-labelledby="ls-question-text-{{ basename }}"
-                    >
-                        <option value="">----</option>
-                        {% set currentYear = 'now'|date('Y') %}
-                        {% for year in range(currentYear - 100, currentYear + 10) %}
-                            <option value="{{ year }}" {% if yearvalue == year %}selected="selected"{% endif %}>
-                                {{ year }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
+<div class="ls-answers answer-item date-item {{ coreClass }} ls-no-js-hidden fr-mb-3w" role="group" aria-labelledby="ls-question-text-{{ basename }}">
+    <div class="fr-grid-row fr-grid-row--gutters">
+        <!-- Day -->
+        <div class="fr-col-3">
+            <div class="fr-select-group">
+                <label for="day{{ name }}" class="fr-label">
+                    {{ gT('Day') }}
+                </label>
+                <select id="day{{ name }}" name="day{{ name }}" class="fr-select day em_sq_validation">
+                    <option value="">{{ gT('Day') }}</option>
+                    {% for day in 1..31 %}
+                        <option value="{{ '%02d'|format(day) }}" {% if dayvalue == '%02d'|format(day) %}selected="selected"{% endif %}>
+                            {{ '%02d'|format(day) }}
+                        </option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
 
-        {% if show_time == 1 %}
-            <!-- Time dropdowns -->
-            <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
-                <div class="fr-col-6">
-                    <div class="fr-select-group">
-                        <label class="fr-label" for="hour{{ name }}">
-                            {{ gT('Hour') }}
-                        </label>
-                        <select class="fr-select" name="hour{{ name }}" id="hour{{ name }}">
-                            <option value="">--</option>
-                            {% for hour in 0..23 %}
-                                <option value="{{ '%02d'|format(hour) }}" {% if hourvalue == '%02d'|format(hour) %}selected{% endif %}>
-                                    {{ '%02d'|format(hour) }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-                <div class="fr-col-6">
-                    <div class="fr-select-group">
-                        <label class="fr-label" for="minute{{ name }}">
-                            {{ gT('Minute') }}
-                        </label>
-                        <select class="fr-select" name="minute{{ name }}" id="minute{{ name }}">
-                            <option value="">--</option>
-                            {% for minute in range(0, 59, 5) %}
-                                <option value="{{ '%02d'|format(minute) }}" {% if minutevalue == '%02d'|format(minute) %}selected{% endif %}>
-                                    {{ '%02d'|format(minute) }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
+        <!-- Separator -->
+        <div class="fr-col-1 d-flex align-items-center justify-content-center fr-mt-4w">
+            <span>/</span>
+        </div>
+
+        <!-- Month -->
+        <div class="fr-col-3">
+            <div class="fr-select-group">
+                <label for="month{{ name }}" class="fr-label">
+                    {{ gT('Month') }}
+                </label>
+                <select id="month{{ name }}" name="month{{ name }}" class="fr-select month em_sq_validation">
+                    <option value="">{{ gT('Month') }}</option>
+                    <option value="01" {% if monthvalue == '01' %}selected{% endif %}>{{ gT('Jan') }}</option>
+                    <option value="02" {% if monthvalue == '02' %}selected{% endif %}>{{ gT('Feb') }}</option>
+                    <option value="03" {% if monthvalue == '03' %}selected{% endif %}>{{ gT('Mar') }}</option>
+                    <option value="04" {% if monthvalue == '04' %}selected{% endif %}>{{ gT('Apr') }}</option>
+                    <option value="05" {% if monthvalue == '05' %}selected{% endif %}>{{ gT('May') }}</option>
+                    <option value="06" {% if monthvalue == '06' %}selected{% endif %}>{{ gT('Jun') }}</option>
+                    <option value="07" {% if monthvalue == '07' %}selected{% endif %}>{{ gT('Jul') }}</option>
+                    <option value="08" {% if monthvalue == '08' %}selected{% endif %}>{{ gT('Aug') }}</option>
+                    <option value="09" {% if monthvalue == '09' %}selected{% endif %}>{{ gT('Sep') }}</option>
+                    <option value="10" {% if monthvalue == '10' %}selected{% endif %}>{{ gT('Oct') }}</option>
+                    <option value="11" {% if monthvalue == '11' %}selected{% endif %}>{{ gT('Nov') }}</option>
+                    <option value="12" {% if monthvalue == '12' %}selected{% endif %}>{{ gT('Dec') }}</option>
+                </select>
             </div>
-        {% endif %}
+        </div>
 
-    {% else %}
-        {# Modern date input (HTML5) #}
-        <label class="fr-label" for="answer{{ name }}">
-            {% if show_time == 1 %}
-                {{ gT('Date and time') }}
-            {% else %}
-                {{ gT('Date') }}
-            {% endif %}
-        </label>
+        <!-- Separator -->
+        <div class="fr-col-1 d-flex align-items-center justify-content-center fr-mt-4w">
+            <span>/</span>
+        </div>
 
-        <input
-            type="{% if show_time == 1 %}datetime-local{% else %}date{% endif %}"
-            class="fr-input"
-            name="{{ name }}"
-            id="answer{{ name }}"
-            value="{{ value }}"
-            {% if date_min %}min="{{ date_min }}"{% endif %}
-            {% if date_max %}max="{{ date_max }}"{% endif %}
-            aria-labelledby="ls-question-text-{{ basename }}"
-        />
-    {% endif %}
+        <!-- Year -->
+        <div class="fr-col-3">
+            <div class="fr-select-group">
+                <label for="year{{ name }}" class="fr-label">
+                    {{ gT('Year') }}
+                </label>
+                <select id="year{{ name }}" name="year{{ name }}" class="fr-select year em_sq_validation">
+                    <option value="">{{ gT('Year') }}</option>
+                    {% set currentYear = 'now'|date('Y') %}
+                    {% set minYear = yearmin|default(currentYear - 100) %}
+                    {% set maxYear = yearmax|default(currentYear + 10) %}
+                    {% for year in range(minYear, maxYear) %}
+                        <option value="{{ year }}" {% if yearvalue == year %}selected="selected"{% endif %}>
+                            {{ year }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
 </div>
 
+{# Hidden field for date output #}
+{% if dateoutput is defined %}
+    {{ dateoutput|raw }}
+{% endif %}
+
 {# Hidden field for ExpressionScript Engine #}
-{{ C.Html.hiddenField("java"~name, value, ({
+{{ C.Html.hiddenField("java"~name, '', ({
     'id': "java"~name,
     'disabled': true
 })) }}

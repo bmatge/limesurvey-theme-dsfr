@@ -56,40 +56,8 @@
                 {% endif %}
                 {% endblock %}
 
-                {% block printanswer %}
-                {#  Link to Print Answer Preview #}
-                {% if (aSurveyInfo.aCompleted.aPrintAnswers.show == true) %}
-                    <div class="fr-mt-4w">
-                        <a href="{{ aSurveyInfo.aCompleted.aPrintAnswers.sUrl }}"
-                           title="{{ aSurveyInfo.aCompleted.aPrintAnswers.sTitle }}"
-                           class="fr-btn fr-btn--secondary fr-icon-printer-line fr-btn--icon-left">
-                            {{ gT("Print your answers") }}
-                        </a>
-                    </div>
-                {% endif %}
-                {% endblock %}
-
-            {% block publicstatistics %}
-            {# Link to Public statistics #}
-            {% if (aSurveyInfo.aCompleted.aPublicStatistics.show == true) %}
-                <!-- Link to Public statistics -->
-                <div class="{{ aSurveyInfo.class.submitwrapperdivb }}" {{ aSurveyInfo.attr.submitwrapperdivb }}>
-                    <a href="{{ aSurveyInfo.aCompleted.aPublicStatistics.sUrl }}" title={{ aSurveyInfo.aCompleted.aPublicStatistics.sTitle }} class="{{ aSurveyInfo.class.submitwrapperdivba }}" {{ aSurveyInfo.attr.submitwrapperdivba }}>
-                        {{ gT("View the statistics for this survey.") }}
-                    </a>
-                </div>
-            {% endif %}
-            {% endblock %}
-
             {# Before LS3 Master, this should be replace by a Twig block logic #}
             {{ aSurveyInfo.aCompleted.sPluginHTML }}
-
-            {% block endurl %}
-            {# NOTE: not very clear what the old replacement keyword {URL} was doing  #}
-            {% if (aSurveyInfo.aCompleted.sSurveylsUrl) %}
-                <a href="{{ str_replace('"', '%22', aSurveyInfo.aCompleted.sSurveylsUrl) }}">{{ aSurveyInfo.aCompleted.sSurveylsUrlDescription }}</a>
-            {% endif %}
-            {% endblock %}
         </div>
     </div>
 </form> <!-- main form -->

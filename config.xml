@@ -106,6 +106,10 @@
                     <file type="view" role="layout">layout_global.twig</file>
                     <file type="view" role="subview">./subviews/header/nav_bar.twig</file>
                     <file type="view" role="subview">./subviews/footer/footer.twig</file>
+                    <file type="view" role="subview">./subviews/footer/modals/accessibility.twig</file>
+                    <file type="view" role="subview">./subviews/footer/modals/legal.twig</file>
+                    <file type="view" role="subview">./subviews/footer/modals/privacy.twig</file>
+                    <file type="view" role="subview">./subviews/footer/modals/cookies.twig</file>
                     <file type="view" role="content">./subviews/content/main.twig</file>
                     <file type="view" role="subview">./subviews/content/mainrow.twig</file>
                     <file type="view" role="subview">./subviews/content/outerframe.twig</file>
@@ -123,6 +127,10 @@
                     <file type="view" role="layout">layout_global.twig</file>
                     <file type="view" role="subview">./subviews/header/nav_bar.twig</file>
                     <file type="view" role="subview">./subviews/footer/footer.twig</file>
+                    <file type="view" role="subview">./subviews/footer/modals/accessibility.twig</file>
+                    <file type="view" role="subview">./subviews/footer/modals/legal.twig</file>
+                    <file type="view" role="subview">./subviews/footer/modals/privacy.twig</file>
+                    <file type="view" role="subview">./subviews/footer/modals/cookies.twig</file>
                     <file type="view" role="content">./subviews/content/firstpage.twig</file>
                     <file type="view" role="subview">./subviews/content/mainrow.twig</file>
                     <file type="view" role="subview">./subviews/content/outerframe.twig</file>
@@ -138,6 +146,10 @@
                     <file type="view" role="layout">layout_global.twig</file>
                     <file type="view" role="subview">./subviews/header/nav_bar.twig</file>
                     <file type="view" role="subview">./subviews/footer/footer.twig</file>
+                    <file type="view" role="subview">./subviews/footer/modals/accessibility.twig</file>
+                    <file type="view" role="subview">./subviews/footer/modals/legal.twig</file>
+                    <file type="view" role="subview">./subviews/footer/modals/privacy.twig</file>
+                    <file type="view" role="subview">./subviews/footer/modals/cookies.twig</file>
                     <file type="view" role="content">./subviews/content/submit.twig</file>
                     <file type="view" role="subview">./subviews/content/mainrow.twig</file>
                     <file type="view" role="subview">./subviews/content/outerframe.twig</file>
@@ -273,26 +285,6 @@
                     <file type="view" role="subview">./subviews/logincomponents/token.twig</file>
                     <file type="view" role="subview">./subviews/logincomponents/captcha.twig</file>
                 </token>
-
-                <modal_accessibility>
-                    <screen_title type="data" role="title" twig="on"><![CDATA[ {{gT('Accessibilité')}} ]]></screen_title>
-                    <file type="view" role="content">./subviews/footer/modals/accessibility.twig</file>
-                </modal_accessibility>
-
-                <modal_legal>
-                    <screen_title type="data" role="title" twig="on"><![CDATA[ {{gT('Mentions légales')}} ]]></screen_title>
-                    <file type="view" role="content">./subviews/footer/modals/legal.twig</file>
-                </modal_legal>
-
-                <modal_privacy>
-                    <screen_title type="data" role="title" twig="on"><![CDATA[ {{gT('Données personnelles')}} ]]></screen_title>
-                    <file type="view" role="content">./subviews/footer/modals/privacy.twig</file>
-                </modal_privacy>
-
-                <modal_cookies>
-                    <screen_title type="data" role="title" twig="on"><![CDATA[ {{gT('Gestion des cookies')}} ]]></screen_title>
-                    <file type="view" role="content">./subviews/footer/modals/cookies.twig</file>
-                </modal_cookies>
             </screens>
 
             <!-- Données par défaut pour l'éditeur de thème -->

@@ -25,8 +25,8 @@
  */
 @import url('../dsfr-dist/css/dsfr.min.css');
 
-/* Import des icônes système DSFR (icônes les plus courantes en base64) */
-@import url('../dsfr-dist/css/icons-system.min.css');
+/* Import des icônes DSFR complètes embarquées en base64 (résout CORS et CSP) */
+@import url('../dsfr-dist/css/icons-embedded.min.css');
 
 /* ============================================
    VARIABLES DSFR
@@ -526,19 +526,8 @@ textarea::placeholder {
 select,
 .fr-select,
 select.form-control {
-    /* Apparence native désactivée */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-
     /* Fond gris DSFR */
     background-color: var(--background-contrast-grey);
-
-    /* Icône flèche DSFR (chevron down) - adaptative au thème */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23161616' d='m12 13.1 5-4.9 1.4 1.4-6.4 6.3-6.4-6.4L7 8.1l5 5z'/%3E%3C/svg%3E");
-    background-position: calc(100% - 1rem) 50%;
-    background-repeat: no-repeat;
-    background-size: 1rem 1rem;
 
     /* Bordure uniquement en bas (gris foncé/noir) */
     border: none;
@@ -551,8 +540,8 @@ select.form-control {
     font-size: 1rem;
     line-height: 1.5rem;
 
-    /* Espacement - Plus d'espace à droite pour l'icône */
-    padding: 0.5rem 2.5rem 0.5rem 1rem;
+    /* Espacement */
+    padding: 0.5rem 1rem;
 
     /* Layout */
     display: block;

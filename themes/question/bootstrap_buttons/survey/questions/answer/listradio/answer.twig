@@ -1,0 +1,43 @@
+{#
+/**
+ * Multiple Choice Html Html
+ *
+ * @var $name
+ * @var $value
+ */
+#}
+
+<!-- List Radio -->
+<!-- answer -->
+{{ sTimer }}
+<div class="container-fluid">
+    <div class="row {{coreClass}} " data-bs-toggle="buttons" role="radiogroup" aria-labelledby="ls-question-text-{{name }}">
+    {# rows/answer_row.php #}
+    {{ sRows }}
+
+    {# Value for expression manager javascript (use id) ; no need to submit #}
+    {{ C.Html.hiddenField("java"~name,value,({
+        'id' : "java"~name,
+        'disabled' : true,
+    }))
+    }}
+    </div>
+    {# Champ "Autre" avec grille DSFR 3+9 #}
+    <div class="fr-grid-row fr-grid-row--gutters ls-js-hidden answer-item fr-mt-2w" id="div{{ name }}other">
+        <div class="fr-col-12 fr-col-md-3">
+            <label for="answer{{ name }}othertext" class="fr-label" id="label-id-{{ name }}">{{ othertext }}</label>
+        </div>
+        <div class="fr-col-12 fr-col-md-9">
+            <input
+                type="text"
+                class="fr-input {{ kpclass }}"
+                id="answer{{ name }}othertext"
+                name="{{ name }}other"
+                aria-labelledby="label-id-{{ name }}"
+            >
+        </div>
+    </div>
+</div>
+<script>doBootstrapRadioOther();</script>
+
+<!-- end of answer -->

@@ -1,0 +1,19 @@
+<div class="container-center">
+    <div class="ls-no-js-hidden answers-list{{ samechoiceheight ? " list-samechoiceheight": "" }} {{ samelistheight ? " list-samelistheight": "" }}" aria-hidden="true">
+        <div class="fr-grid-row fr-grid-row--gutters">
+            {% block choice %}
+                <div>
+                    {% for index, ansrow in  answers %}
+                            <p>{{ansrow.answer}}</p>
+                    {% endfor %}
+                    <li class="d-none ls-remove"></li>
+                </div>
+            {% endblock %}
+
+            {% block rank %}
+                <div>
+                </div>
+            {% endblock %}
+        </div>
+    </div>
+</div>

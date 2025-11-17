@@ -1,0 +1,28 @@
+/**
+ * Styles d'impression pour le thème DSFR
+ */
+
+@media print {
+    /* Masquer les éléments de navigation lors de l'impression */
+    .survey-navigation,
+    .progress-bar-container,
+    .survey-header nav {
+        display: none !important;
+    }
+
+    /* Optimiser pour l'impression */
+    body {
+        background: white;
+        color: black;
+    }
+
+    .question-container {
+        border: 1px solid #000;
+        page-break-inside: avoid;
+    }
+
+    /* Forcer les liens à afficher leur URL */
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+}

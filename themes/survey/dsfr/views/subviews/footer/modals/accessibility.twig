@@ -1,0 +1,34 @@
+{# Modale Déclaration d'accessibilité #}
+<dialog id="accessibility-modal" class="fr-modal" aria-labelledby="accessibility-modal-title">
+    <div class="fr-container fr-container--fluid fr-fr-container">
+        <div class="fr-grid-row fr-grid-row--center">
+            <div class="fr-col-12 fr-col-md-10">
+                <div class="fr-modal__body">
+                    <div class="fr-modal__header">
+                        <button class="fr-btn--close fr-btn" aria-controls="accessibility-modal">{{ gT("Close") }}</button>
+                    </div>
+                    <div class="fr-modal__content">
+                        <h1 id="accessibility-modal-title" class="fr-modal__title">
+                            Déclaration d'accessibilité
+                        </h1>
+                        <p>[Nom de l'organisme] s'engage à rendre son service accessible conformément à l'article 47 de la loi n° 2005-102 du 11 février 2005.</p>
+
+                        <h2>État de conformité</h2>
+                        <p>Ce site n'est pas encore en conformité avec le RGAA. Un audit sera réalisé prochainement.</p>
+
+                        <h2>Contenus non accessibles</h2>
+                        <p>Les contenus listés ci-dessous ne sont pas accessibles pour les raisons suivantes :</p>
+                        <ul>
+                            <li>Non-conformité : audit RGAA non encore effectué</li>
+                        </ul>
+
+                        <h2>Amélioration et contact</h2>
+                        <p>Si vous n'arrivez pas à accéder à un contenu ou à un service, vous pouvez contacter le responsable du site pour être orienté vers une alternative accessible.</p>
+
+                        <p><strong>Date de publication :</strong> {{ "now"|date("d/m/Y") }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</dialog>

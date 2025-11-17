@@ -1,0 +1,29 @@
+{#
+/**
+ * List radio - item 'no answer' row - DSFR Theme
+ *
+ * @var $name   $ia[1]
+ * @var $check_ans
+ * @var $checkconditionFunction
+ */
+#}
+
+<!-- answer_row_noanswer -->
+<li id='javatbd{{ name }}' class="answer-item no-anwser-item">
+    <div class="fr-radio-group fr-mt-1w">
+        <input
+            type="radio"
+            name="{{ name }}"
+            id="answer{{ name }}"
+            value=""
+            {{ check_ans }}
+            onclick="if (document.getElementById('answer{{ name }}othertext') != null) document.getElementById('answer{{ name }}othertext').value='';{{ checkconditionFunction }}(this.value, this.name, this.type)"
+            class="fr-radio-input"
+            aria-label="{{ gT('No answer') }}"
+        />
+        <label for="answer{{ name }}" class="fr-label">
+            {{ gT('No answer') }}
+        </label>
+    </div>
+</li>
+<!-- endof answer_row_noanswer -->

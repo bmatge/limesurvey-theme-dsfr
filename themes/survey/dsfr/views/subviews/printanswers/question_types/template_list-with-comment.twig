@@ -1,0 +1,19 @@
+ {% extends "./subviews/printanswers/printanswers_question.twig" %}
+ {% block question_answer %}
+ <div class="fr-col-lg-8">
+    <div class="fr-grid-row">
+        <div class="fr-col-lg-4 text-end">
+        </div>
+        <div class="fr-col-lg-8 text-start">
+            {{question.answervalue}} - {{question.answeroption.answer}}
+        </div>
+    </div>
+    <div class="fr-grid-row">
+        <div class="fr-col-md-4 text-right">
+        </div>
+        <div class="fr-col-md-8 text-left">
+            {{question.comment.answervalue|escape}}
+        </div>
+    </div>
+</div>
+{% endblock %}

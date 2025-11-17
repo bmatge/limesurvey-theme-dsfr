@@ -1,0 +1,33 @@
+{#
+/**
+ * List Radio - DSFR Theme
+ * Template principal pour les questions radio liste
+ *
+ * @var $name
+ * @var $value
+ * @var $sRows
+ * @var $othertext
+ * @var $kpclass
+ * @var $coreClass
+ * @var $sTimer
+ */
+#}
+
+<!-- List Radio - DSFR -->
+<!-- answer -->
+{{ sTimer }}
+<div class="container-fluid">
+    <div class="row {{coreClass}} " data-bs-toggle="buttons" role="radiogroup" aria-labelledby="ls-question-text-{{name }}">
+    {# rows/answer_row.php #}
+    {{ sRows }}
+
+    {# Value for expression manager javascript (use id) ; no need to submit #}
+    {{ C.Html.hiddenField("java"~name,value,({
+        'id' : "java"~name,
+        'disabled' : true,
+    }))
+    }}
+    </div>
+</div>
+
+<!-- end of answer -->

@@ -1,0 +1,34 @@
+{#
+/**
+ * Radio Item Row - DSFR Theme
+ * Single radio button with DSFR fr-radio-group
+ *
+ * Variables available:
+ * @var $name
+ * @var $code
+ * @var $answer
+ * @var $checkedState
+ * @var $myfname
+ * @var $sDisplayStyle
+ */
+#}
+
+<!-- answer_row -->
+<li id='javatbd{{ myfname }}' class='answer-item' {{ sDisplayStyle }}>
+    <div class="fr-radio-group fr-mt-1w">
+        <input
+            type="radio"
+            value="{{ code }}"
+            name="{{ name }}"
+            id="answer{{ name }}{{ code }}"
+            {{ checkedState }}
+            onclick="if (document.getElementById('answer{{ name }}othertext') != null) document.getElementById('answer{{ name }}othertext').value='';checkconditions(this.value, this.name, this.type)"
+            class="fr-radio-input"
+            aria-label="{{ flatString(processString(answer,1),1) }}"
+        />
+        <label class="fr-label" for="answer{{ name }}{{ code }}">
+            {{ processString(answer) }}
+        </label>
+    </div>
+</li>
+<!-- end of answer_row -->

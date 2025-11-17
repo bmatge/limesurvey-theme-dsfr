@@ -1,0 +1,58 @@
+{#
+/**
+ * List radio - item 'other' row - DSFR Theme
+ *
+ * @var $name
+ * @var $answer_other
+ * @var $sDisplayStyle
+ * @var $sDisable
+ * @var $myfname
+ * @var $othertext
+ * @var $checkedState
+ * @var $kpclass
+ * @var $sValue
+ * @var $checkconditionFunction
+ */
+#}
+
+<!-- answer_row_other -->
+<li id='javatbd{{ myfname }}' class='answer-item' role='group' {{ sDisplayStyle }}>
+    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
+        <!-- Radio + label (6 colonnes sur desktop) -->
+        <div class="fr-col-12 fr-col-md-6">
+            <div class="fr-radio-group">
+                <input
+                    type="radio"
+                    value="-oth-"
+                    name="{{ name }}"
+                    id="SOTH{{ name }}"
+                    {{ checkedState }}
+                    class="fr-radio-input"
+                />
+                <label for="SOTH{{ name }}" class="fr-label" id="label-id-{{ name }}">
+                    {{ processString(othertext) }}
+                </label>
+            </div>
+        </div>
+
+        <!-- Champ texte (6 colonnes sur desktop) -->
+        <div class="fr-col-12 fr-col-md-6">
+            <input
+                type="text"
+                class="fr-input {{ kpclass }}"
+                id="answer{{ name }}othertext"
+                name="{{ name }}other"
+                title="{{ flatString(processString(othertext,1),1) }}"
+                {{ answer_other }}
+                aria-labelledby="label-id-{{ name }}"
+                {% if numbers_only %} data-number="1" {% endif %}
+            />
+        </div>
+    </div>
+    <script>
+        $("#answer{{ name }}othertext").on("keyup",function(){
+            if($.trim($(this).val())!=''){ $('#SOTH{{ name }}').click(); };
+        });
+    </script>
+</li>
+<!-- end of answer_row_other -->

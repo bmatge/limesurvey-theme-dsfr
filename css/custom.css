@@ -581,6 +581,32 @@ select.fr-select--error {
 }
 
 /* ============================================
+   FIX CHECKBOX VISIBILITY - DSFR
+   ============================================ */
+
+/* IMPORTANT: Les checkboxes DSFR utilisent des pseudo-éléments pour l'affichage.
+   Le theme.css les désactive globalement, ce qui rend les checkboxes invisibles.
+   On doit les réactiver pour les inputs avec la classe fr-checkbox-input */
+
+/* Forcer l'affichage de la checkbox DSFR en permettant au DSFR de créer son apparence */
+.fr-checkbox-group input[type="checkbox"].fr-checkbox-input {
+    /* La checkbox native doit être visible mais stylée par DSFR */
+    opacity: 1 !important;
+    position: relative !important;
+    width: auto !important;
+    height: auto !important;
+    margin-right: 0.5rem !important;
+}
+
+/* Permettre aux styles DSFR de fonctionner UNIQUEMENT pour les checkboxes avec fr-checkbox-input */
+.fr-checkbox-group:has(input.fr-checkbox-input) .fr-label::before,
+.fr-checkbox-group:has(input.fr-checkbox-input) .fr-label::after {
+    /* Réactiver les pseudo-éléments DSFR pour les vraies checkboxes DSFR */
+    content: "" !important;
+    display: block !important;
+}
+
+/* ============================================
    DATE PICKER - Alignement des séparateurs
    ============================================ */
 

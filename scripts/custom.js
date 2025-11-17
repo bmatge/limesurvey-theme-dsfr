@@ -186,4 +186,148 @@
         initRadioOtherField();
     });
 
+    // === Accessibilité clavier pour les questions de ranking ===
+
+    /**
+     * Ajoute la gestion du clavier aux éléments de ranking
+     * Permet d'utiliser Enter ou Espace pour déplacer les éléments (simule double-clic)
+     */
+    function initRankingKeyboardAccessibility() {
+        // Trouver toutes les questions de ranking
+        const rankingQuestions = document.querySelectorAll('.ranking-question-dsfr');
+
+        rankingQuestions.forEach(function(container) {
+            // Fonction pour gérer le double-clic programmatique
+            function simulateDoubleClick(element) {
+                // Créer un événement de double-clic
+                const dblClickEvent = new MouseEvent('dblclick', {
+                    view: window,
+                    bubbles: true,
+                    cancelable: true
+                });
+                element.dispatchEvent(dblClickEvent);
+            }
+
+            // Fonction pour ajouter les event listeners aux items
+            function attachKeyboardHandlers(item) {
+                // Éviter de dupliquer les listeners
+                if (item.dataset.keyboardHandlerAttached) {
+                    return;
+                }
+                item.dataset.keyboardHandlerAttached = 'true';
+
+                item.addEventListener('keydown', function(e) {
+                    // Enter (13) ou Espace (32)
+                    if (e.key === 'Enter' || e.key === ' ' || e.keyCode === 13 || e.keyCode === 32) {
+                        e.preventDefault();
+                        simulateDoubleClick(this);
+
+                        // Donner un feedback visuel
+                        this.style.transform = 'scale(0.98)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 100);
+                    }
+
+                    // Navigation avec flèches haut/bas
+                    else if (e.key === 'ArrowDown' || e.keyCode === 40) {
+                        e.preventDefault();
+                        const nextItem = this.nextElementSibling;
+                        if (nextItem && nextItem.classList.contains('sortable-item')) {
+                            nextItem.focus();
+                        }
+                    }
+                    else if (e.key === 'ArrowUp' || e.keyCode === 38) {
+                        e.preventDefault();
+                        const prevItem = this.previousElementSibling;
+                        if (prevItem && prevItem.classList.contains('sortable-item')) {
+                            prevItem.focus();
+                        }
+                    }
+                });
+
+                // Améliorer le feedback visuel au focus
+                item.addEventListener('focus', function() {
+                    this.style.outline = '2px solid var(--border-action-high-blue-france)';
+                    this.style.outlineOffset = '2px';
+                });
+
+                item.addEventListener('blur', function() {
+                    this.style.outline = '';
+                    this.style.outlineOffset = '';
+                });
+            }
+
+            // Attacher les handlers aux items existants
+            const allItems = container.querySelectorAll('.sortable-item');
+            allItems.forEach(attachKeyboardHandlers);
+
+            // Observer les nouveaux items ajoutés dynamiquement (quand déplacés)
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === 1 && node.classList && node.classList.contains('sortable-item')) {
+                            // Ajouter tabindex si manquant (items déplacés)
+                            if (!node.hasAttribute('tabindex')) {
+                                node.setAttribute('tabindex', '0');
+                            }
+                            // Ajouter role si manquant
+                            if (!node.hasAttribute('role')) {
+                                node.setAttribute('role', 'button');
+                            }
+                            // Mettre à jour aria-label basé sur la position
+                            updateAriaLabel(node);
+                            // Attacher les handlers clavier
+                            attachKeyboardHandlers(node);
+                        }
+                    });
+                });
+            });
+
+            // Observer les deux listes (choix disponibles et classés)
+            const choiceList = container.querySelector('.sortable-choice');
+            const rankList = container.querySelector('.sortable-rank');
+
+            if (choiceList) {
+                observer.observe(choiceList, { childList: true });
+            }
+            if (rankList) {
+                observer.observe(rankList, { childList: true });
+            }
+
+            // Fonction pour mettre à jour l'aria-label selon la position
+            function updateAriaLabel(item) {
+                const text = item.textContent.trim().replace(/\s+/g, ' ');
+                const parentList = item.closest('ul');
+                const isInRankList = parentList && parentList.classList.contains('sortable-rank');
+
+                if (isInRankList) {
+                    const position = Array.from(parentList.querySelectorAll('.sortable-item')).indexOf(item) + 1;
+                    const total = parentList.querySelectorAll('.sortable-item').length;
+                    item.setAttribute('aria-label', text + ' - Position ' + position + ' sur ' + total + '. Appuyez sur Entrée ou Espace pour retirer de la liste classée.');
+                } else {
+                    item.setAttribute('aria-label', text + ' - Appuyez sur Entrée ou Espace pour ajouter à la liste classée, ou utilisez le glisser-déposer.');
+                }
+            }
+
+            // Observer les changements pour mettre à jour les aria-labels
+            if (rankList) {
+                const updateObserver = new MutationObserver(function() {
+                    rankList.querySelectorAll('.sortable-item').forEach(updateAriaLabel);
+                });
+                updateObserver.observe(rankList, { childList: true });
+            }
+        });
+    }
+
+    // Initialiser au chargement
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initRankingKeyboardAccessibility);
+    } else {
+        initRankingKeyboardAccessibility();
+    }
+
+    // Réinitialiser après événements AJAX
+    document.addEventListener('limesurvey:questionsLoaded', initRankingKeyboardAccessibility);
+
 })();

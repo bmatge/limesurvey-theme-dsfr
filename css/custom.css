@@ -317,12 +317,31 @@ table td input[type="checkbox"] {
     background-color: var(--background-alt-grey);
     border: 1px solid var(--border-default-grey);
     cursor: pointer;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
 }
 
 .list-group-item:hover {
     background-color: var(--background-action-low-blue-france-hover);
     border-color: var(--border-action-high-blue-france);
+}
+
+/* Focus visible pour accessibilité clavier */
+.list-group-item:focus {
+    outline: 2px solid var(--border-action-high-blue-france);
+    outline-offset: 2px;
+    background-color: var(--background-action-low-blue-france-hover);
+}
+
+/* Focus-visible moderne (navigateurs récents) */
+.list-group-item:focus-visible {
+    outline: 2px solid var(--border-action-high-blue-france);
+    outline-offset: 2px;
+    background-color: var(--background-action-low-blue-france-hover);
+}
+
+/* Retirer l'outline au clic (gardé au focus clavier) */
+.list-group-item:focus:not(:focus-visible) {
+    outline: none;
 }
 
 /* Ranking items with drag handle */

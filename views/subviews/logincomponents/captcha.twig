@@ -1,9 +1,9 @@
-<div class="{{ aSurveyInfo.class.maincoldivdiva }} h3" {{ aSurveyInfo.attr.maincoldivdiva }}>
+<div class="{{ aSurveyInfo.class.maincoldivdiva }} fr-alert fr-alert--info fr-mb-3w" {{ aSurveyInfo.attr.maincoldivdiva }}>
     {% block formheading %}
-        {{ gT("Before you start, please prove you are human.") }}
+        <p class="fr-alert__title">{{ gT("Before you start, please prove you are human.") }}</p>
     {% endblock %}
 </div>
-<div class="{{ aSurveyInfo.class.maincoldivdivb }} card fr-callout__text bg-light fr-container--fluid fr-mb-3w" {{ aSurveyInfo.attr.maincoldivdivb }}>
+<div class="{{ aSurveyInfo.class.maincoldivdivb }} card fr-callout__text bg-light fr-container--fluid fr-mb-3w fr-p-2w" {{ aSurveyInfo.attr.maincoldivdivb }}>
 
     {% block description %}
         
@@ -43,31 +43,47 @@
 
         {% block formcontent  %}
 
-            <div class='{{ aSurveyInfo.class.maincolformdivb }}  fr-mb-3w ' {{ aSurveyInfo.attr.maincolformdivb }}>
+            <div class='{{ aSurveyInfo.class.maincolformdivb }} fr-mb-3w' {{ aSurveyInfo.attr.maincolformdivb }}>
+                <fieldset class="fr-fieldset">
+                    <legend class='{{ aSurveyInfo.class.maincolformdivblabel }} fr-fieldset__legend' {{ aSurveyInfo.attr.maincolformdivblabel }}>
+                        <span class="fr-badge fr-badge--sm fr-badge--info" aria-label="{{ gT("Mandatory field") }}">
+                            {{ gT("Mandatory") }}
+                        </span>
+                        <span id="ls-captcha-text" style="display: block; color: rgb(22, 22, 22); font-family: 'Marianne', Arial, sans-serif; font-size: 18px; font-weight: 700; line-height: 27px;">
+                            {{ gT("Please solve the following equation:") }}
+                        </span>
+                    </legend>
+                    <div class="fr-fieldset__content">
+                        <!-- Image du captcha agrandie -->
+                        <div class='{{ aSurveyInfo.class.maincolformdivbdivdivdiv }} fr-captcha fr-mb-3w' {{ aSurveyInfo.attr.maincolformdivbdivdivdiv }} style="text-align: center;">
+                            {# see: LS_Twig_Extension::renderCaptcha() in application/core/LS_Twig_Extension.php #}
+                            <div style="display: inline-block; width: 100%; max-width: 500px;">
+                                <div style="width: 100%; transform: scale(1.5); transform-origin: center; margin: 2rem 0;">
+                                    {{ renderCaptcha().renderOut() }}
+                                </div>
+                            </div>
+                            <div class="fr-mt-2w">
+                                <button type="button" class="fr-btn fr-btn--sm fr-btn--tertiary" id="reloadCaptcha" title="{{ gT("Reload captcha") }}" aria-label="{{ gT("Reload captcha") }}">
+                                    <span class="fr-icon-refresh-line" aria-hidden="true"></span>
+                                    {{ gT("Reload captcha") }}
+                                </button>
+                            </div>
+                        </div>
 
-                <!-- Doesn't seems aria capable -->
-                <label class='{{ aSurveyInfo.class.maincolformdivblabel }} fr-label col-md-4' {{ aSurveyInfo.attr.maincolformdivblabel }} >
-                    {{ gT("Please solve the following equation:") }}
-                    <small class="{{ aSurveyInfo.class.maincolformdivblabelsmall }} fr-text--error asterisk fa fa-asterisk fr-float-left small"  {{ aSurveyInfo.attr.maincolformdivblabelsmall }} ></small>
-                    <span  class="{{ aSurveyInfo.class.maincolformdivblabelspan }} fr-sr-only fr-text--error asterisk" {{ aSurveyInfo.attr.maincolformdivblabelspan }}>
-                        ( {{ gT("Mandatory") }} )
-                    <span>
-                </label>
-                <div class="fr-col-md-2">
-                    <div class='{{ aSurveyInfo.class.maincolformdivbdivdivdiv }}' {{ aSurveyInfo.attr.maincolformdivbdivdivdiv }} >
-                        {# see: LS_Twig_Extension::renderCaptcha() in application/core/LS_Twig_Extension.php #}
-                        {{ renderCaptcha().renderOut() }}
-                        <a href="#" class="fr-btn fr-btn--sm fr-btn--tertiary" id="reloadCaptcha" title="{{ gT("Reload captcha") }}" data-fr-toggle="captcha"><i class="fa fa-refresh"></i></a>
+                        <!-- Champ de saisie en dessous -->
+                        <div class='{{ aSurveyInfo.class.maincolformdivbdiv }} fr-input-group' {{ aSurveyInfo.attr.maincolformdivbdiv }}>
+                            <label class="fr-label" for="loadsecurity">
+                                {{ gT("Answer") }}
+                            </label>
+                            <input class='fr-input {{ aSurveyInfo.class.maincolformdivbdivdivinput }}' {{ aSurveyInfo.attr.maincolformdivbdivdivinput }} aria-required="true" aria-labelledby="ls-captcha-text" placeholder="{{ gT("Enter your answer here") }}">
+                        </div>
                     </div>
-                </div>
-                <div class='{{ aSurveyInfo.class.maincolformdivbdiv }} col-md-6' {{ aSurveyInfo.attr.maincolformdivbdiv }}>
-                    <input class='fr-input {{ aSurveyInfo.class.maincolformdivbdivdivinput }}' {{ aSurveyInfo.attr.maincolformdivbdivdivinput }} >
-                </div>
+                </fieldset>
             </div>
 
-            <div class='{{ aSurveyInfo.class.maincolformdivc }} fr-mb-3w ' {{ aSurveyInfo.attr.maincolformdivc }}>
-                <div class='{{ aSurveyInfo.class.maincolformdivcdiv }} fr-col-md-7 fr-col-offset-3--lg ' {{ aSurveyInfo.attr.maincolformdivcdiv }}>
-                    <button class='{{ aSurveyInfo.class.maincolformdivcdivbutton }} fr-btn fr-btn--secondary' {{ aSurveyInfo.attr.maincolformdivcdivbutton }}>
+            <div class='{{ aSurveyInfo.class.maincolformdivc }} fr-mb-3w' {{ aSurveyInfo.attr.maincolformdivc }}>
+                <div class='{{ aSurveyInfo.class.maincolformdivcdiv }}' {{ aSurveyInfo.attr.maincolformdivcdiv }}>
+                    <button class='{{ aSurveyInfo.class.maincolformdivcdivbutton }} fr-btn' {{ aSurveyInfo.attr.maincolformdivcdivbutton }}>
                         {{ gT("Continue") }}
                     </button>
                 </div>

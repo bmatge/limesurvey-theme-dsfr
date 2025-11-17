@@ -22,13 +22,11 @@
  * pour convertir les classes Bootstrap, mais on a déjà tout converti.
  *
  * Pour mettre à jour DSFR, voir ../dsfr-dist/README.md
- *
- * NOTE CSP: Version sans data URIs pour compatibilité CSP strict
  */
-@import url('../dsfr-dist/css/dsfr-no-datauri.min.css');
+@import url('../dsfr-dist/css/dsfr.min.css');
 
-/* Import des icônes DSFR avec SVG externes (répertoire icons/ copié dans css/) */
-@import url('../dsfr-dist/css/icons.min.css');
+/* Import des icônes DSFR (avec data URIs intégrés en base64) */
+@import url('../dsfr-dist/css/icons-embedded.min.css');
 
 /* ============================================
    VARIABLES DSFR
@@ -1483,7 +1481,7 @@ li.ls-group-dynamic {
 .ls-table-wrapper table.table-array-radio thead tr.ls-heading td,
 .ls-table-wrapper table.radio-array thead tr.ls-heading th,
 .ls-table-wrapper table.radio-array thead tr.ls-heading td {
-    border-bottom: 2px solid rgb(22, 22, 22);
+    border-bottom: 2px solid var(--border-default-grey);
 }
 
 /* En-têtes de lignes (première colonne) */
@@ -1685,14 +1683,14 @@ li.ls-group-dynamic {
 .array-increase-same-decrease table.radio-array thead tr.ls-heading td,
 .array-increase-same-decrease table.radio-array thead tr.ls-header th,
 .array-increase-same-decrease table.radio-array thead tr.ls-header td {
-    border-bottom: 2px solid rgb(22, 22, 22) !important;
+    border-bottom: 2px solid var(--border-default-grey) !important;
 }
 
 /* En-têtes de lignes (première colonne) */
 .array-increase-same-decrease table.radio-array tbody th.answertext {
     background-color: var(--background-contrast-grey, #f6f6f6) !important;
     font-weight: 700;
-    color: #161616 !important;
+    color: var(--text-label-grey) !important;
 }
 
 /* Cellules avec radio buttons - centrage */
@@ -1704,7 +1702,7 @@ li.ls-group-dynamic {
 
 /* Fond blanc uniforme pour toutes les lignes */
 .array-increase-same-decrease table.radio-array tbody tr {
-    background-color: #ffffff !important;
+    background-color: var(--background-default-grey) !important;
 }
 
 /* Hover sur les lignes */
@@ -1735,7 +1733,7 @@ li.ls-group-dynamic {
 .array-yes-uncertain-no table.radio-array thead th {
     background-color: var(--background-contrast-grey, #f6f6f6) !important;
     font-weight: 700;
-    color: #161616 !important;
+    color: var(--text-label-grey) !important;
     text-align: center;
 }
 
@@ -1753,14 +1751,14 @@ li.ls-group-dynamic {
 /* Bordures renforcées en bas de la ligne d'en-tête */
 .array-yes-uncertain-no table.radio-array thead tr.ls-heading th,
 .array-yes-uncertain-no table.radio-array thead tr.ls-heading td {
-    border-bottom: 2px solid rgb(22, 22, 22) !important;
+    border-bottom: 2px solid var(--border-default-grey) !important;
 }
 
 /* En-têtes de lignes (première colonne) */
 .array-yes-uncertain-no table.radio-array tbody th.answertext {
     background-color: var(--background-contrast-grey, #f6f6f6) !important;
     font-weight: 700;
-    color: #161616 !important;
+    color: var(--text-label-grey) !important;
 }
 
 /* Cellules avec radio buttons - centrage */
@@ -1772,7 +1770,7 @@ li.ls-group-dynamic {
 
 /* Fond blanc uniforme pour toutes les lignes */
 .array-yes-uncertain-no table.radio-array tbody tr {
-    background-color: #ffffff !important;
+    background-color: var(--background-default-grey) !important;
 }
 
 /* Hover sur les lignes */
@@ -1830,7 +1828,7 @@ table.array-flexible-dual-scale thead tr.ls-heading td {
 .ls-table-wrapper table.array-flexible-dual-scale thead tr.ls-heading td,
 table.array-flexible-dual-scale thead tr.ls-heading th,
 table.array-flexible-dual-scale thead tr.ls-heading td {
-    border-bottom: 2px solid rgb(22, 22, 22);
+    border-bottom: 2px solid var(--border-default-grey);
 }
 
 /* En-têtes de lignes (première colonne) */
@@ -1868,7 +1866,7 @@ table.array-flexible-dual-scale thead tr.ls-heading.groups th.dsheader {
     background-color: var(--background-contrast-grey, #f6f6f6);
     font-weight: 700;
     color: #161616;
-    border-bottom: 2px solid rgb(22, 22, 22);
+    border-bottom: 2px solid var(--border-default-grey);
 }
 
 /* Séparateurs dans les tableaux dual scale */
@@ -1906,7 +1904,7 @@ table.array-flexible-dual-scale td.dual_scale_separator {
 .ls-table-wrapper table thead th.right-header {
     background-color: var(--background-contrast-grey, #f6f6f6) !important;
     font-weight: 700;
-    color: #161616 !important;
+    color: var(--text-label-grey) !important;
     text-align: center;
 }
 
@@ -1919,14 +1917,14 @@ table.array-flexible-dual-scale td.dual_scale_separator {
 .ls-table-wrapper table thead tr.ls-heading th.left-header,
 .ls-table-wrapper table thead tr.ls-heading th.right-header,
 .ls-table-wrapper table thead tr.ls-heading td {
-    border-bottom: 2px solid rgb(22, 22, 22) !important;
+    border-bottom: 2px solid var(--border-default-grey) !important;
 }
 
 /* En-têtes de lignes (première colonne) */
 .ls-table-wrapper table:has(.ddarrayseparator) tbody th.answertext {
     background-color: var(--background-contrast-grey, #f6f6f6) !important;
     font-weight: 700;
-    color: #161616 !important;
+    color: var(--text-label-grey) !important;
 }
 
 /* Cellules avec dropdown - centrage */
@@ -1950,7 +1948,7 @@ table.array-flexible-dual-scale td.dual_scale_separator {
 
 /* Fond blanc uniforme pour toutes les lignes */
 .ls-table-wrapper table:has(.ddarrayseparator) tbody tr {
-    background-color: #ffffff !important;
+    background-color: var(--background-default-grey) !important;
 }
 
 /* Hover sur les lignes */
@@ -2022,4 +2020,320 @@ table.array-flexible-dual-scale td.dual_scale_separator {
     gap: 0.25rem;
     justify-content: flex-end;
     align-items: center;
+}
+
+/* ========================================
+   Question Type: Multiple Short Text (Type Q)
+   Input On Demand - Saisie à la demande
+   ======================================== */
+
+/* Container padding pour éviter le débordement des champs */
+.multiple-short-txt .answer-container {
+    padding: 0 1rem;
+}
+
+/* Style du bouton "Ajouter une ligne" en DSFR */
+.selector--inputondemand-addlinebutton,
+button.selector--inputondemand-addlinebutton,
+.btn.selector--inputondemand-addlinebutton {
+    /* Reset Bootstrap */
+    all: unset;
+
+    /* Bouton secondaire DSFR */
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent !important;
+    color: var(--text-action-high-blue-france, #000091) !important;
+    border: 1px solid var(--text-action-high-blue-france, #000091) !important;
+    padding: 0.5rem 1rem !important;
+    font-family: "Marianne", Arial, sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    line-height: 1.5rem !important;
+    border-radius: 0.25rem !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s !important;
+    text-decoration: none !important;
+    box-sizing: border-box !important;
+    box-shadow: none !important;
+}
+
+.selector--inputondemand-addlinebutton:hover,
+button.selector--inputondemand-addlinebutton:hover,
+.btn.selector--inputondemand-addlinebutton:hover {
+    background-color: var(--background-action-high-blue-france-hover, #1212ff) !important;
+    color: white !important;
+    border-color: var(--background-action-high-blue-france-hover, #1212ff) !important;
+    text-decoration: none !important;
+}
+
+.selector--inputondemand-addlinebutton:active,
+button.selector--inputondemand-addlinebutton:active,
+.btn.selector--inputondemand-addlinebutton:active {
+    background-color: var(--background-action-high-blue-france-active, #2323ff) !important;
+    color: white !important;
+    border-color: var(--background-action-high-blue-france-active, #2323ff) !important;
+}
+
+.selector--inputondemand-addlinebutton:focus,
+button.selector--inputondemand-addlinebutton:focus,
+.btn.selector--inputondemand-addlinebutton:focus {
+    outline: 2px solid var(--text-action-high-blue-france, #000091) !important;
+    outline-offset: 2px !important;
+}
+
+/* Icône dans le bouton */
+.selector--inputondemand-addlinebutton i,
+.selector--inputondemand-addlinebutton .ri-arrow-down-s-line,
+.selector--inputondemand-addlinebutton .fa {
+    margin-right: 0.25rem;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Convertir l'icône FontAwesome en icône DSFR visuelle */
+.selector--inputondemand-addlinebutton .fa-chevron-down::before,
+.selector--inputondemand-addlinebutton .ri-arrow-down-s-line::before {
+    content: "▼";
+    font-family: "Marianne", Arial, sans-serif;
+    font-size: 0.75rem;
+}
+
+/* Fix pour les champs qui dépassent */
+.selector--inputondemand-list .form-control,
+.selector--inputondemand-list .dsfr-input,
+.selector--inputondemand-list .fr-input {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Fix pour les rows Bootstrap dans les questions on-demand */
+.selector--inputondemand-list .row {
+    margin: 0;
+}
+
+.selector--inputondemand-list .row > div {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+/* Alignement du conteneur du bouton */
+.text-end {
+    text-align: right;
+    margin-top: 1rem;
+}
+
+/* Marge gauche pour les labels des questions Multiple Short Text */
+/* Pour les templates DSFR */
+.multiple-short-txt .fr-label,
+.multiple-short-txt label.fr-label {
+    margin-left: 0.25rem !important;
+}
+
+/* Pour les templates Bootstrap (input on demand) */
+.selector--inputondemand-list .control-label,
+.selector--inputondemand-list label.control-label,
+.selector--inputondemand-list-item .control-label,
+.selector--inputondemand-list-item label,
+.multiple-short-txt .selector--inputondemand-list .control-label,
+.multiple-short-txt .control-label,
+li.selector--inputondemand-list-item label.control-label {
+    margin-left: 0.25rem !important;
+}
+
+/* === Utility classes DSFR custom === */
+
+/* Text alignment utility - right */
+.fr-text--right {
+    text-align: right !important;
+}
+
+/* === Array Dropdown Tables (Question type F) === */
+
+/* Force normal table display for array dropdown tables */
+.fr-table table.dropdown-array,
+.fr-table--bordered table.dropdown-array {
+    display: table !important;
+    width: 100%;
+}
+
+.fr-table table.dropdown-array tbody,
+.fr-table--bordered table.dropdown-array tbody {
+    display: table-row-group !important;
+}
+
+.fr-table table.dropdown-array tr,
+.fr-table--bordered table.dropdown-array tr {
+    display: table-row !important;
+}
+
+.fr-table table.dropdown-array th,
+.fr-table table.dropdown-array td,
+.fr-table--bordered table.dropdown-array th,
+.fr-table--bordered table.dropdown-array td {
+    display: table-cell !important;
+    vertical-align: middle;
+    padding: 0.75rem 1rem;
+}
+
+/* Label column styling */
+.fr-table table.dropdown-array th.answertext,
+.fr-table--bordered table.dropdown-array th.answertext {
+    width: 60%;
+    font-weight: 400;
+    text-align: left;
+}
+
+/* Select column styling */
+.fr-table table.dropdown-array td,
+.fr-table--bordered table.dropdown-array td {
+    width: 40%;
+}
+
+/* Remove label styles that conflict with DSFR */
+.fr-table table.dropdown-array th.answertext label.fr-label,
+.fr-table--bordered table.dropdown-array th.answertext label.fr-label {
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+/* === Bootstrap Buttons Radio (List Radio avec affichage boutons) === */
+
+/* Conteneur principal des boutons */
+.bootstrap-buttons-div {
+    margin-bottom: 0.5rem;
+}
+
+/* Masquer le radio natif mais le garder accessible */
+.bootstrap-buttons-div .btn-check {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    pointer-events: none;
+}
+
+/* Style des boutons (labels) - État non sélectionné */
+.bootstrap-buttons-div label.btn {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent !important;
+    color: var(--text-action-high-blue-france, #000091) !important;
+    border: 1px solid var(--text-action-high-blue-france, #000091) !important;
+    padding: 0.5rem 1rem !important;
+    font-family: "Marianne", Arial, sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    line-height: 1.5rem !important;
+    border-radius: 0.25rem !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s, color 0.2s !important;
+    text-decoration: none !important;
+    box-sizing: border-box !important;
+    box-shadow: none !important;
+    width: 100%;
+    text-align: center;
+}
+
+/* Hover */
+.bootstrap-buttons-div label.btn:hover {
+    background-color: var(--background-action-high-blue-france-hover, #1212ff) !important;
+    color: var(--text-inverted-grey, #ffffff) !important;
+}
+
+/* Focus visible */
+.bootstrap-buttons-div .btn-check:focus-visible + label.btn {
+    outline: 2px solid #000091;
+    outline-offset: 2px;
+}
+
+/* État sélectionné (checked) */
+.bootstrap-buttons-div .btn-check:checked + label.btn,
+.bootstrap-buttons-div .form-check.active label.btn {
+    background-color: var(--background-action-high-blue-france, #000091) !important;
+    color: var(--text-inverted-grey, #ffffff) !important;
+    border-color: var(--background-action-high-blue-france, #000091) !important;
+}
+
+/* Hover sur bouton sélectionné */
+.bootstrap-buttons-div .btn-check:checked + label.btn:hover,
+.bootstrap-buttons-div .form-check.active label.btn:hover {
+    background-color: var(--background-action-high-blue-france-hover, #1212ff) !important;
+}
+
+/* Responsive: Ajuster la disposition sur mobile */
+@media (max-width: 767px) {
+    .bootstrap-buttons-div {
+        margin-bottom: 0.75rem;
+    }
+}
+
+/* === Champ "Autre" pour les Bootstrap Buttons Radio === */
+
+/* Alignement vertical du label avec l'input */
+.fr-grid-row[id^="div"][id$="other"].answer-item {
+    align-items: center;
+}
+
+/* Marge entre label et input sur mobile */
+.fr-grid-row[id^="div"][id$="other"].answer-item .fr-label {
+    margin-bottom: 0.5rem;
+}
+
+/* Sur desktop, retirer la marge et aligner */
+@media (min-width: 768px) {
+    .fr-grid-row[id^="div"][id$="other"].answer-item .fr-label {
+        margin-bottom: 0;
+        padding-top: 0.5rem; /* Aligner avec le padding de l'input */
+    }
+}
+
+/* ========================================================================
+   Neutralisation des styles awesome-bootstrap-checkbox pour DSFR
+   ======================================================================== */
+
+/* Désactiver les styles Bootstrap checkbox/radio pour les éléments DSFR uniquement */
+.fr-radio-group label::before,
+.fr-radio-group label::after,
+.fr-checkbox-group label::before,
+.fr-checkbox-group label::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* Retirer le padding-left ajouté par awesome-bootstrap-checkbox */
+.answer-item:has(.fr-radio-group),
+.answer-item:has(.fr-checkbox-group) {
+    padding-left: 0 !important;
+}
+
+/* ============================================
+   SOFT MANDATORY QUESTIONS - DSFR STYLE
+   ============================================ */
+
+/* Forcer l'affichage du groupe de checkbox DSFR pour soft mandatory */
+.question-valid-container .fr-checkbox-group {
+    display: flex !important;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* CRITIQUE: Contrer l'opacity:0 du DSFR sur les checkboxes pour rendre visible la checkbox soft mandatory */
+.question-valid-container .fr-checkbox-group input[type="checkbox"] {
+    opacity: 1 !important;
+    position: relative !important;
+    flex-shrink: 0;
+    margin: 0 !important;
+}
+
+/* S'assurer que le label DSFR fonctionne correctement */
+.question-valid-container .fr-checkbox-group .fr-label {
+    padding-left: 0 !important;
+    margin: 0 !important;
+    cursor: pointer;
+    line-height: 1.5rem;
 }

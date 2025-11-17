@@ -134,7 +134,8 @@
         initBootstrapModalFallback();
 
         // Système de validation DSFR
-        initDsfrValidation();
+        // DÉSACTIVÉ temporairement pour tester
+        // initDsfrValidation();
 
         // Initialiser les questions de classement (ranking)
         initRankingQuestions();
@@ -1163,5 +1164,31 @@
             });
         }
     }
+
+    // ============================================
+    // GESTION DES ERREURS DE VALIDATION
+    // ============================================
+
+    /**
+     * Retire les classes d'erreur quand l'utilisateur commence à saisir
+     * Utilise la délégation d'événements pour fonctionner avec les éléments dynamiques
+     */
+    $(document).on('input change keyup', '.question-container.input-error input, .question-container.input-error textarea, .question-container.input-error select', function() {
+        const $input = $(this);
+        const $question = $input.closest('.question-container');
+
+        if ($question.length) {
+            // Retirer les classes d'erreur du container de question
+            $question.removeClass('input-error fr-input-group--error');
+
+            // Retirer les classes d'erreur du groupe d'input parent
+            $input.closest('.fr-input-group').removeClass('fr-input-group--error');
+
+            // Cacher le message d'erreur initial
+            $question.find('.ls-question-mandatory-initial').fadeOut(300);
+
+            console.log('DSFR: Erreur de validation retirée pour la question');
+        }
+    });
 
 })();

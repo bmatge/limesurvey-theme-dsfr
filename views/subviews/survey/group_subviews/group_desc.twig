@@ -20,9 +20,11 @@
 
 {% if aGroup.showgroupinfo == 'D' or aGroup.showgroupinfo == 'B' %}
     {% if aGroup.description != '' %}
-        <!-- Group description -->
-        <div class="{{ aSurveyInfo.class.groupdesc }} group-description-card" {{ aSurveyInfo.attr.groupdesc }}>
-            {{ processString(aGroup.description) }}
+        <!-- Group description - DSFR Mise en avant -->
+        <div class="fr-callout fr-mb-4w" {{ aSurveyInfo.attr.groupdesc }}>
+            <div class="fr-callout__text">
+                {{ processString(aGroup.description) }}
+            </div>
         </div>
     {% endif %}
 {% endif %}

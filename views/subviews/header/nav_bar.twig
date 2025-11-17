@@ -51,7 +51,9 @@ For the survey navigator ("Next", "Back", etc.), see: navigation/navigator.twig
                             {% endif %}
                         </div>
                         <div class="fr-header__service">
-                            <p class="fr-header__service-title fr-text--sm">Ministère de l'Économie, des Finances et de la Souveraineté industrielle, énergétique et numérique</p>
+                            {% if aSurveyInfo.options.organization_name %}
+                                <p class="fr-header__service-title fr-text--sm">{{ aSurveyInfo.options.organization_name }}</p>
+                            {% endif %}
                             {% if aSurveyInfo.description %}
                                 <p class="fr-header__service-tagline">{{ aSurveyInfo.name }}</p>
                             {% endif %}

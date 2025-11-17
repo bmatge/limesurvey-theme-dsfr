@@ -36,7 +36,7 @@
         <div class="fr-stepper">
             <h2 class="fr-stepper__title">
                 {{ currentStepText }}
-                <span class="fr-stepper__state">Étape {{ currentStepIndex }} sur {{ totalSteps }}</span>
+                <span class="fr-stepper__state">{{ gT("Step") }} {{ currentStepIndex }} {{ gT("of") }} {{ totalSteps }}</span>
             </h2>
             <div class="fr-stepper__steps"
                  data-fr-current-step="{{ currentStepIndex }}"
@@ -45,7 +45,7 @@
             </div>
             {% if nextStepText %}
                 <p class="fr-stepper__details">
-                    <span class="fr-text--bold">Étape suivante :</span> {{ nextStepText }}
+                    <span class="fr-text--bold">{{ gT("Next step:") }}</span> {{ nextStepText }}
                 </p>
             {% endif %}
         </div>

@@ -44,7 +44,7 @@
     <div class="{{ aSurveyInfo.class.loadform }}" {{ aSurveyInfo.attr.loadform }}>
 
         {% if count(aSurveyInfo.aLoadForm.aErrors) > 0 %}
-            <ul class="{{ aSurveyInfo.class.loadformul }} fr-alert fr-alert--error " {{ aSurveyInfo.attr.loadformul }} >
+            <ul class="{{ aSurveyInfo.class.loadformul }} fr-alert fr-alert--error " role="alert" {{ aSurveyInfo.attr.loadformul }} >
                 {% for key,error in aSurveyInfo.aLoadForm.aErrors %}
                     <li {{ aSurveyInfo.attr.loadformulli }}>{{ error }}</li>
                 {% endfor %}

@@ -10,6 +10,20 @@ build/
 .vscode/
 .idea/
 
-# OS
+# OS files
 .DS_Store
 Thumbs.db
+
+# Hidden config files
+.editorconfig
+.eslintrc.json
+.prettierrc.json
+.stylelintrc.json
+
+# Release zips and temporary files
+*.zip
+zium4NAN
+
+# Scripts (keep only in main repo)
+*.sh
+*.py

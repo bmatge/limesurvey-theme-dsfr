@@ -209,7 +209,6 @@
             e.stopPropagation();
             e.stopImmediatePropagation();
 
-            console.log('DSFR: Rechargement du captcha');
 
             // Trouver l'image du captcha
             // Elle est soit dans le même container, soit juste avant le bouton
@@ -229,7 +228,6 @@
             }
 
             if (!captchaImage) {
-                console.warn('DSFR: Image du captcha introuvable, rechargement de la page');
                 window.location.reload();
                 return;
             }
@@ -238,25 +236,21 @@
             const currentSrc = captchaImage.src;
             const newSrc = currentSrc.replace(/v=[^&]*/, 'v=' + new Date().getTime());
 
-            console.log('DSFR: Rechargement captcha de', currentSrc, 'vers', newSrc);
 
             // Ajouter un effet visuel pendant le rechargement
             captchaImage.style.opacity = '0.5';
 
             captchaImage.onload = function() {
                 captchaImage.style.opacity = '1';
-                console.log('DSFR: Captcha rechargé avec succès');
             };
 
             captchaImage.onerror = function() {
                 captchaImage.style.opacity = '1';
-                console.error('DSFR: Erreur lors du rechargement du captcha');
             };
 
             captchaImage.src = newSrc;
         });
 
-        console.log('DSFR: Gestionnaire de rechargement du captcha initialisé');
     }
 
     // Initialiser au chargement
@@ -279,7 +273,6 @@
      * - Cache le message LimeSurvey original
      */
     function transformErrorsToDsfr() {
-        console.log('DSFR: Transformation des erreurs vers structure DSFR');
 
         // Trouver toutes les questions en erreur
         const errorQuestions = document.querySelectorAll('.question-container.input-error');
@@ -289,7 +282,6 @@
             const inputGroup = question.querySelector('.fr-input-group');
 
             if (!inputGroup) {
-                console.warn('DSFR: fr-input-group introuvable dans la question en erreur', question.id);
                 return;
             }
 
@@ -297,14 +289,12 @@
             const messagesGroup = inputGroup.querySelector('.fr-messages-group');
 
             if (!messagesGroup) {
-                console.warn('DSFR: fr-messages-group introuvable', question.id);
                 return;
             }
 
             // IMPORTANT : Vérifier si un message existe déjà pour éviter la duplication
             const existingError = messagesGroup.querySelector('.fr-message--error');
             if (existingError) {
-                console.log('DSFR: Message d\'erreur déjà présent pour', question.id);
                 return; // Déjà traité
             }
 
@@ -344,7 +334,6 @@
             }
 
             if (!lsErrorContainer) {
-                console.warn('DSFR: Message d\'erreur LimeSurvey introuvable', question.id);
                 return;
             }
 
@@ -354,7 +343,6 @@
             errorText = errorText.replace(/\s+/g, ' ').trim();
 
             if (!errorText) {
-                console.warn('DSFR: Texte d\'erreur vide pour', question.id);
                 return;
             }
 
@@ -373,7 +361,6 @@
                 questionValidContainer.style.display = 'none';
             }
 
-            console.log('DSFR: Erreur transformée pour', question.id, ':', errorText);
 
             // 6. Ajouter les listeners pour retirer l'erreur quand l'utilisateur corrige
             attachErrorRemovalListeners(question, inputGroup, messagesGroup, errorMessage, questionValidContainer);
@@ -407,7 +394,6 @@
                 errorMessage.textContent = 'Merci d\'avoir répondu';
             }
 
-            console.log('DSFR: Erreur convertie en succès pour', question.id);
 
             // Mettre à jour le récapitulatif d'erreurs (marquer en vert, passer en warning/success)
             setTimeout(updateErrorSummary, 50);
@@ -440,7 +426,6 @@
                 if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
                     const target = mutation.target;
                     if (target.classList.contains('question-container') && target.classList.contains('input-error')) {
-                        console.log('DSFR: Nouvelle erreur détectée dynamiquement');
                         setTimeout(transformErrorsToDsfr, 100); // Petit délai pour laisser LimeSurvey finir
                     }
                 }
@@ -449,7 +434,6 @@
                 if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
                     mutation.addedNodes.forEach(function(node) {
                         if (node.nodeType === 1 && node.classList && node.classList.contains('input-error')) {
-                            console.log('DSFR: Question en erreur ajoutée au DOM');
                             setTimeout(transformErrorsToDsfr, 100);
                         }
                     });
@@ -465,7 +449,6 @@
             subtree: true
         });
 
-        console.log('DSFR: Observation des erreurs dynamiques activée');
     }
 
     // Initialiser la transformation des erreurs au chargement
@@ -510,7 +493,6 @@
      * avec liens ancrés vers chaque champ en erreur
      */
     function createErrorSummary() {
-        console.log('DSFR: Création du récapitulatif d\'erreurs');
 
         // Supprimer l'ancien récapitulatif s'il existe
         const oldSummary = document.getElementById('dsfr-error-summary');
@@ -522,11 +504,9 @@
         const errorQuestions = document.querySelectorAll('.question-container.input-error, .question-container.fr-input-group--error');
 
         if (errorQuestions.length === 0) {
-            console.log('DSFR: Aucune erreur détectée');
             return;
         }
 
-        console.log('DSFR: ' + errorQuestions.length + ' erreur(s) détectée(s)');
 
         // Construire la liste des erreurs
         const errorList = [];
@@ -633,7 +613,6 @@
         setTimeout(function() {
             summary.scrollIntoView({ behavior: 'smooth', block: 'start' });
             summary.focus();
-            console.log('DSFR: Récapitulatif d\'erreurs affiché et focusé');
         }, 100);
     }
 
@@ -648,7 +627,6 @@
             return; // Pas de récapitulatif à mettre à jour
         }
 
-        console.log('DSFR: Mise à jour du récapitulatif d\'erreurs');
 
         // Récupérer toutes les lignes d'erreur dans le récapitulatif
         const errorItems = summary.querySelectorAll('.error-item');
@@ -682,7 +660,6 @@
             }
         });
 
-        console.log('DSFR: ' + correctedCount + ' / ' + totalErrors + ' erreur(s) corrigée(s)');
 
         // Mettre à jour le type d'alerte selon l'état
         const title = summary.querySelector('.fr-alert__title');
@@ -790,7 +767,6 @@
                         errorMessage.textContent = 'Seuls des nombres peuvent être entrés dans ce champ.';
                         messagesGroup.appendChild(errorMessage);
 
-                        console.log('DSFR: Validation numérique - erreur affichée pour', input.id);
                     }
                 } else {
                     // Valeur valide → convertir en succès si une erreur existe
@@ -816,7 +792,6 @@
                             errorMessage.className = 'fr-message fr-message--valid';
                             errorMessage.textContent = 'Merci d\'avoir répondu';
 
-                            console.log('DSFR: Validation numérique - convertie en succès pour', this.id);
 
                             // Mettre à jour le récapitulatif d'erreurs
                             setTimeout(updateErrorSummary, 50);
@@ -826,7 +801,6 @@
             });
         });
 
-        console.log('DSFR: Validation numérique en temps réel initialisée pour', numericInputs.length, 'champ(s)');
     }
 
     // Initialiser la validation numérique

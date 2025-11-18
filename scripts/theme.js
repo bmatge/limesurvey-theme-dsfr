@@ -81,12 +81,10 @@
 
     // Initialiser basicThemeScripts avec TOUTES les méthodes requises
     window.basicThemeScripts.init = function() {
-        console.log('BasicThemeScripts initialized');
     };
 
     // Méthode initGlobal requise par LimeSurvey
     window.basicThemeScripts.initGlobal = function() {
-        console.log('BasicThemeScripts initGlobal called');
     };
 
     // Autres méthodes potentiellement requises
@@ -118,13 +116,11 @@
                 }
             });
 
-            console.log('DSFR: Language changer activé pour', select.id || 'select sans id');
         });
     };
 
     // Initialisation après le chargement du DOM
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('Thème DSFR initialisé');
 
         // Initialiser les scripts de base
         if (window.basicThemeScripts && window.basicThemeScripts.init) {
@@ -220,7 +216,6 @@
             // Sauvegarder dans localStorage
             localStorage.setItem(THEME_KEY, theme);
 
-            console.log('DSFR: Thème appliqué:', theme);
         }
 
         /**
@@ -259,7 +254,6 @@
             });
         }
 
-        console.log('DSFR: Theme toggle initialisé, thème actuel:', initialTheme);
     }
 
     /**
@@ -315,7 +309,6 @@
      * Convertir les modales Bootstrap en alertes DSFR
      */
     function initBootstrapModalFallback() {
-        console.log('DSFR: Initialisation de la conversion modale → alerte DSFR');
 
         /**
          * Vérifier si le contenu de la modale est valide
@@ -333,19 +326,16 @@
             // Vérifier si la modale a du contenu
             const modalBody = modal.querySelector('.modal-body');
             if (!modalBody) {
-                console.log('DSFR: Modale sans body détectée');
                 cleanupModal(modal);
                 return;
             }
 
             const content = modalBody.textContent.trim();
             if (!isValidContent(content)) {
-                console.log('DSFR: Modale vide ou sans contenu valide');
                 cleanupModal(modal);
                 return;
             }
 
-            console.log('DSFR: Modale Bootstrap interceptée avec contenu:', content.substring(0, 100));
 
             // Récupérer le titre
             const titleElement = modal.querySelector('.modal-title, .modal-header h4, .modal-header h5');
@@ -360,7 +350,6 @@
 
             if (hasSoftMandatory) {
                 // Modale avec choix (ex: "Continuer sans répondre" ou "Fermer")
-                console.log('DSFR: Modale de validation douce détectée');
 
                 const actions = [];
                 footerLinks.forEach(function(link) {
@@ -378,7 +367,6 @@
                 showDsfrAlert(title, content, actions);
             } else {
                 // Modale d'erreur simple
-                console.log('DSFR: Modale d\'erreur simple détectée');
                 showDsfrAlert(title, content);
             }
 
@@ -399,7 +387,6 @@
                     if (modal.classList.contains('modal') &&
                         (modal.classList.contains('show') || modal.classList.contains('in'))) {
 
-                        console.log('DSFR: Modale Bootstrap en cours d\'affichage détectée');
                         interceptModalShow(modal);
                     }
                 }
@@ -426,7 +413,6 @@
             // Retirer modal-open du body
             document.body.classList.remove('modal-open');
 
-            console.log('DSFR: Modale nettoyée', modal.id);
         }
 
         // Observer toutes les modales existantes
@@ -442,7 +428,6 @@
                         attributes: true,
                         attributeFilter: ['class']
                     });
-                    console.log('DSFR: Observation de la modale', modal.id || 'sans-id');
                 }
             });
 
@@ -462,7 +447,6 @@
             mutations.forEach(function(mutation) {
                 mutation.addedNodes.forEach(function(node) {
                     if (node.nodeType === 1 && node.classList && node.classList.contains('modal')) {
-                        console.log('DSFR: Nouvelle modale ajoutée au DOM');
                         cleanupModal(node);
 
                         if (!node.hasAttribute('data-dsfr-observed')) {
@@ -499,7 +483,6 @@
         // Trouver le conteneur principal (après le header)
         const container = document.querySelector('#outerframeContainer, main, .container-fluid');
         if (!container) {
-            console.warn('DSFR: Impossible de trouver le conteneur pour l\'alerte');
             return;
         }
 
@@ -558,7 +541,6 @@
                 const btn = alert.querySelector('[data-action-index="' + index + '"]');
                 if (btn) {
                     btn.addEventListener('click', function() {
-                        console.log('DSFR: Action cliquée', action.text);
 
                         // Exécuter l'onclick original si présent
                         if (action.onclick && typeof action.onclick === 'function') {
@@ -607,7 +589,6 @@
             }
         }, autoCloseDelay);
 
-        console.log('DSFR: Alerte affichée', { title, message, hasActions: !!(actions && actions.length > 0) });
     }
 
     /**
@@ -677,7 +658,6 @@
             td.style.display = 'table-cell';
         });
 
-        console.log('DSFR: Table classes cleaned');
     });
 
     /**
@@ -697,30 +677,24 @@
      * Ajoute la classe error si la saisie n'est pas numérique
      */
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('DSFR: Initialisation de la validation numérique');
 
         // Trouver tous les inputs avec data-number
         const numberInputs = document.querySelectorAll('input[data-number="1"]');
-        console.log('DSFR: Nombre d\'inputs numériques trouvés:', numberInputs.length);
 
         numberInputs.forEach(function(input) {
-            console.log('DSFR: Initialisation de la validation pour', input.id);
 
             // Valider à chaque frappe
             input.addEventListener('input', function() {
-                console.log('DSFR: Input event pour', this.id, 'valeur:', this.value);
                 validateNumberInput(this);
             });
 
             // Valider au blur
             input.addEventListener('blur', function() {
-                console.log('DSFR: Blur event pour', this.id);
                 validateNumberInput(this);
             });
 
             // Valider à chaque changement (keyup)
             input.addEventListener('keyup', function() {
-                console.log('DSFR: Keyup event pour', this.id);
                 validateNumberInput(this);
             });
 
@@ -732,7 +706,6 @@
 
         function validateNumberInput(input) {
             const value = input.value.trim();
-            console.log('DSFR: Validation de', input.id, 'valeur:', value);
 
             // Nettoyer les anciens messages d'erreur
             removeErrorMessage(input);
@@ -740,18 +713,15 @@
             // Si vide, pas d'erreur
             if (value === '') {
                 input.classList.remove('error');
-                console.log('DSFR: Valeur vide, pas d\'erreur');
                 return;
             }
 
             // Vérifier si c'est un nombre (accepte aussi virgule)
             const isNumber = /^-?\d*[.,]?\d*$/.test(value);
-            console.log('DSFR: Est un nombre?', isNumber, 'pour la valeur:', value);
 
             if (!isNumber) {
                 // Ajouter la classe error
                 input.classList.add('error');
-                console.log('DSFR: Classe error ajoutée à', input.id);
 
                 // Créer le message d'erreur
                 const parentLi = input.closest('li.question-item');
@@ -765,12 +735,10 @@
 
                     // Insérer après la grid-row
                     gridRow.parentElement.appendChild(errorMsg);
-                    console.log('DSFR: Message d\'erreur créé pour', input.id);
                 }
             } else {
                 // Retirer la classe error
                 input.classList.remove('error');
-                console.log('DSFR: Erreur retirée pour', input.id);
             }
         }
 
@@ -792,7 +760,6 @@
      * avec messages inline et alerte globale
      */
     function initDsfrValidation() {
-        console.log('DSFR: Initialisation du système de validation');
 
         // Intercepter la soumission de tous les formulaires
         const forms = document.querySelectorAll('form#limesurvey, form[name="limesurvey"]');
@@ -800,7 +767,6 @@
         forms.forEach(function(form) {
             // Empêcher la soumission native
             form.addEventListener('submit', function(e) {
-                console.log('DSFR: Tentative de soumission du formulaire');
 
                 // Nettoyer les erreurs précédentes
                 clearAllErrors();
@@ -814,7 +780,6 @@
                     e.stopPropagation();
                     e.stopImmediatePropagation();
 
-                    console.log('DSFR: Validation échouée, ' + errors.length + ' erreur(s)');
 
                     // Afficher les erreurs
                     displayErrors(errors);
@@ -822,7 +787,6 @@
                     return false;
                 }
 
-                console.log('DSFR: Validation réussie');
                 return true;
             }, true); // useCapture = true pour intercepter avant EM
         });
@@ -845,7 +809,6 @@
                                !container.offsetParent; // offsetParent est null si l'élément est caché
 
                 if (isHidden) {
-                    console.log('DSFR: Question cachée ignorée dans la validation');
                     return;
                 }
 
@@ -929,7 +892,6 @@
          * Afficher les erreurs
          */
         function displayErrors(errors) {
-            console.log('DSFR: Affichage de ' + errors.length + ' erreur(s)');
 
             // 1. Marquer visuellement les questions en erreur
             errors.forEach(function(error) {
@@ -1070,7 +1032,6 @@
             });
         }
 
-        console.log('DSFR: Système de validation initialisé');
     }
 
     /**
@@ -1084,52 +1045,41 @@
         const rankingQuestions = document.querySelectorAll('.ranking-question-dsfr, [id^="sortable-choice-"]');
 
         if (rankingQuestions.length === 0) {
-            console.log('DSFR: Aucune question de classement détectée');
             return;
         }
 
-        console.log('DSFR: ' + rankingQuestions.length + ' question(s) de classement détectée(s)');
 
         // Charger SortableJS si pas déjà chargé
         if (typeof Sortable === 'undefined') {
-            console.log('DSFR: Chargement de SortableJS...');
             const sortableScript = document.createElement('script');
             sortableScript.src = '/assets/packages/sortablejs/sortable.min.js';
             sortableScript.onload = function() {
-                console.log('DSFR: SortableJS chargé');
                 loadRankingScript();
             };
             sortableScript.onerror = function() {
-                console.error('DSFR: Erreur de chargement de SortableJS');
             };
             document.head.appendChild(sortableScript);
         } else {
-            console.log('DSFR: SortableJS déjà chargé');
             loadRankingScript();
         }
 
         function loadRankingScript() {
             // Charger RankingQuestion si pas déjà chargé
             if (typeof RankingQuestion === 'undefined') {
-                console.log('DSFR: Chargement de ranking.js...');
                 const rankingScript = document.createElement('script');
                 rankingScript.src = '/assets/packages/questions/ranking/scripts/ranking.js';
                 rankingScript.onload = function() {
-                    console.log('DSFR: ranking.js chargé');
                     initializeRankingInstances();
                 };
                 rankingScript.onerror = function() {
-                    console.error('DSFR: Erreur de chargement de ranking.js');
                 };
                 document.head.appendChild(rankingScript);
             } else {
-                console.log('DSFR: RankingQuestion déjà chargé');
                 initializeRankingInstances();
             }
         }
 
         function initializeRankingInstances() {
-            console.log('DSFR: Initialisation des instances RankingQuestion...');
 
             // Définir la traduction
             if (typeof LSvar === 'undefined') {
@@ -1151,7 +1101,6 @@
                 const samechoiceheight = container.dataset.samechoiceheight || "1";
                 const samelistheight = container.dataset.samelistheight || "1";
 
-                console.log('DSFR: Initialisation de la question ranking ' + qId + ' avec rankingName=' + rankingName);
 
                 // Créer les options pour RankingQuestion
                 const options = {
@@ -1167,9 +1116,7 @@
                 try {
                     const rankingInstance = new RankingQuestion(options);
                     rankingInstance.init();
-                    console.log('DSFR: Question ranking ' + qId + ' initialisée avec succès');
                 } catch(e) {
-                    console.error('DSFR: Erreur lors de l\'initialisation du ranking ' + qId + ':', e);
                 }
             });
         }
@@ -1197,7 +1144,6 @@
             // Cacher le message d'erreur initial
             $question.find('.ls-question-mandatory-initial').fadeOut(300);
 
-            console.log('DSFR: Erreur de validation retirée pour la question');
         }
     });
 

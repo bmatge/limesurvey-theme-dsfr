@@ -1,0 +1,30 @@
+{#
+    LimeSurvey - DSFR Theme
+    Question Container with DSFR styling
+
+    The fr-container wraps each question with DSFR classes and structure.
+    Provides consistent spacing and error handling.
+#}
+
+<!-- Question {{ aQuestion.qid }} -->
+<div {{ aQuestion.attributes }}
+     class="fr-mb-6w {{ aQuestion.class }} {{ aQuestion.input_error_class }} {{ aSurveyInfo.class.questioncontainer }} {% if aQuestion.input_error_class %}fr-input-group--error{% endif %}"
+     {{ aSurveyInfo.attr.questioncontainer }}>
+
+    {# Question number - simple text #}
+    {% if aSurveyInfo.options.showqnumcode != 'N' %}
+        <p class="fr-text--xs text-muted fr-mb-1w">
+            {% if aSurveyInfo.options.showqnumcode == 'C' %}
+                {{ aQuestion.code }}
+            {% elseif aSurveyInfo.options.showqnumcode == 'B' %}
+                {{ aQuestion.number }} - {{ aQuestion.code }}
+            {% else %}
+                {{ gT("Question") }} {{ aQuestion.number }}
+            {% endif %}
+        </p>
+    {% endif %}
+
+    {# Question content #}
+    {{ include('./subviews/survey/question.twig') }}
+</div>
+<!-- End of question {{ aQuestion.qid }} -->

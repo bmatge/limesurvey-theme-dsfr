@@ -1,0 +1,21 @@
+{#
+/**
+ * Multiple Short Text Textarea - DSFR Theme
+ * Balanced 50/50 layout with label in col
+ */
+#}
+
+<!-- answer_row_textarea -->
+<li id="javatbd{{ myfname }}" class="question-item answer-item text-item fr-mb-3w{% if alert %} ls-error-mandatory has-error{% endif %}{{ extraclass }}" {{ sDisplayStyle }}>
+    <div class="fr-grid-row fr-grid-row--gutters">
+        <div class="fr-col-12 fr-col-md-6">
+            <label class="fr-label fr-ml-1w" for="answer{{ myfname }}">
+                {{ processString(question) }}
+            </label>
+        </div>
+        <div class="fr-col-12 fr-col-md-6">
+            <textarea class="fr-input" name="{{ myfname }}" id="answer{{ myfname }}" rows="{{ drows }}" placeholder="{{ flatString(processString(placeholder,1),1) }}" aria-label="{{ processString(question) }}">{{ dispVal }}</textarea>
+        </div>
+    </div>
+</li>
+<!-- end of answer_row_textarea -->

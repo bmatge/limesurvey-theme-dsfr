@@ -1,0 +1,69 @@
+{#
+/**
+ * Short Free Text - DSFR Theme
+ * Type: S (Short Free Text)
+ *
+ * Simple input text avec style DSFR (CSS uniquement)
+ *
+ * @var $extraclass
+ * @var $name           Field name
+ * @var $basename       Base name for IDs
+ * @var $prefix         Prefix text
+ * @var $suffix         Suffix text
+ * @var $kpclass        Keypress class
+ * @var $tiwidth        Text input width
+ * @var $dispVal        Display value
+ * @var $placeholder    Placeholder text
+ * @var $maxlength      Max length
+ * @var $inputsize      Input size attribute
+ * @var $numberonly     Number only validation
+ * @var $checkconditionFunction
+ */
+#}
+
+<!-- DSFR Input - Structure 100% conforme DSFR avec fr-input-group -->
+{% if withColumn %}
+<div class='{{ coreClass }} fr-grid-row'>
+    <div class="{{ extraclass }}">
+{% else %}
+<div class='{{ coreClass }} {{ extraclass }}'>
+{% endif %}
+
+    {# Prefix - affiché au-dessus du champ #}
+    {% if prefix != '' %}
+        <span class="input-prefix fr-text--sm fr-mb-1w" style="display: block;">{{ processString(prefix) }}</span>
+    {% endif %}
+
+    {# DSFR Input Group - structure conforme aux spécifications DSFR #}
+    <div class="fr-input-group">
+        <input
+            class="fr-input {{ kpclass }}"
+            type="text"
+            name="{{ name }}"
+            id="answer{{ name }}"
+            value="{{ dispVal }}"
+            placeholder="{{ flatString(processString(placeholder,1),1) }}"
+            {% if inputsize %}size="{{ inputsize }}" {% endif %}
+            {% if maxlength %}maxlength="{{ maxlength }}" {% endif %}
+            {% if numberonly %}data-number="1" {% endif %}
+            aria-labelledby="ls-question-text-{{ basename }}"
+            aria-describedby="answer{{ name }}-messages"
+        />
+        <div class="fr-messages-group" id="answer{{ name }}-messages" aria-live="polite">
+            {# Messages d'erreur/succès injectés ici par JavaScript (theme.js) #}
+        </div>
+    </div>
+
+    {# Suffix - affiché en-dessous du champ #}
+    {% if suffix %}
+        <span class="input-suffix fr-text--sm fr-mt-1w" style="display: block;">{{ processString(suffix) }}</span>
+    {% endif %}
+
+{% if withColumn %}
+    </div>
+</div>
+{% else %}
+</div>
+{% endif %}
+
+<!-- end of answer -->

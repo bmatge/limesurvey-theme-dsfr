@@ -1,0 +1,65 @@
+{#
+/**
+ * Shortfreetext - DSFR Theme
+ * Input text style with DSFR fr-input component
+ *
+ * Variables available:
+ * $extraclass
+ * $name        $ia[1]
+ * $prefix
+ * $suffix
+ * $kpclass
+ * $tiwidth
+ * $dispVal
+ * $placeholder
+ * $maxlength
+ * $checkconditionFunction
+ */
+#}
+
+<!-- DSFR Input Text -->
+{% if withColumn %}
+<div class='{{ coreClass }} fr-grid-row'>
+    <div class="{{ extraclass }}">
+{% else %}
+<div class='{{ coreClass }} {{ extraclass }}'>
+{% endif %}
+    <div class="fr-input-group">
+        {% if prefix != '' or suffix != '' %}
+            <div class="fr-input-wrap">
+        {% endif %}
+            <!-- Prefix -->
+            {% if prefix != '' %}
+                <span class="fr-text--sm fr-text--bold fr-mr-1w">{{ processString(prefix) }}</span>
+            {% endif %}
+
+            <!-- Input DSFR -->
+            <input
+                class="fr-input {{ kpclass }}"
+                type="text"
+                name="{{ name }}"
+                id="answer{{ name }}"
+                value="{{ dispVal }}"
+                placeholder="{{ flatString(processString(placeholder,1),1) }}"
+                {% if inputsize %}size="{{ inputsize }}" {% endif %}
+                {% if maxlength %}maxlength="{{ maxlength }}" {% endif %}
+                {% if numberonly %}data-number="1" {% endif %}
+                aria-labelledby="ls-question-text-{{ basename }}"
+            />
+
+            <!-- Suffix -->
+            {% if suffix %}
+                <span class="fr-text--sm fr-text--bold fr-ml-1w">{{ processString(suffix) }}</span>
+            {% endif %}
+        {% if prefix != '' or suffix != '' %}
+            </div>
+        {% endif %}
+    </div>
+{% if withColumn %}
+    </div>
+</div>
+{% else %}
+</div>
+{% endif %}
+
+<!-- end of answer -->

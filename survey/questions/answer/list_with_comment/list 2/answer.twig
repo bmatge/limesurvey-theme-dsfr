@@ -1,0 +1,60 @@
+{#
+/**
+ * List with comment, list style - DSFR Theme
+ * Radio list with comment textarea, DSFR-compliant
+ *
+ * Variables available:
+ * @var $sRows         : the list of radio, generated with the view answer_row.php
+ * @var $id
+ * @var $hint_comment
+ * @var $kpclass
+ * @var $name
+ * @var $tarows
+ * @var $has_comment_saved
+ * @var $comment_saved
+ * @var $java_name
+ * @var $java_id
+ * @var $java_value
+ * @var $basename
+ * @var $coreClass
+ */
+#}
+<!-- List with comment, DSFR style -->
+
+<!-- answer -->
+<div class="{{ coreClass }} fr-grid-row fr-grid-row--gutters" role="group" aria-labelledby="ls-question-text-{{ basename }}">
+    <!-- Radio list column -->
+    <div class="fr-col-12 fr-col-md-6">
+        <fieldset class="fr-fieldset" aria-labelledby="ls-question-text-{{ basename }}">
+            <legend class="fr-sr-only">
+                {{ gT('Please choose one of the following options') }}
+            </legend>
+            <div class="fr-fieldset__content">
+                {# rows/answer_row.twig #}
+                {{ sRows }}
+            </div>
+        </fieldset>
+
+        {# Value for expression manager javascript (use id) ; no need to submit #}
+        {{ C.Html.hiddenField(java_name,java_value,({
+            'id' : java_id,
+            'disabled' : true,
+        })) }}
+    </div>
+
+    <!-- Comment column -->
+    <div class="fr-col-12 fr-col-md-6">
+        <div class="fr-input-group">
+            <label class="fr-label" for="{{ id }}">
+                {{ processString(hint_comment) }}:
+            </label>
+            {{ C.Html.textArea(name,comment_saved,({
+                'id' : id,
+                'class' : "fr-input"~kpclass,
+                'rows' : tarows
+            })) }}
+        </div>
+    </div>
+</div>
+
+<!-- end of answer -->

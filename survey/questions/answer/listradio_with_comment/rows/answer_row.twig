@@ -1,0 +1,30 @@
+{#
+/**
+ * Radio Item Row for list with comment - DSFR Theme
+ *
+ * Variables available:
+ * @var $name
+ * @var $code
+ * @var $answer
+ * @var $checkedState
+ * @var $myfname
+ */
+#}
+
+<!-- DSFR Radio Item -->
+<div class="fr-fieldset__element">
+    <div class="fr-radio-group">
+        <input
+            type="radio"
+            name="{{ name }}"
+            id="answer{{ name }}{{ code }}"
+            value="{{ code }}"
+            {{ checkedState }}
+            onclick="checkconditions(this.value, this.name, this.type);"
+        />
+        <label class="fr-label" for="answer{{ name }}{{ code }}">
+            {{ processString(answer) }}
+        </label>
+    </div>
+</div>
+<!-- end of answer_row -->

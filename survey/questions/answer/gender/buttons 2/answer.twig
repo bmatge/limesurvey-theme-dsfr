@@ -1,0 +1,47 @@
+{#
+/**
+ * Gender Question - DSFR Theme
+ * Radio buttons with DSFR fr-radio-group
+ */
+#}
+
+<!-- Gender DSFR -->
+<fieldset class="fr-fieldset" aria-labelledby="ls-question-text-{{ basename }}">
+    <div class="fr-fieldset__content">
+        <div class="fr-grid-row fr-grid-row--gutters">
+            <!-- Female -->
+            <div class="fr-col-12 fr-col-sm-6 fr-col-md-4">
+                <div class="fr-radio-group">
+                    <input type="radio" name="{{ name }}" id="answer{{ name }}F" value="F" {{ fChecked }}>
+                    <label class="fr-label" for="answer{{ name }}F">
+                        <span class="ri-women-line" aria-hidden="true"></span> {{ gT('Female') }}
+                    </label>
+                </div>
+            </div>
+
+            <!-- Male -->
+            <div class="fr-col-12 fr-col-sm-6 fr-col-md-4">
+                <div class="fr-radio-group">
+                    <input type="radio" name="{{ name }}" id="answer{{ name }}M" value="M" {{ mChecked }}>
+                    <label class="fr-label" for="answer{{ name }}M">
+                        <span class="ri-men-line" aria-hidden="true"></span> {{ gT('Male') }}
+                    </label>
+                </div>
+            </div>
+
+            <!-- No answer -->
+            {% if noAnswer %}
+                <div class="fr-col-12 fr-col-sm-6 fr-col-md-4">
+                    <div class="fr-radio-group">
+                        <input type="radio" name="{{ name }}" id="answer{{ name }}" value="" {{ naChecked }}>
+                        <label class="fr-label" for="answer{{ name }}">
+                            {{ gT('No answer') }}
+                        </label>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</fieldset>
+
+{{ C.Html.hiddenField('java' ~ name, value, ({'id' : 'java' ~ name,'disabled' : 'true'})) }}

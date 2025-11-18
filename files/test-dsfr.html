@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr" data-fr-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test DSFR - Thème LimeSurvey</title>
+
+    <!-- DSFR CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/@gouvfr/dsfr@1.11/dist/dsfr.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@gouvfr/dsfr@1.11/dist/utility/icons/icons.min.css">
+
+    <style>
+        body {
+            padding: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header DSFR -->
+    <header role="banner" class="fr-header">
+        <div class="fr-header__body">
+            <div class="fr-container">
+                <div class="fr-header__body-row">
+                    <div class="fr-header__brand fr-enlarge-link">
+                        <div class="fr-header__brand-top">
+                            <div class="fr-header__logo">
+                                <p class="fr-logo">République<br>Française</p>
+                            </div>
+                        </div>
+                        <div class="fr-header__service">
+                            <a href="/" title="Accueil">
+                                <p class="fr-header__service-title">Test Thème DSFR pour LimeSurvey</p>
+                            </a>
+                            <p class="fr-header__service-tagline">Vérification des composants DSFR</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenu principal -->
+    <main role="main" id="contenu">
+        <div class="fr-container fr-my-6w">
+            <!-- Titre -->
+            <div class="fr-grid-row">
+                <div class="fr-col-12">
+                    <h1>Test des composants DSFR</h1>
+                    <p class="fr-text--lead">Cette page permet de vérifier que le DSFR est bien chargé et fonctionnel.</p>
+                </div>
+            </div>
+
+            <!-- Boutons -->
+            <div class="fr-grid-row fr-grid-row--gutters fr-mt-6w">
+                <div class="fr-col-12">
+                    <h2>Boutons</h2>
+                    <div class="fr-btns-group">
+                        <button class="fr-btn">Bouton par défaut</button>
+                        <button class="fr-btn fr-btn--secondary">Bouton secondaire</button>
+                        <button class="fr-btn fr-btn--tertiary">Bouton tertiaire</button>
+                    </div>
+                    <div class="fr-btns-group fr-mt-2w">
+                        <button class="fr-btn fr-icon-arrow-right-line fr-btn--icon-right">
+                            Bouton avec icône
+                        </button>
+                        <button class="fr-btn fr-btn--secondary fr-icon-download-line fr-btn--icon-left">
+                            Télécharger
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Champs de formulaire -->
+            <div class="fr-grid-row fr-grid-row--gutters fr-mt-6w">
+                <div class="fr-col-12 fr-col-md-6">
+                    <h2>Champs de texte</h2>
+
+                    <!-- Input texte -->
+                    <div class="fr-input-group">
+                        <label class="fr-label" for="text-input">
+                            Champ de texte
+                            <span class="fr-hint-text">Texte d'aide</span>
+                        </label>
+                        <input class="fr-input" type="text" id="text-input" name="text-input">
+                    </div>
+
+                    <!-- Input obligatoire -->
+                    <div class="fr-input-group fr-mt-4w">
+                        <label class="fr-label" for="text-required">
+                            Champ obligatoire
+                            <span class="fr-error-text">*</span>
+                        </label>
+                        <input class="fr-input" type="text" id="text-required" name="text-required" required>
+                    </div>
+
+                    <!-- Input avec erreur -->
+                    <div class="fr-input-group fr-input-group--error fr-mt-4w">
+                        <label class="fr-label" for="text-error">
+                            Champ avec erreur
+                        </label>
+                        <input class="fr-input fr-input--error" type="text" id="text-error" name="text-error" aria-describedby="text-error-desc-error">
+                        <p id="text-error-desc-error" class="fr-error-text">
+                            Message d'erreur
+                        </p>
+                    </div>
+
+                    <!-- Textarea -->
+                    <div class="fr-input-group fr-mt-4w">
+                        <label class="fr-label" for="textarea">
+                            Zone de texte
+                        </label>
+                        <textarea class="fr-input" id="textarea" name="textarea" rows="4"></textarea>
+                    </div>
+                </div>
+
+                <div class="fr-col-12 fr-col-md-6">
+                    <h2>Boutons radio</h2>
+                    <fieldset class="fr-fieldset">
+                        <legend class="fr-fieldset__legend fr-text--regular">
+                            Question avec réponse unique
+                        </legend>
+                        <div class="fr-fieldset__content">
+                            <div class="fr-radio-group">
+                                <input type="radio" id="radio-1" name="radio" checked>
+                                <label class="fr-label" for="radio-1">Option 1</label>
+                            </div>
+                            <div class="fr-radio-group">
+                                <input type="radio" id="radio-2" name="radio">
+                                <label class="fr-label" for="radio-2">Option 2</label>
+                            </div>
+                            <div class="fr-radio-group">
+                                <input type="radio" id="radio-3" name="radio">
+                                <label class="fr-label" for="radio-3">Option 3</label>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <h2 class="fr-mt-6w">Cases à cocher</h2>
+                    <fieldset class="fr-fieldset">
+                        <legend class="fr-fieldset__legend fr-text--regular">
+                            Question avec réponses multiples
+                        </legend>
+                        <div class="fr-fieldset__content">
+                            <div class="fr-checkbox-group">
+                                <input type="checkbox" id="checkbox-1" name="checkbox-1">
+                                <label class="fr-label" for="checkbox-1">Choix 1</label>
+                            </div>
+                            <div class="fr-checkbox-group">
+                                <input type="checkbox" id="checkbox-2" name="checkbox-2">
+                                <label class="fr-label" for="checkbox-2">Choix 2</label>
+                            </div>
+                            <div class="fr-checkbox-group">
+                                <input type="checkbox" id="checkbox-3" name="checkbox-3">
+                                <label class="fr-label" for="checkbox-3">Choix 3</label>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Select -->
+                    <div class="fr-select-group fr-mt-4w">
+                        <label class="fr-label" for="select">
+                            Liste déroulante
+                        </label>
+                        <select class="fr-select" id="select" name="select">
+                            <option value="" selected disabled hidden>Sélectionnez une option</option>
+                            <option value="1">Option 1</option>
+                            <option value="2">Option 2</option>
+                            <option value="3">Option 3</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alertes -->
+            <div class="fr-grid-row fr-grid-row--gutters fr-mt-6w">
+                <div class="fr-col-12">
+                    <h2>Alertes</h2>
+                    <div class="fr-alert fr-alert--success fr-mb-2w">
+                        <p class="fr-alert__title">Succès</p>
+                        <p>Votre réponse a été enregistrée avec succès.</p>
+                    </div>
+                    <div class="fr-alert fr-alert--info fr-mb-2w">
+                        <p class="fr-alert__title">Information</p>
+                        <p>Cette enquête comprend 15 questions.</p>
+                    </div>
+                    <div class="fr-alert fr-alert--warning fr-mb-2w">
+                        <p class="fr-alert__title">Attention</p>
+                        <p>Certaines questions sont obligatoires.</p>
+                    </div>
+                    <div class="fr-alert fr-alert--error fr-mb-2w">
+                        <p class="fr-alert__title">Erreur</p>
+                        <p>Veuillez remplir tous les champs obligatoires.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stepper (barre de progression) -->
+            <div class="fr-grid-row fr-grid-row--gutters fr-mt-6w">
+                <div class="fr-col-12">
+                    <h2>Barre de progression</h2>
+                    <div class="fr-stepper">
+                        <h3 class="fr-stepper__title">
+                            Question 3 sur 10
+                        </h3>
+                        <div class="fr-stepper__steps" data-fr-current-step="3" data-fr-steps="10"></div>
+                        <p class="fr-stepper__details">
+                            <span class="fr-text--bold">Étape 3</span> : Informations personnelles
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Badge -->
+            <div class="fr-grid-row fr-grid-row--gutters fr-mt-6w">
+                <div class="fr-col-12">
+                    <h2>Badges</h2>
+                    <p class="fr-badge">Badge par défaut</p>
+                    <p class="fr-badge fr-badge--info">Obligatoire</p>
+                    <p class="fr-badge fr-badge--success">Validé</p>
+                    <p class="fr-badge fr-badge--warning">En attente</p>
+                    <p class="fr-badge fr-badge--error">Erreur</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer DSFR -->
+    <footer class="fr-footer" role="contentinfo" id="footer">
+        <div class="fr-container">
+            <div class="fr-footer__body">
+                <div class="fr-footer__brand fr-enlarge-link">
+                    <a href="/" title="Retour à l'accueil">
+                        <p class="fr-logo">République<br>Française</p>
+                    </a>
+                </div>
+                <div class="fr-footer__content">
+                    <p class="fr-footer__content-desc">
+                        Thème DSFR pour LimeSurvey
+                    </p>
+                    <ul class="fr-footer__content-list">
+                        <li class="fr-footer__content-item">
+                            <a class="fr-footer__content-link" href="#">Accessibilité : non conforme</a>
+                        </li>
+                        <li class="fr-footer__content-item">
+                            <a class="fr-footer__content-link" href="#">Mentions légales</a>
+                        </li>
+                        <li class="fr-footer__content-item">
+                            <a class="fr-footer__content-link" href="#">Données personnelles</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="fr-footer__bottom">
+                <ul class="fr-footer__bottom-list">
+                    <li class="fr-footer__bottom-item">
+                        <a class="fr-footer__bottom-link" href="https://www.systeme-de-design.gouv.fr/" target="_blank">
+                            Système de Design de l'État
+                        </a>
+                    </li>
+                </ul>
+                <div class="fr-footer__bottom-copy">
+                    <p>© République Française 2025</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- DSFR JS -->
+    <script type="module" src="https://unpkg.com/@gouvfr/dsfr@1.11/dist/dsfr.module.min.js"></script>
+    <script nomodule src="https://unpkg.com/@gouvfr/dsfr@1.11/dist/dsfr.nomodule.min.js"></script>
+</body>
+</html>

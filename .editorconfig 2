@@ -1,0 +1,23 @@
+# EditorConfig pour le thème DSFR
+root = true
+
+# Tous les fichiers
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Fichiers code
+[*.{js,css,twig,html,xml}]
+indent_style = space
+indent_size = 4
+
+# Fichiers JSON et YAML
+[*.{json,yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# Fichiers Markdown
+[*.md]
+trim_trailing_whitespace = false

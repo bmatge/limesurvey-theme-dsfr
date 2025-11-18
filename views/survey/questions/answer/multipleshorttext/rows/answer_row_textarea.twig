@@ -14,7 +14,12 @@
             </label>
         </div>
         <div class="fr-col-12 fr-col-md-6">
-            <textarea class="fr-input" name="{{ myfname }}" id="answer{{ myfname }}" rows="{{ drows }}" placeholder="{{ flatString(processString(placeholder,1),1) }}" aria-label="{{ processString(question) }}">{{ dispVal }}</textarea>
+            <div class="fr-input-group{% if alert %} fr-input-group--error{% endif %}">
+                <textarea class="fr-input" name="{{ myfname }}" id="answer{{ myfname }}" rows="{{ drows }}" placeholder="{{ flatString(processString(placeholder,1),1) }}" aria-label="{{ processString(question) }}" aria-describedby="answer{{ myfname }}-messages">{{ dispVal }}</textarea>
+                <div class="fr-messages-group" id="answer{{ myfname }}-messages" aria-live="polite">
+                    {# Messages d'erreur injectés par JavaScript #}
+                </div>
+            </div>
         </div>
     </div>
 </li>

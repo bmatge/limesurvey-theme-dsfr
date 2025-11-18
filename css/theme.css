@@ -369,7 +369,7 @@ body > article {
 
 .question-mandatory,
 .asterisk {
-    color: var(--error-425);
+    color: var(--error-425-625);
     font-weight: 700;
     margin-left: 0.25rem;
 }
@@ -392,16 +392,26 @@ body > article {
     font-size: 0.875rem;
     line-height: 1.5;
     margin-top: 0.25rem;
-    color: var(--error-425);
+    color: var(--error-425-625);
     font-weight: 400;
 }
 
 /* État d'erreur sur l'input */
 input.error,
 textarea.error,
-select.error {
-    border-color: var(--error-425) !important;
-    box-shadow: inset 0 -2px 0 0 var(--error-425) !important;
+select.error,
+.fr-input--error,
+input.fr-input--error,
+textarea.fr-input--error {
+    border-color: var(--error-425-625) !important;
+    box-shadow: inset 0 -2px 0 0 var(--error-425-625) !important;
+}
+
+/* État valide sur l'input */
+.fr-input--valid,
+input.fr-input--valid,
+textarea.fr-input--valid {
+    box-shadow: inset 0 -2px 0 0 var(--success-425-625) !important;
 }
 
 
@@ -612,10 +622,6 @@ select:disabled,
 }
 
 /* Message info (bleu) */
-.fr-message--info {
-    color: var(--info-425);
-}
-
 .fr-message--info::before {
     content: "";
     flex-shrink: 0;
@@ -645,7 +651,7 @@ select:disabled,
 
 /* Message erreur (rouge) */
 .fr-message--error {
-    color: var(--error-425);
+    color: var(--error-425-625);
 }
 
 .fr-message--error::before {
@@ -660,15 +666,8 @@ select:disabled,
 }
 
 /* États fr-input-group --error et --valid */
-.fr-input-group--error .fr-input,
-.fr-input-group--error .fr-select {
-    box-shadow: inset 0 -2px 0 0 var(--error-425);
-}
-
-.fr-input-group--valid .fr-input,
-.fr-input-group--valid .fr-select {
-    box-shadow: inset 0 -2px 0 0 var(--success-425);
-}
+/* Note: Les box-shadow sont gérées par DSFR natif pour éviter les conflits */
+/* Les règles --error et --valid sont désactivées pour laisser DSFR gérer nativement les bordures */
 
 /* Label hint text */
 .fr-label .fr-hint-text {
@@ -917,8 +916,8 @@ input[type="submit"]:hover {
 .alert-error,
 .alert-danger {
     background-color: var(--background-contrast-error);
-    border-left-color: var(--error-425);
-    color: var(--error-425);
+    border-left-color: var(--error-425-625);
+    color: var(--error-425-625);
 }
 
 /* ============================================
@@ -928,7 +927,7 @@ input[type="submit"]:hover {
 .error-message,
 .em_num_answers,
 .ls-em-error {
-    color: var(--error-425);
+    color: var(--error-425-625);
     font-size: 0.875rem;
     margin-top: 0.25rem;
     display: flex;
@@ -952,14 +951,14 @@ select.error,
 .has-error input,
 .has-error textarea,
 .has-error select {
-    border-color: var(--error-425);
-    border-bottom-color: var(--error-425);
+    border-color: var(--error-425-625);
+    border-bottom-color: var(--error-425-625);
 }
 
 input.error:focus,
 textarea.error:focus,
 select.error:focus {
-    box-shadow: inset 0 -2px 0 0 var(--error-425);
+    box-shadow: inset 0 -2px 0 0 var(--error-425-625);
 }
 
 /* ============================================
@@ -1281,20 +1280,24 @@ footer.fr-footer,
    On surcharge ici pour respecter le comportement attendu de LimeSurvey
    avec alternance ls-odd/ls-even */
 
+/* Surcharge du fond alterné DSFR natif sur tbody */
+.fr-table tbody,
+.fr-table--bordered tbody {
+    background-color: transparent !important;
+}
+
 /* Reset du fond gris par défaut du DSFR sur tous les td */
 .fr-table--bordered table tbody td {
     background-color: transparent !important;
 }
 
 /* Application manuelle de l'alternance avec les classes LimeSurvey */
+/* Backgrounds removed for responsive mobile linearization */
 .fr-table--bordered table tbody tr.ls-odd td,
-.fr-table--bordered table tbody tr.ls-odd th {
-    background-color: var(--background-alt-grey) !important;
-}
-
+.fr-table--bordered table tbody tr.ls-odd th,
 .fr-table--bordered table tbody tr.ls-even td,
 .fr-table--bordered table tbody tr.ls-even th {
-    background-color: var(--background-default-grey) !important;
+    background-color: transparent !important;
 }
 
 /* Labels de colonnes pour vue mobile - cachés en desktop */
@@ -1305,10 +1308,27 @@ footer.fr-footer,
 /* Afficher les labels en vue mobile (< 768px) */
 @media (max-width: 767px) {
     .ls-label-xs-visibility {
-        display: block;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-        color: var(--text-label-grey, #161616);
+        display: inline-block !important;
+        position: static !important;
+        width: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+        /* Style DSFR pour les labels */
+        font-size: 0.875rem !important;
+        line-height: 1.5rem !important;
+        font-weight: 700 !important;
+        color: var(--text-label-grey, #161616) !important;
+        vertical-align: top !important;
+        /* Marges pour alignement avec input */
+        margin-left: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
+        margin-top: 0 !important;
+        /* Permettre le wrapping du texte */
+        max-width: calc(100% - 2.5rem) !important;
+        overflow-wrap: break-word !important;
+        word-wrap: break-word !important;
+        word-break: normal !important;
+        white-space: normal !important;
     }
 
     /* ============================================
@@ -1319,7 +1339,11 @@ footer.fr-footer,
     /* Masquer le tableau natif et forcer le mode bloc */
     .fr-table table,
     .fr-table--bordered table,
-    div[class*="fr-table"] table {
+    div[class*="fr-table"] table,
+    table.radio-array,
+    table.questions-list,
+    table.dropdown-array,
+    table.table {
         border: 0 !important;
         display: block !important;
     }
@@ -1327,7 +1351,11 @@ footer.fr-footer,
     /* Cacher complètement les en-têtes de colonnes */
     .fr-table table thead,
     .fr-table--bordered table thead,
-    div[class*="fr-table"] table thead {
+    div[class*="fr-table"] table thead,
+    table.radio-array thead,
+    table.questions-list thead,
+    table.dropdown-array thead,
+    table.table thead {
         display: none !important;
         visibility: hidden !important;
     }
@@ -1335,20 +1363,39 @@ footer.fr-footer,
     /* Tbody en mode bloc */
     .fr-table table tbody,
     .fr-table--bordered table tbody,
-    div[class*="fr-table"] table tbody {
+    div[class*="fr-table"] table tbody,
+    table.radio-array tbody,
+    table.questions-list tbody,
+    table.dropdown-array tbody,
+    table.table tbody {
         display: block !important;
     }
 
     /* Chaque ligne devient une carte */
     .fr-table table tbody tr,
     .fr-table--bordered table tbody tr,
-    div[class*="fr-table"] table tbody tr {
+    div[class*="fr-table"] table tbody tr,
+    table.radio-array tbody tr,
+    table.questions-list tbody tr,
+    table.dropdown-array tbody tr,
+    table.table tbody tr {
         display: block !important;
         margin-bottom: 1.5rem !important;
-        border: 1px solid var(--border-default-grey) !important;
-        padding: 1rem !important;
-        background-color: var(--background-default-grey) !important;
-        border-radius: 0.25rem !important;
+        padding: 0.75rem !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Fix padding-left pour les TR avec class radio-list/answers-list
+       (custom.css force padding-left: 0 sur ces classes) */
+    .fr-table table tbody tr.radio-list,
+    .fr-table table tbody tr.answers-list,
+    .fr-table--bordered table tbody tr.radio-list,
+    .fr-table--bordered table tbody tr.answers-list,
+    table.radio-array tbody tr.radio-list,
+    table.radio-array tbody tr.answers-list,
+    table.questions-list tbody tr.radio-list,
+    table.questions-list tbody tr.answers-list {
+        padding-left: 0.75rem !important;
     }
 
     /* Toutes les cellules en mode bloc vertical */
@@ -1357,29 +1404,76 @@ footer.fr-footer,
     .fr-table table tbody tr td,
     .fr-table--bordered table tbody tr td,
     div[class*="fr-table"] table tbody tr th,
-    div[class*="fr-table"] table tbody tr td {
+    div[class*="fr-table"] table tbody tr td,
+    table.radio-array tbody tr th,
+    table.radio-array tbody tr td,
+    table.questions-list tbody tr th,
+    table.questions-list tbody tr td,
+    table.dropdown-array tbody tr th,
+    table.dropdown-array tbody tr td,
+    table.table tbody tr th,
+    table.table tbody tr td {
         display: block !important;
         text-align: left !important;
         border: none !important;
-        padding: 0.5rem 0 !important;
+        padding: 0.25rem 0 !important;
+        margin: 0 !important;
         background-color: transparent !important;
         width: 100% !important;
+        /* Permettre le wrapping du contenu */
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Alignement des radio/checkbox avec leurs labels sur mobile */
+    .fr-table table tbody tr td input[type="radio"],
+    .fr-table table tbody tr td input[type="checkbox"],
+    .fr-table--bordered table tbody tr td input[type="radio"],
+    .fr-table--bordered table tbody tr td input[type="checkbox"],
+    table.radio-array tbody tr td input[type="radio"],
+    table.radio-array tbody tr td input[type="checkbox"],
+    table.questions-list tbody tr td input[type="radio"],
+    table.questions-list tbody tr td input[type="checkbox"],
+    table.dropdown-array tbody tr td input[type="radio"],
+    table.dropdown-array tbody tr td input[type="checkbox"],
+    table.table tbody tr td input[type="radio"],
+    table.table tbody tr td input[type="checkbox"] {
+        display: inline-block !important;
+        vertical-align: top !important;
+        margin-right: 0 !important;
+        margin-top: 0.125rem !important; /* Petit ajustement pour aligner avec le texte */
     }
 
     /* Header de ligne (th) mis en évidence */
     .fr-table table tbody tr th,
     .fr-table--bordered table tbody tr th,
-    div[class*="fr-table"] table tbody tr th {
+    div[class*="fr-table"] table tbody tr th,
+    table.radio-array tbody tr th,
+    table.questions-list tbody tr th,
+    table.dropdown-array tbody tr th,
+    table.table tbody tr th {
         font-size: 1.125rem !important;
+        font-weight: 700 !important;
         margin-bottom: 0.75rem !important;
+        padding-top: 0 !important;
         padding-bottom: 0.75rem !important;
         border-bottom: 1px solid var(--border-default-grey, #ddd) !important;
+        /* Forcer le wrapping des labels longs */
+        overflow-wrap: break-word !important;
+        word-break: break-word !important;
     }
 
-    /* Les fr-input-group doivent rester en bloc */
+    /* Les fr-input-group et fr-select-group doivent rester en bloc */
     .fr-table table tbody tr td .fr-input-group,
     .fr-table--bordered table tbody tr td .fr-input-group,
-    div[class*="fr-table"] table tbody tr td .fr-input-group {
+    div[class*="fr-table"] table tbody tr td .fr-input-group,
+    table.radio-array tbody tr td .fr-input-group,
+    table.questions-list tbody tr td .fr-input-group,
+    table.dropdown-array tbody tr td .fr-input-group,
+    table.dropdown-array tbody tr td .fr-select-group,
+    table.table tbody tr td .fr-input-group {
         display: block !important;
         width: 100% !important;
     }
@@ -1387,9 +1481,71 @@ footer.fr-footer,
     /* Les inputs doivent prendre toute la largeur */
     .fr-table table tbody tr td .fr-input,
     .fr-table--bordered table tbody tr td .fr-input,
-    div[class*="fr-table"] table tbody tr td .fr-input {
+    div[class*="fr-table"] table tbody tr td .fr-input,
+    table.radio-array tbody tr td .fr-input,
+    table.questions-list tbody tr td .fr-input,
+    table.dropdown-array tbody tr td .fr-input,
+    table.table tbody tr td .fr-input {
         width: 100% !important;
     }
+
+    /* Les selects doivent aussi prendre toute la largeur */
+    .fr-table table tbody tr td select,
+    .fr-table--bordered table tbody tr td select,
+    div[class*="fr-table"] table tbody tr td select,
+    table.radio-array tbody tr td select,
+    table.questions-list tbody tr td select,
+    table.dropdown-array tbody tr td select,
+    table.table tbody tr td select,
+    .fr-table table tbody tr td .fr-select,
+    .fr-table--bordered table tbody tr td .fr-select,
+    div[class*="fr-table"] table tbody tr td .fr-select,
+    table.radio-array tbody tr td .fr-select,
+    table.questions-list tbody tr td .fr-select,
+    table.dropdown-array tbody tr td .fr-select,
+    table.table tbody tr td .fr-select {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* ============================================
+   ÉTATS D'ERREUR ET DE VALIDITÉ POUR TABLEAUX
+   S'applique sur tous les écrans (pas seulement mobile)
+   ============================================ */
+
+/* États d'erreur et de validité pour les inputs dans les tableaux */
+.fr-table table tbody tr td .fr-input-group .fr-input.fr-input--error,
+.fr-table--bordered table tbody tr td .fr-input-group .fr-input.fr-input--error,
+div[class*="fr-table"] table tbody tr td .fr-input-group .fr-input.fr-input--error,
+.fr-table table tbody tr td .fr-input.fr-input--error,
+.fr-table--bordered table tbody tr td .fr-input.fr-input--error,
+div[class*="fr-table"] table tbody tr td .fr-input.fr-input--error,
+table.radio-array tbody tr td .fr-input-group .fr-input.fr-input--error,
+table.radio-array tbody tr td .fr-input.fr-input--error,
+table.questions-list tbody tr td .fr-input-group .fr-input.fr-input--error,
+table.questions-list tbody tr td .fr-input.fr-input--error,
+table.table tbody tr td .fr-input-group .fr-input.fr-input--error,
+table.table tbody tr td .fr-input.fr-input--error,
+.fr-input-group--error .fr-input.fr-input--error {
+    border-color: var(--error-425-625) !important;
+    box-shadow: inset 0 -2px 0 0 var(--error-425-625) !important;
+}
+
+.fr-table table tbody tr td .fr-input-group .fr-input.fr-input--valid,
+.fr-table--bordered table tbody tr td .fr-input-group .fr-input.fr-input--valid,
+div[class*="fr-table"] table tbody tr td .fr-input-group .fr-input.fr-input--valid,
+.fr-table table tbody tr td .fr-input.fr-input--valid,
+.fr-table--bordered table tbody tr td .fr-input.fr-input--valid,
+div[class*="fr-table"] table tbody tr td .fr-input.fr-input--valid,
+table.radio-array tbody tr td .fr-input-group .fr-input.fr-input--valid,
+table.radio-array tbody tr td .fr-input.fr-input--valid,
+table.questions-list tbody tr td .fr-input-group .fr-input.fr-input--valid,
+table.questions-list tbody tr td .fr-input.fr-input--valid,
+table.table tbody tr td .fr-input-group .fr-input.fr-input--valid,
+table.table tbody tr td .fr-input.fr-input--valid,
+.fr-input-group--valid .fr-input.fr-input--valid {
+    box-shadow: inset 0 -2px 0 0 var(--success-425-625) !important;
 }
 
 /* ============================================
@@ -1418,6 +1574,22 @@ li.ls-group-dynamic {
     list-style: none !important;
     padding-left: 0 !important;
     margin-left: 0 !important;
+}
+
+/* ============================================
+   SLIDERS - AJUSTEMENT MARGE DROITE
+   ============================================ */
+
+/* Ajouter une marge à droite pour les sliders horizontaux dans les questions numériques multiples */
+.ls-slider-item-horizontal .fr-range-group {
+    margin-right: 1.5rem;
+}
+
+/* Sur mobile, retirer la marge supplémentaire */
+@media (max-width: 767px) {
+    .ls-slider-item-horizontal .fr-range-group {
+        margin-right: 0;
+    }
 }
 
 /* S'assurer que les colonnes prennent 100% sur mobile */
@@ -1490,7 +1662,6 @@ li.ls-group-dynamic {
 /* En-têtes de lignes (première colonne) */
 .ls-table-wrapper table.table-array-radio tbody th.answertext,
 .ls-table-wrapper table.radio-array tbody th.answertext {
-    background-color: var(--background-contrast-grey);
     font-weight: 700;
     color: var(--text-title-grey);
 }
@@ -1570,7 +1741,6 @@ li.ls-group-dynamic {
 
 /* En-têtes de lignes (première colonne) */
 .ls-table-wrapper table.array-radio tbody th.answertext {
-    background-color: var(--background-contrast-grey);
     font-weight: 700;
     color: var(--text-title-grey);
 }
@@ -1650,12 +1820,10 @@ li.ls-group-dynamic {
     width: 100%;
     border-collapse: collapse;
     background-color: transparent;
-    border: 1px solid var(--border-default-grey) !important;
 }
 
 .array-increase-same-decrease table.radio-array th,
 .array-increase-same-decrease table.radio-array td {
-    border: 1px solid var(--border-default-grey) !important;
     padding: 0.75rem;
     text-align: left;
 }
@@ -1691,7 +1859,6 @@ li.ls-group-dynamic {
 
 /* En-têtes de lignes (première colonne) */
 .array-increase-same-decrease table.radio-array tbody th.answertext {
-    background-color: var(--background-contrast-grey, #f6f6f6) !important;
     font-weight: 700;
     color: var(--text-label-grey) !important;
 }
@@ -1703,9 +1870,9 @@ li.ls-group-dynamic {
     vertical-align: middle;
 }
 
-/* Fond blanc uniforme pour toutes les lignes */
+/* Fond transparent pour toutes les lignes (pas de fond sur mobile) */
 .array-increase-same-decrease table.radio-array tbody tr {
-    background-color: var(--background-default-grey) !important;
+    background-color: transparent !important;
 }
 
 /* Hover sur les lignes */
@@ -1722,12 +1889,10 @@ li.ls-group-dynamic {
     width: 100%;
     border-collapse: collapse;
     background-color: transparent;
-    border: 1px solid var(--border-default-grey, #ddd) !important;
 }
 
 .array-yes-uncertain-no table.radio-array th,
 .array-yes-uncertain-no table.radio-array td {
-    border: 1px solid var(--border-default-grey, #ddd) !important;
     padding: 0.75rem;
     text-align: left;
 }
@@ -1759,7 +1924,6 @@ li.ls-group-dynamic {
 
 /* En-têtes de lignes (première colonne) */
 .array-yes-uncertain-no table.radio-array tbody th.answertext {
-    background-color: var(--background-contrast-grey, #f6f6f6) !important;
     font-weight: 700;
     color: var(--text-label-grey) !important;
 }
@@ -1771,9 +1935,9 @@ li.ls-group-dynamic {
     vertical-align: middle;
 }
 
-/* Fond blanc uniforme pour toutes les lignes */
+/* Fond transparent pour toutes les lignes (pas de fond sur mobile) */
 .array-yes-uncertain-no table.radio-array tbody tr {
-    background-color: var(--background-default-grey) !important;
+    background-color: transparent !important;
 }
 
 /* Hover sur les lignes */
@@ -1791,14 +1955,12 @@ table.array-flexible-dual-scale {
     width: 100%;
     border-collapse: collapse;
     background-color: transparent;
-    border: 1px solid var(--border-default-grey, #ddd);
 }
 
 .ls-table-wrapper table.array-flexible-dual-scale th,
 .ls-table-wrapper table.array-flexible-dual-scale td,
 table.array-flexible-dual-scale th,
 table.array-flexible-dual-scale td {
-    border: 1px solid var(--border-default-grey, #ddd);
     padding: 0.75rem;
     text-align: left;
 }
@@ -1837,7 +1999,6 @@ table.array-flexible-dual-scale thead tr.ls-heading td {
 /* En-têtes de lignes (première colonne) */
 .ls-table-wrapper table.array-flexible-dual-scale tbody th.answertext,
 table.array-flexible-dual-scale tbody th.answertext {
-    background-color: var(--background-contrast-grey, #f6f6f6);
     font-weight: 700;
     color: #161616;
 }
@@ -1851,10 +2012,10 @@ table.array-flexible-dual-scale td[class*="answer_cell_"] {
     vertical-align: middle;
 }
 
-/* Fond blanc uniforme pour toutes les lignes */
+/* Fond transparent pour toutes les lignes (pas de fond alterné sur mobile) */
 .ls-table-wrapper table.array-flexible-dual-scale tbody tr,
 table.array-flexible-dual-scale tbody tr {
-    background-color: #ffffff;
+    background-color: transparent;
 }
 
 /* Hover sur les lignes */
@@ -1890,14 +2051,12 @@ table.array-flexible-dual-scale td.dual_scale_separator {
     width: 100%;
     border-collapse: collapse;
     background-color: transparent;
-    border: 1px solid var(--border-default-grey, #ddd) !important;
 }
 
 .ls-table-wrapper table:has(.left-header, .right-header) th,
 .ls-table-wrapper table:has(.left-header, .right-header) td,
 .ls-table-wrapper table:has(.ddarrayseparator) th,
 .ls-table-wrapper table:has(.ddarrayseparator) td {
-    border: 1px solid var(--border-default-grey, #ddd) !important;
     padding: 0.75rem;
     text-align: left;
 }
@@ -1925,7 +2084,6 @@ table.array-flexible-dual-scale td.dual_scale_separator {
 
 /* En-têtes de lignes (première colonne) */
 .ls-table-wrapper table:has(.ddarrayseparator) tbody th.answertext {
-    background-color: var(--background-contrast-grey, #f6f6f6) !important;
     font-weight: 700;
     color: var(--text-label-grey) !important;
 }
@@ -1949,9 +2107,9 @@ table.array-flexible-dual-scale td.dual_scale_separator {
     width: 0 !important;
 }
 
-/* Fond blanc uniforme pour toutes les lignes */
+/* Fond transparent pour toutes les lignes (pas de fond sur mobile) */
 .ls-table-wrapper table:has(.ddarrayseparator) tbody tr {
-    background-color: var(--background-default-grey) !important;
+    background-color: transparent !important;
 }
 
 /* Hover sur les lignes */
@@ -2154,52 +2312,54 @@ li.selector--inputondemand-list-item label.control-label {
 
 /* === Array Dropdown Tables (Question type F) === */
 
-/* Force normal table display for array dropdown tables */
-.fr-table table.dropdown-array,
-.fr-table--bordered table.dropdown-array {
-    display: table !important;
-    width: 100%;
-}
+/* Force normal table display for array dropdown tables - DESKTOP ONLY */
+@media (min-width: 768px) {
+    .fr-table table.dropdown-array,
+    .fr-table--bordered table.dropdown-array {
+        display: table !important;
+        width: 100%;
+    }
 
-.fr-table table.dropdown-array tbody,
-.fr-table--bordered table.dropdown-array tbody {
-    display: table-row-group !important;
-}
+    .fr-table table.dropdown-array tbody,
+    .fr-table--bordered table.dropdown-array tbody {
+        display: table-row-group !important;
+    }
 
-.fr-table table.dropdown-array tr,
-.fr-table--bordered table.dropdown-array tr {
-    display: table-row !important;
-}
+    .fr-table table.dropdown-array tr,
+    .fr-table--bordered table.dropdown-array tr {
+        display: table-row !important;
+    }
 
-.fr-table table.dropdown-array th,
-.fr-table table.dropdown-array td,
-.fr-table--bordered table.dropdown-array th,
-.fr-table--bordered table.dropdown-array td {
-    display: table-cell !important;
-    vertical-align: middle;
-    padding: 0.75rem 1rem;
-}
+    .fr-table table.dropdown-array th,
+    .fr-table table.dropdown-array td,
+    .fr-table--bordered table.dropdown-array th,
+    .fr-table--bordered table.dropdown-array td {
+        display: table-cell !important;
+        vertical-align: middle;
+        padding: 0.75rem 1rem;
+    }
 
-/* Label column styling */
-.fr-table table.dropdown-array th.answertext,
-.fr-table--bordered table.dropdown-array th.answertext {
-    width: 60%;
-    font-weight: 400;
-    text-align: left;
-}
+    /* Label column styling */
+    .fr-table table.dropdown-array th.answertext,
+    .fr-table--bordered table.dropdown-array th.answertext {
+        width: 60%;
+        font-weight: 400;
+        text-align: left;
+    }
 
-/* Select column styling */
-.fr-table table.dropdown-array td,
-.fr-table--bordered table.dropdown-array td {
-    width: 40%;
-}
+    /* Select column styling */
+    .fr-table table.dropdown-array td,
+    .fr-table--bordered table.dropdown-array td {
+        width: 40%;
+    }
 
-/* Remove label styles that conflict with DSFR */
-.fr-table table.dropdown-array th.answertext label.fr-label,
-.fr-table--bordered table.dropdown-array th.answertext label.fr-label {
-    margin-bottom: 0;
-    font-size: 1rem;
-    font-weight: 400;
+    /* Remove label styles that conflict with DSFR */
+    .fr-table table.dropdown-array th.answertext label.fr-label,
+    .fr-table--bordered table.dropdown-array th.answertext label.fr-label {
+        margin-bottom: 0;
+        font-size: 1rem;
+        font-weight: 400;
+    }
 }
 
 /* === Bootstrap Buttons Radio (List Radio avec affichage boutons) === */

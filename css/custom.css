@@ -38,7 +38,8 @@ body > article {
     text-align: right;
 }
 
-.fr-text-center {
+.fr-text-center,
+.text-center {
     text-align: center;
 }
 
@@ -127,12 +128,16 @@ html, body {
     padding-top: 0 !important;
 }
 
-/* Masquer les labels xs-visibility (accessibilité seulement, pas visuels) */
-table .ls-label-xs-visibility {
-    position: absolute;
-    left: -10000px;
-    width: 1px;
-    height: 1px;
+/* Masquer les labels xs-visibility sur desktop uniquement */
+/* Sur mobile (< 768px), ils seront visibles grâce à la media query dans theme.css */
+@media (min-width: 768px) {
+    table .ls-label-xs-visibility {
+        position: absolute;
+        left: -10000px;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
 }
 
 /* Centrer radios/checkbox dans cellules */
@@ -799,6 +804,22 @@ textarea,
     display: inline-block;
     margin-right: 2rem;
     margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   VALIDATION MESSAGES
+   ============================================ */
+
+/* Masquer les messages de succès par défaut - ils ne s'affichent qu'après correction d'erreur */
+.dsfr-valid-message,
+.dsfr-file-valid-message {
+    display: none !important;
+}
+
+/* Afficher les messages de succès uniquement après correction d'erreur (géré par JS) */
+.question-container[data-had-error="true"] .dsfr-valid-message[style*="display: block"],
+.question-container[data-had-error="true"] .dsfr-file-valid-message[style*="display: block"] {
+    display: block !important;
 }
 
 /* TODO: Ajouter les styles spécifiques ici au fur et à mesure */

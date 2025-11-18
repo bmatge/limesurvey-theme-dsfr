@@ -727,7 +727,12 @@
                 const parentLi = input.closest('li.question-item');
                 const gridRow = input.closest('.fr-grid-row');
 
-                if (gridRow && parentLi) {
+                // Ne pas ajouter de message externe pour les questions multiple-short-txt
+                // car elles sont gérées par handleMultipleShortTextErrors() dans custom.js
+                const questionContainer = input.closest('.question-container');
+                const isMultipleShortText = questionContainer && questionContainer.classList.contains('multiple-short-txt');
+
+                if (gridRow && parentLi && !isMultipleShortText) {
                     const errorMsg = document.createElement('div');
                     errorMsg.className = 'ls-em-error dsfr-validation-error';
                     errorMsg.textContent = 'Seuls des nombres peuvent être entrés dans ce champ.';
@@ -898,6 +903,19 @@
                 // Ajouter classe d'erreur au container
                 error.container.classList.add('has-error', 'fr-input-group--error');
 
+                // Cacher les messages de succès (ils ne doivent s'afficher qu'après correction)
+                const validationContainer = error.container.querySelector('.dsfr-validation-container');
+                if (validationContainer) {
+                    const validMessage = validationContainer.querySelector('.dsfr-valid-message');
+                    if (validMessage) {
+                        validMessage.style.display = 'none';
+                    }
+                    const fileValidMessage = validationContainer.querySelector('.dsfr-file-valid-message');
+                    if (fileValidMessage) {
+                        fileValidMessage.style.display = 'none';
+                    }
+                }
+
                 // Ajouter message d'erreur inline
                 addInlineErrorMessage(error.container, error.message);
 
@@ -932,6 +950,34 @@
         }
 
         /**
+         * Afficher le message de succès après correction d'une erreur
+         */
+        function showSuccessMessage(container) {
+            // Ne montrer le message de succès que si la question a eu une erreur auparavant
+            if (!container.dataset.hadError) {
+                return;
+            }
+
+            // Trouver le conteneur de validation
+            const validationContainer = container.querySelector('.dsfr-validation-container');
+            if (!validationContainer) {
+                return;
+            }
+
+            // Afficher le message de succès
+            const validMessage = validationContainer.querySelector('.dsfr-valid-message');
+            if (validMessage && validMessage.textContent.trim()) {
+                validMessage.style.display = 'block';
+            }
+
+            // Afficher aussi le message pour les fichiers si c'est une question de type fichier
+            const fileValidMessage = validationContainer.querySelector('.dsfr-file-valid-message');
+            if (fileValidMessage && fileValidMessage.textContent.trim()) {
+                fileValidMessage.style.display = 'block';
+            }
+        }
+
+        /**
          * Attacher des event listeners pour retirer l'erreur dès que l'utilisateur interagit
          */
         function attachErrorRemovalListeners(container) {
@@ -943,6 +989,9 @@
 
             // Fonction pour retirer l'erreur
             function removeError() {
+                // Marquer que cette question a eu une erreur (pour afficher le message de succès plus tard)
+                container.dataset.hadError = 'true';
+
                 container.classList.remove('has-error', 'fr-input-group--error');
 
                 // Retirer les classes d'erreur des inputs
@@ -956,6 +1005,9 @@
                 if (errorMsg) {
                     errorMsg.remove();
                 }
+
+                // Afficher le message de succès si la question a été corrigée
+                showSuccessMessage(container);
             }
 
             // Attacher les listeners sur tous les champs de la question
@@ -1129,20 +1181,35 @@
     /**
      * Retire les classes d'erreur quand l'utilisateur commence à saisir
      * Utilise la délégation d'événements pour fonctionner avec les éléments dynamiques
+     * MODIFIÉ: Ne retire la classe input-error que s'il ne reste plus de messages d'erreur visibles
      */
     $(document).on('input change keyup', '.question-container.input-error input, .question-container.input-error textarea, .question-container.input-error select', function() {
         const $input = $(this);
         const $question = $input.closest('.question-container');
 
         if ($question.length) {
-            // Retirer les classes d'erreur du container de question
-            $question.removeClass('input-error fr-input-group--error');
+            // Ignorer les questions de type array (tableaux) - elles ont leur propre gestion dans custom.js
+            if ($question.attr('class').match(/array-/)) {
+                return;
+            }
 
             // Retirer les classes d'erreur du groupe d'input parent
             $input.closest('.fr-input-group').removeClass('fr-input-group--error');
 
             // Cacher le message d'erreur initial
             $question.find('.ls-question-mandatory-initial').fadeOut(300);
+
+            // Vérifier s'il reste des messages d'erreur visibles
+            setTimeout(function() {
+                const visibleErrors = $question.find('.ls-question-mandatory:visible, .ls-question-mandatory-array:visible').filter(function() {
+                    return $(this).css('display') !== 'none' && $(this).is(':visible');
+                });
+
+                // Ne retirer input-error que s'il n'y a plus d'erreurs visibles
+                if (visibleErrors.length === 0) {
+                    $question.removeClass('input-error fr-input-group--error');
+                }
+            }, 50);
 
         }
     });

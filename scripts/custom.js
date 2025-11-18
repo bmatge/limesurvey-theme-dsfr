@@ -5,6 +5,8 @@
  * sans modifier theme.js
  */
 
+console.log('DSFR custom.js chargé - version 2024-11-18');
+
 (function() {
     'use strict';
 
@@ -278,6 +280,11 @@
         const errorQuestions = document.querySelectorAll('.question-container.input-error');
 
         errorQuestions.forEach(function(question) {
+            // Ignorer les questions multiple-short-txt qui sont gérées par handleMultipleShortTextErrors()
+            if (question.classList.contains('multiple-short-txt')) {
+                return;
+            }
+
             // Trouver le fr-input-group dans cette question
             const inputGroup = question.querySelector('.fr-input-group');
 
@@ -351,6 +358,7 @@
             errorMessage.className = 'fr-message fr-message--error';
             errorMessage.id = messagesGroup.id + '-error';
             errorMessage.textContent = errorText;
+            errorMessage.setAttribute('role', 'alert');
 
             // Ajouter le message dans le messages-group
             messagesGroup.appendChild(errorMessage);
@@ -363,39 +371,124 @@
 
 
             // 6. Ajouter les listeners pour retirer l'erreur quand l'utilisateur corrige
-            attachErrorRemovalListeners(question, inputGroup, messagesGroup, errorMessage, questionValidContainer);
+            attachErrorRemovalListeners(question, inputGroup, messagesGroup);
         });
     }
 
     /**
      * Attache des event listeners pour retirer l'erreur DSFR quand l'utilisateur interagit
      */
-    function attachErrorRemovalListeners(question, inputGroup, messagesGroup, errorMessage, questionValidContainer) {
+    function attachErrorRemovalListeners(question, inputGroup, messagesGroup) {
         // Éviter de dupliquer les listeners
         if (question.dataset.dsfrErrorListeners) {
             return;
         }
         question.dataset.dsfrErrorListeners = 'true';
 
-        // Fonction pour convertir l'erreur en succès (transition douce)
-        function convertErrorToSuccess() {
-            // Retirer les classes d'erreur
-            inputGroup.classList.remove('fr-input-group--error');
-            question.classList.remove('input-error');
-            question.classList.remove('fr-input-group--error');
+        // Fonction pour valider et mettre à jour l'état du champ
+        function validateAndUpdateState(input) {
+            const value = input.value ? input.value.trim() : '';
+            const isNumberOnly = input.dataset.number === '1';
 
-            // Ajouter les classes de succès
-            inputGroup.classList.add('fr-input-group--valid');
-            question.classList.add('input-valid');
+            // Vérifier si le champ est vide
+            if (value === '') {
+                // Champ vide → erreur obligatoire
+                inputGroup.classList.add('fr-input-group--error');
+                inputGroup.classList.remove('fr-input-group--valid');
+                question.classList.add('input-error');
+                question.classList.remove('input-valid');
 
-            // Transformer le message d'erreur en message de succès
-            if (errorMessage && errorMessage.parentNode) {
-                errorMessage.className = 'fr-message fr-message--valid';
-                errorMessage.textContent = 'Merci d\'avoir répondu';
+                // Ajouter la classe d'erreur à l'input
+                input.classList.add('fr-input--error');
+                input.classList.remove('fr-input--valid');
+
+                // Retirer le message de succès s'il existe
+                const validMessage = messagesGroup.querySelector('.fr-message--valid');
+                if (validMessage) {
+                    validMessage.remove();
+                }
+
+                // Ajouter le message d'erreur si pas présent
+                if (!messagesGroup.querySelector('.fr-message--error')) {
+                    const newErrorMessage = document.createElement('p');
+                    newErrorMessage.className = 'fr-message fr-message--error';
+                    newErrorMessage.id = messagesGroup.id + '-error';
+                    newErrorMessage.textContent = 'Ce champ est obligatoire';
+                    newErrorMessage.setAttribute('role', 'alert');
+                    messagesGroup.appendChild(newErrorMessage);
+                }
+                return;
             }
 
+            // Vérifier la validation numérique si applicable
+            if (isNumberOnly) {
+                const isValidNumber = /^-?\d+([.,]\d*)?$/.test(value) || /^-?\d*[.,]\d+$/.test(value);
 
-            // Mettre à jour le récapitulatif d'erreurs (marquer en vert, passer en warning/success)
+                if (!isValidNumber) {
+                    // Format invalide → erreur de validation
+                    inputGroup.classList.add('fr-input-group--error');
+                    inputGroup.classList.remove('fr-input-group--valid');
+                    question.classList.add('input-error');
+                    question.classList.remove('input-valid');
+
+                    // Ajouter la classe d'erreur à l'input
+                    input.classList.add('fr-input--error');
+                    input.classList.remove('fr-input--valid');
+
+                    // Retirer le message de succès
+                    const validMessage = messagesGroup.querySelector('.fr-message--valid');
+                    if (validMessage) {
+                        validMessage.remove();
+                    }
+
+                    // Ajouter/mettre à jour le message d'erreur
+                    let errorMsg = messagesGroup.querySelector('.fr-message--error');
+                    if (!errorMsg) {
+                        errorMsg = document.createElement('p');
+                        errorMsg.className = 'fr-message fr-message--error';
+                        errorMsg.id = messagesGroup.id + '-error';
+                        errorMsg.setAttribute('role', 'alert');
+                        messagesGroup.appendChild(errorMsg);
+                    }
+                    errorMsg.textContent = 'Seuls des nombres peuvent être entrés dans ce champ.';
+
+                    setTimeout(updateErrorSummary, 50);
+                    return;
+                }
+            }
+
+            // Champ valide → succès
+            inputGroup.classList.remove('fr-input-group--error');
+            question.classList.remove('input-error');
+
+            // Retirer la classe d'erreur de l'input
+            input.classList.remove('fr-input--error');
+
+            // Retirer le message d'erreur et marquer qu'une erreur a été corrigée
+            const errorMsg = messagesGroup.querySelector('.fr-message--error');
+            if (errorMsg) {
+                errorMsg.remove();
+                // Marquer que cette question a eu une erreur (pour afficher le message de succès)
+                question.dataset.hadError = 'true';
+            }
+
+            // Ajouter les classes et message de succès UNIQUEMENT si la question a eu une erreur auparavant
+            if (question.dataset.hadError === 'true') {
+                inputGroup.classList.add('fr-input-group--valid');
+                question.classList.add('input-valid');
+                input.classList.add('fr-input--valid');
+
+                let validMessage = messagesGroup.querySelector('.fr-message--valid');
+                if (!validMessage) {
+                    validMessage = document.createElement('p');
+                    validMessage.className = 'fr-message fr-message--valid';
+                    validMessage.id = messagesGroup.id + '-valid';
+                    messagesGroup.appendChild(validMessage);
+                }
+                validMessage.textContent = 'Merci d\'avoir répondu';
+            }
+
+            // Mettre à jour le récapitulatif d'erreurs
             setTimeout(updateErrorSummary, 50);
         }
 
@@ -403,15 +496,48 @@
         const inputs = question.querySelectorAll('.fr-input, input[type="text"], input[type="number"], textarea, select');
 
         inputs.forEach(function(input) {
-            // Convertir l'erreur en succès dès que l'utilisateur commence à taper
-            input.addEventListener('input', convertErrorToSuccess, { once: true });
-            input.addEventListener('change', convertErrorToSuccess, { once: true });
+            // Valider en temps réel à chaque frappe
+            input.addEventListener('input', function() {
+                validateAndUpdateState(input);
+            });
+            input.addEventListener('change', function() {
+                validateAndUpdateState(input);
+            });
         });
 
-        // Pour les radio/checkbox
+        // Pour les radio/checkbox - convertir en succès immédiatement
         const radiosCheckboxes = question.querySelectorAll('input[type="radio"], input[type="checkbox"]');
         radiosCheckboxes.forEach(function(input) {
-            input.addEventListener('change', convertErrorToSuccess, { once: true });
+            input.addEventListener('change', function() {
+                // Pour radio/checkbox, retirer les erreurs
+                inputGroup.classList.remove('fr-input-group--error');
+                question.classList.remove('input-error');
+
+                // Retirer le message d'erreur et marquer qu'une erreur a été corrigée
+                const errorMsg = messagesGroup.querySelector('.fr-message--error');
+                if (errorMsg) {
+                    errorMsg.remove();
+                    // Marquer que cette question a eu une erreur
+                    question.dataset.hadError = 'true';
+                }
+
+                // Ajouter les classes et message de succès UNIQUEMENT si la question a eu une erreur auparavant
+                if (question.dataset.hadError === 'true') {
+                    inputGroup.classList.add('fr-input-group--valid');
+                    question.classList.add('input-valid');
+
+                    let validMessage = messagesGroup.querySelector('.fr-message--valid');
+                    if (!validMessage) {
+                        validMessage = document.createElement('p');
+                        validMessage.className = 'fr-message fr-message--valid';
+                        validMessage.id = messagesGroup.id + '-valid';
+                        messagesGroup.appendChild(validMessage);
+                    }
+                    validMessage.textContent = 'Merci d\'avoir répondu';
+                }
+
+                setTimeout(updateErrorSummary, 50);
+            }, { once: true });
         });
     }
 
@@ -451,16 +577,199 @@
 
     }
 
+    // === Gestion spécifique des questions à choix multiples (multiple-short-txt) ===
+
+    /**
+     * Gère les erreurs pour les questions à choix multiples
+     * Chaque ligne (item) doit avoir son propre état d'erreur
+     */
+    function handleMultipleShortTextErrors() {
+        const multipleQuestions = document.querySelectorAll('.question-container.multiple-short-txt');
+
+        multipleQuestions.forEach(function(question) {
+            // Cacher les messages d'erreur legacy LimeSurvey pour ce type de question
+            const legacyMessages = question.querySelectorAll('.ls-question-mandatory-initial, .ls-question-mandatory-array');
+            legacyMessages.forEach(function(msg) {
+                msg.style.display = 'none';
+            });
+
+            const items = question.querySelectorAll('.answer-item');
+
+            items.forEach(function(item) {
+                const input = item.querySelector('input, textarea');
+                const inputGroup = item.querySelector('.fr-input-group');
+                const messagesGroup = item.querySelector('.fr-messages-group');
+
+                if (!input || !inputGroup || !messagesGroup) return;
+
+                // Vérifier si cet item a la classe d'erreur
+                const hasError = item.classList.contains('ls-error-mandatory') || item.classList.contains('has-error');
+
+                if (hasError) {
+                    // Ajouter la classe d'erreur DSFR
+                    inputGroup.classList.add('fr-input-group--error');
+
+                    // Ajouter le message d'erreur dans fr-messages-group si pas déjà présent
+                    if (!messagesGroup.querySelector('.fr-message--error')) {
+                        const errorMessage = document.createElement('p');
+                        errorMessage.className = 'fr-message fr-message--error';
+                        errorMessage.id = messagesGroup.id + '-error';
+                        errorMessage.textContent = 'Ce champ est obligatoire';
+                        errorMessage.setAttribute('role', 'alert');
+                        messagesGroup.appendChild(errorMessage);
+                    }
+                } else {
+                    // Retirer la classe d'erreur DSFR
+                    inputGroup.classList.remove('fr-input-group--error');
+
+                    // Retirer le message d'erreur
+                    const errorMessage = messagesGroup.querySelector('.fr-message--error');
+                    if (errorMessage) {
+                        errorMessage.remove();
+                    }
+                }
+
+                // Écouter les changements sur cet input (une seule fois)
+                if (!input.dataset.errorListenerAdded) {
+                    input.dataset.errorListenerAdded = 'true';
+
+                    input.addEventListener('input', function() {
+                        // Vérifier immédiatement si le champ est rempli
+                        const isFilled = input.value && input.value.trim() !== '';
+
+                        // Vérifier la validation numérique si applicable
+                        const isNumberOnly = input.dataset.number === '1';
+                        const hasInvalidNumber = isNumberOnly && isFilled && !/^-?\d*\.?\d+$/.test(input.value);
+
+                        if (hasInvalidNumber) {
+                            // Valeur non numérique → erreur de validation
+                            inputGroup.classList.add('fr-input-group--error');
+                            inputGroup.classList.remove('fr-input-group--valid');
+                            item.classList.add('has-error');
+                            input.classList.add('error');
+
+                            // Retirer le message de succès s'il existe
+                            const validMessage = messagesGroup.querySelector('.fr-message--valid');
+                            if (validMessage) {
+                                validMessage.remove();
+                            }
+
+                            // Ajouter/mettre à jour le message d'erreur
+                            let errorMessage = messagesGroup.querySelector('.fr-message--error');
+                            if (!errorMessage) {
+                                errorMessage = document.createElement('p');
+                                errorMessage.className = 'fr-message fr-message--error';
+                                errorMessage.id = messagesGroup.id + '-error';
+                                errorMessage.setAttribute('role', 'alert');
+                                messagesGroup.appendChild(errorMessage);
+                            }
+                            errorMessage.textContent = 'Seuls des nombres peuvent être entrés dans ce champ.';
+                        } else if (isFilled) {
+                            // Champ rempli et valide → retirer les erreurs
+                            inputGroup.classList.remove('fr-input-group--error');
+                            item.classList.remove('ls-error-mandatory', 'has-error');
+                            input.classList.remove('error');
+
+                            // Retirer le message d'erreur et marquer qu'une erreur a été corrigée
+                            const errorMessage = messagesGroup.querySelector('.fr-message--error');
+                            if (errorMessage) {
+                                errorMessage.remove();
+                                // Marquer que cette question a eu une erreur
+                                item.closest('.question-container').dataset.hadError = 'true';
+                            }
+
+                            // Ajouter les classes et message de succès UNIQUEMENT si la question a eu une erreur auparavant
+                            const questionContainer = item.closest('.question-container');
+                            if (questionContainer && questionContainer.dataset.hadError === 'true') {
+                                inputGroup.classList.add('fr-input-group--valid');
+
+                                let validMessage = messagesGroup.querySelector('.fr-message--valid');
+                                if (!validMessage) {
+                                    validMessage = document.createElement('p');
+                                    validMessage.className = 'fr-message fr-message--valid';
+                                    validMessage.id = messagesGroup.id + '-valid';
+                                    messagesGroup.appendChild(validMessage);
+                                }
+                                validMessage.textContent = 'Merci d\'avoir répondu';
+                            }
+                        } else {
+                            // Champ vide → erreur obligatoire
+                            inputGroup.classList.add('fr-input-group--error');
+                            inputGroup.classList.remove('fr-input-group--valid');
+                            item.classList.add('ls-error-mandatory', 'has-error');
+
+                            // Retirer le message de succès s'il existe
+                            const validMessage = messagesGroup.querySelector('.fr-message--valid');
+                            if (validMessage) {
+                                validMessage.remove();
+                            }
+
+                            // Ajouter le message d'erreur si pas présent
+                            if (!messagesGroup.querySelector('.fr-message--error')) {
+                                const errorMessage = document.createElement('p');
+                                errorMessage.className = 'fr-message fr-message--error';
+                                errorMessage.id = messagesGroup.id + '-error';
+                                errorMessage.textContent = 'Ce champ est obligatoire';
+                                errorMessage.setAttribute('role', 'alert');
+                                messagesGroup.appendChild(errorMessage);
+                            }
+                        }
+
+                        // Vérifier si toute la question est valide
+                        setTimeout(function() {
+                            const allInputs = question.querySelectorAll('.answer-item input, .answer-item textarea');
+                            let hasEmptyField = false;
+
+                            allInputs.forEach(function(inp) {
+                                if (!inp.value || inp.value.trim() === '') {
+                                    hasEmptyField = true;
+                                }
+                            });
+
+                            if (!hasEmptyField) {
+                                // Tous les champs sont remplis → succès
+                                question.classList.remove('input-error', 'fr-input-group--error');
+                                question.classList.add('input-valid');
+
+                                // Cacher les messages legacy
+                                const legacyMsgs = question.querySelectorAll('.ls-question-mandatory-initial, .ls-question-mandatory-array');
+                                legacyMsgs.forEach(function(msg) {
+                                    msg.style.display = 'none';
+                                });
+
+                                // Mettre à jour le récapitulatif d'erreurs
+                                if (typeof updateErrorSummary === 'function') {
+                                    setTimeout(updateErrorSummary, 50);
+                                }
+                            } else {
+                                // Il reste des champs vides → garder l'erreur
+                                question.classList.add('input-error');
+                                question.classList.remove('input-valid', 'fr-input-group--valid');
+
+                                // Mettre à jour le récapitulatif d'erreurs
+                                if (typeof updateErrorSummary === 'function') {
+                                    setTimeout(updateErrorSummary, 50);
+                                }
+                            }
+                        }, 50);
+                    });
+                }
+            });
+        });
+    }
+
     // Initialiser la transformation des erreurs au chargement
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
             transformErrorsToDsfr();
+            handleMultipleShortTextErrors();
             observeErrorChanges();
             // Créer le récapitulatif si des erreurs sont déjà présentes au chargement
             setTimeout(createErrorSummary, 100);
         });
     } else {
         transformErrorsToDsfr();
+        handleMultipleShortTextErrors();
         observeErrorChanges();
         // Créer le récapitulatif si des erreurs sont déjà présentes au chargement
         setTimeout(createErrorSummary, 100);
@@ -469,6 +778,7 @@
     // Réinitialiser après événements LimeSurvey
     document.addEventListener('limesurvey:questionsLoaded', function() {
         transformErrorsToDsfr();
+        handleMultipleShortTextErrors();
         setTimeout(createErrorSummary, 100);
     });
 
@@ -642,10 +952,19 @@
             if (!question) return;
 
             // Vérifier si la question est encore en erreur
-            const isError = question.classList.contains('input-error') || question.classList.contains('fr-input-group--error');
-            const isValid = question.classList.contains('input-valid') || question.classList.contains('fr-input-group--valid');
+            const isError = question.classList.contains('input-error');
+            const isValid = question.classList.contains('input-valid');
 
-            if (isValid && !isError) {
+            // Vérifier aussi si tous les inputs de la question sont valides
+            const inputs = question.querySelectorAll('.fr-input, input[type="text"], input[type="number"], textarea, select');
+            let allInputsValid = inputs.length > 0;
+            inputs.forEach(function(input) {
+                if (input.classList.contains('fr-input--error') || !input.value || input.value.trim() === '') {
+                    allInputsValid = false;
+                }
+            });
+
+            if ((isValid && !isError) || allInputsValid) {
                 // Question corrigée → changer l'icône du lien
                 if (!item.classList.contains('corrected')) {
                     item.classList.add('corrected');
@@ -730,73 +1049,94 @@
             // Validation sur input (en temps réel)
             input.addEventListener('input', function() {
                 const value = this.value.trim();
+                const question = this.closest('.question-container');
+                const inputGroup = this.closest('.fr-input-group');
 
-                // Si vide, pas de validation ici (géré par mandatory)
+                if (!question || !inputGroup) return;
+
+                const messagesGroup = inputGroup.querySelector('.fr-messages-group');
+                if (!messagesGroup) return;
+
+                // Si vide, retirer tous les messages (la validation obligatoire gérera)
                 if (value === '') {
+                    // Retirer les messages d'erreur de validation
+                    const errorMessage = messagesGroup.querySelector('.fr-message--error');
+                    if (errorMessage) {
+                        errorMessage.remove();
+                    }
+                    // Retirer les messages de succès
+                    const validMessage = messagesGroup.querySelector('.fr-message--valid');
+                    if (validMessage) {
+                        validMessage.remove();
+                    }
+                    // Retirer les classes de validation
+                    inputGroup.classList.remove('fr-input-group--error', 'fr-input-group--valid');
                     return;
                 }
 
                 // Vérifier si c'est un nombre valide
-                // Accepter les nombres avec virgule ou point
-                const isValid = /^-?\d*[.,]?\d*$/.test(value) && value !== '-' && value !== '.' && value !== ',';
+                // Accepter les nombres avec virgule ou point, mais pas juste un signe ou un séparateur
+                const isValidNumber = /^-?\d+([.,]\d*)?$/.test(value) || /^-?\d*[.,]\d+$/.test(value);
 
-                if (!isValid) {
-                    // Trouver la question parente
-                    const question = this.closest('.question-container');
-                    if (!question) return;
-
-                    // Ajouter la classe d'erreur
+                if (!isValidNumber) {
+                    // Format invalide → Erreur de validation
                     question.classList.add('input-error');
-
-                    // Trouver le fr-input-group et fr-messages-group
-                    const inputGroup = this.closest('.fr-input-group');
-                    if (!inputGroup) return;
-
                     inputGroup.classList.add('fr-input-group--error');
+                    inputGroup.classList.remove('fr-input-group--valid');
 
-                    const messagesGroup = inputGroup.querySelector('.fr-messages-group');
-                    if (!messagesGroup) return;
+                    // Ajouter la classe d'erreur à l'input
+                    this.classList.add('fr-input--error');
+                    this.classList.remove('fr-input--valid');
 
-                    // Vérifier si le message existe déjà
+                    // Retirer le message de succès s'il existe
+                    const validMessage = messagesGroup.querySelector('.fr-message--valid');
+                    if (validMessage) {
+                        validMessage.remove();
+                    }
+
+                    // Ajouter/mettre à jour le message d'erreur
                     let errorMessage = messagesGroup.querySelector('.fr-message--error');
                     if (!errorMessage) {
-                        // Créer le message d'erreur
                         errorMessage = document.createElement('p');
                         errorMessage.className = 'fr-message fr-message--error';
                         errorMessage.id = messagesGroup.id + '-error';
-                        errorMessage.textContent = 'Seuls des nombres peuvent être entrés dans ce champ.';
+                        errorMessage.setAttribute('role', 'alert');
                         messagesGroup.appendChild(errorMessage);
-
                     }
+                    errorMessage.textContent = 'Seuls des nombres peuvent être entrés dans ce champ.';
+
                 } else {
-                    // Valeur valide → convertir en succès si une erreur existe
-                    const question = this.closest('.question-container');
-                    const inputGroup = this.closest('.fr-input-group');
+                    // Format valide et non vide → Retirer les erreurs
+                    question.classList.remove('input-error');
+                    inputGroup.classList.remove('fr-input-group--error');
+                    this.classList.remove('fr-input--error');
 
-                    if (question && inputGroup) {
-                        const messagesGroup = inputGroup.querySelector('.fr-messages-group');
-                        const errorMessage = messagesGroup ? messagesGroup.querySelector('.fr-message--error') : null;
-
-                        // Si une erreur existe, la convertir en succès
-                        if (errorMessage) {
-                            // Retirer les classes d'erreur
-                            question.classList.remove('input-error');
-                            question.classList.remove('fr-input-group--error');
-                            inputGroup.classList.remove('fr-input-group--error');
-
-                            // Ajouter les classes de succès
-                            question.classList.add('input-valid');
-                            inputGroup.classList.add('fr-input-group--valid');
-
-                            // Transformer le message d'erreur en succès
-                            errorMessage.className = 'fr-message fr-message--valid';
-                            errorMessage.textContent = 'Merci d\'avoir répondu';
-
-
-                            // Mettre à jour le récapitulatif d'erreurs
-                            setTimeout(updateErrorSummary, 50);
-                        }
+                    // Retirer le message d'erreur s'il existe et marquer qu'une erreur a été corrigée
+                    const errorMessage = messagesGroup.querySelector('.fr-message--error');
+                    if (errorMessage) {
+                        errorMessage.remove();
+                        // Marquer que cette question a eu une erreur
+                        question.dataset.hadError = 'true';
                     }
+
+                    // Ajouter les classes et message de succès UNIQUEMENT si la question a eu une erreur auparavant
+                    if (question.dataset.hadError === 'true') {
+                        question.classList.add('input-valid');
+                        inputGroup.classList.add('fr-input-group--valid');
+                        this.classList.add('fr-input--valid');
+
+                        let validMessage = messagesGroup.querySelector('.fr-message--valid');
+                        if (!validMessage) {
+                            validMessage = document.createElement('p');
+                            validMessage.className = 'fr-message fr-message--valid';
+                            validMessage.id = messagesGroup.id + '-valid';
+                            messagesGroup.appendChild(validMessage);
+                        }
+                        validMessage.textContent = 'Merci d\'avoir répondu';
+                    }
+
+                    // Mettre à jour le récapitulatif d'erreurs
+                    setTimeout(updateErrorSummary, 50);
                 }
             });
         });
@@ -812,5 +1152,680 @@
 
     // Réinitialiser après chargement AJAX
     document.addEventListener('limesurvey:questionsLoaded', initNumericValidation);
+
+    // === Validation pour les tableaux (array questions) ===
+
+    /**
+     * Gère la validation des questions de type tableau (array)
+     * - Transforme le message d'erreur en format DSFR
+     * - Ajoute une bordure verte aux champs remplis
+     * - Retire le message quand tous les champs sont remplis
+     * - Change le liseret du conteneur de rouge à vert
+     */
+    function handleArrayValidation() {
+        // Trouver toutes les questions de type array avec erreur
+        const arrayQuestions = document.querySelectorAll('.question-container.input-error[class*="array-"]');
+
+        arrayQuestions.forEach(function(question) {
+            // Éviter de dupliquer les listeners
+            if (question.dataset.arrayValidationAttached) {
+                return;
+            }
+            question.dataset.arrayValidationAttached = 'true';
+
+            // 1. Transformer le message d'erreur en format DSFR
+            // Gérer tous les types de messages d'erreur de tableau
+            const arrayErrorMessage = question.querySelector('.ls-question-mandatory-array, .ls-question-mandatory-arraycolumn');
+            if (arrayErrorMessage && !arrayErrorMessage.classList.contains('fr-message')) {
+                // Créer le message DSFR
+                const dsfrMessage = document.createElement('p');
+                dsfrMessage.className = 'fr-message fr-message--error';
+                dsfrMessage.textContent = arrayErrorMessage.textContent.trim().replace(/\s+/g, ' ');
+                dsfrMessage.id = arrayErrorMessage.id ? arrayErrorMessage.id + '-dsfr' : '';
+                dsfrMessage.setAttribute('role', 'alert');
+
+                // Masquer le message original au lieu de le remplacer
+                arrayErrorMessage.style.display = 'none';
+
+                // Insérer le message DSFR après le message original
+                arrayErrorMessage.parentNode.insertBefore(dsfrMessage, arrayErrorMessage.nextSibling);
+            }
+
+            // Masquer également le message initial s'il existe
+            const initialMessage = question.querySelector('.ls-question-mandatory-initial');
+            if (initialMessage) {
+                initialMessage.style.display = 'none';
+            }
+
+            // Masquer aussi le message arraycolumn s'il n'a pas déjà été traité
+            const arrayColumnMessage = question.querySelector('.ls-question-mandatory-arraycolumn');
+            if (arrayColumnMessage && arrayColumnMessage.style.display !== 'none') {
+                arrayColumnMessage.style.display = 'none';
+            }
+
+            // 2. Trouver tous les inputs dans le tableau
+            const allInputs = question.querySelectorAll('table input[type="text"], table textarea, table select');
+
+            // 2b. S'assurer que les champs vides ont bien la classe fr-input--error au départ
+            allInputs.forEach(function(input) {
+                if (!input.value || input.value.trim() === '') {
+                    input.classList.add('fr-input--error');
+                    input.classList.remove('fr-input--valid');
+                }
+            });
+
+            allInputs.forEach(function(input) {
+                // Éviter de dupliquer les listeners
+                if (input.dataset.arrayInputListener) {
+                    return;
+                }
+                input.dataset.arrayInputListener = 'true';
+
+                input.addEventListener('input', function() {
+                    const value = input.value.trim();
+                    const isNumberOnly = input.dataset.number === '1';
+
+                    // Vérifier la validité du champ
+                    let isValid = false;
+                    if (value !== '') {
+                        if (isNumberOnly) {
+                            // Validation numérique
+                            isValid = /^-?\d+([.,]\d*)?$/.test(value) || /^-?\d*[.,]\d+$/.test(value);
+                        } else {
+                            // Champ texte simple - valide si non vide
+                            isValid = true;
+                        }
+                    }
+
+                    // Mettre à jour l'état visuel du champ
+                    if (isValid) {
+                        // Champ valide → bordure verte
+                        input.classList.remove('fr-input--error');
+                        input.classList.add('fr-input--valid');
+                    } else {
+                        // Champ invalide ou vide → bordure rouge
+                        input.classList.remove('fr-input--valid');
+                        input.classList.add('fr-input--error');
+                    }
+
+                    // 3. Vérifier si tous les champs du tableau sont remplis
+                    setTimeout(function() {
+                        let allFilled = true;
+                        let allValid = true;
+
+                        allInputs.forEach(function(inp) {
+                            const val = inp.value.trim();
+                            if (val === '') {
+                                allFilled = false;
+                                allValid = false;
+                            } else {
+                                const isNum = inp.dataset.number === '1';
+                                if (isNum) {
+                                    const validNum = /^-?\d+([.,]\d*)?$/.test(val) || /^-?\d*[.,]\d+$/.test(val);
+                                    if (!validNum) {
+                                        allValid = false;
+                                    }
+                                }
+                            }
+                        });
+
+                        // 4. Mettre à jour l'état global de la question
+                        const dsfrErrorMsg = question.querySelector('.fr-message--error');
+
+                        if (allFilled && allValid) {
+                            // Tous les champs sont remplis et valides → succès
+                            question.classList.remove('input-error', 'fr-input-group--error');
+                            question.classList.add('input-valid');
+
+                            // Retirer le message d'erreur
+                            if (dsfrErrorMsg) {
+                                dsfrErrorMsg.remove();
+                            }
+
+                            // Mettre à jour le récapitulatif d'erreurs
+                            if (typeof updateErrorSummary === 'function') {
+                                setTimeout(updateErrorSummary, 50);
+                            }
+                        } else {
+                            // Il reste des champs vides ou invalides → garder l'erreur
+                            question.classList.add('input-error');
+                            question.classList.remove('input-valid');
+
+                            // S'assurer que le message d'erreur est présent
+                            if (!dsfrErrorMsg) {
+                                const validContainer = question.querySelector('.question-valid-container');
+                                if (validContainer) {
+                                    const newErrorMsg = document.createElement('p');
+                                    newErrorMsg.className = 'fr-message fr-message--error';
+                                    newErrorMsg.textContent = 'Veuillez compléter toutes les parties.';
+                                    newErrorMsg.setAttribute('role', 'alert');
+                                    validContainer.appendChild(newErrorMsg);
+                                }
+                            }
+                        }
+                    }, 50);
+                });
+            });
+        });
+    }
+
+    // Initialiser la validation des tableaux
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', handleArrayValidation);
+    } else {
+        handleArrayValidation();
+    }
+
+    // Réinitialiser après chargement AJAX
+    document.addEventListener('limesurvey:questionsLoaded', handleArrayValidation);
+
+    // === Validation DSFR pour les questions "Multiples entrées numériques" ===
+
+    /**
+     * Gère la validation DSFR pour les questions de type "Multiples entrées numériques"
+     * - Transforme le message d'erreur global
+     * - Ajoute fr-input-group et fr-messages-group pour chaque input
+     * - Gère la validation en temps réel
+     */
+    function handleNumericMultiValidation() {
+        const numericMultiQuestions = document.querySelectorAll('.question-container.numeric-multi');
+
+        numericMultiQuestions.forEach(function(question) {
+            // Vérifier si déjà initialisé
+            if (question.dataset.dsfrNumericMultiInit) {
+                return;
+            }
+            question.dataset.dsfrNumericMultiInit = 'true';
+
+            // Masquer les messages d'erreur LimeSurvey
+            const initialErrorMessage = question.querySelector('.ls-question-mandatory-initial');
+            if (initialErrorMessage) {
+                initialErrorMessage.style.display = 'none';
+            }
+
+            // Transformer le message d'erreur global en DSFR
+            const arrayErrorMessage = question.querySelector('.ls-question-mandatory-array');
+            if (arrayErrorMessage && !arrayErrorMessage.classList.contains('fr-message')) {
+                const dsfrMessage = document.createElement('p');
+                dsfrMessage.className = 'fr-message fr-message--error';
+                dsfrMessage.textContent = arrayErrorMessage.textContent.trim().replace(/\s+/g, ' ');
+                dsfrMessage.setAttribute('role', 'alert');
+                arrayErrorMessage.style.display = 'none';
+                arrayErrorMessage.parentNode.insertBefore(dsfrMessage, arrayErrorMessage.nextSibling);
+            }
+
+            // Pour chaque input numérique
+            const numericInputs = question.querySelectorAll('input.numeric[data-number="1"]');
+
+            numericInputs.forEach(function(input) {
+                const listItem = input.closest('li.question-item');
+                if (!listItem) return;
+
+                // Vérifier si le fr-input-group existe déjà
+                let inputGroup = input.closest('.fr-input-group');
+                if (!inputGroup) {
+                    // Créer le fr-input-group
+                    inputGroup = document.createElement('div');
+                    inputGroup.className = 'fr-input-group';
+
+                    // Wrapper l'input dans le fr-input-group
+                    const parent = input.parentNode;
+                    parent.insertBefore(inputGroup, input);
+                    inputGroup.appendChild(input);
+
+                    // Créer le fr-messages-group
+                    const messagesGroup = document.createElement('div');
+                    messagesGroup.className = 'fr-messages-group';
+                    messagesGroup.id = input.id + '-messages';
+                    messagesGroup.setAttribute('aria-live', 'polite');
+                    inputGroup.appendChild(messagesGroup);
+
+                    // Mettre à jour aria-describedby
+                    input.setAttribute('aria-describedby', messagesGroup.id);
+                }
+
+                // Si le champ est en erreur, ajouter la classe et le message
+                if (listItem.classList.contains('ls-error-mandatory') || listItem.classList.contains('has-error')) {
+                    input.classList.add('fr-input--error');
+                    if (inputGroup) {
+                        inputGroup.classList.add('fr-input-group--error');
+                    }
+
+                    // Ajouter un message d'erreur initial si le champ est vide
+                    const messagesGroup = inputGroup.querySelector('.fr-messages-group');
+                    if (messagesGroup && (!input.value || input.value.trim() === '')) {
+                        let errorMsg = messagesGroup.querySelector('.fr-message--error');
+                        if (!errorMsg) {
+                            errorMsg = document.createElement('p');
+                            errorMsg.className = 'fr-message fr-message--error';
+                            errorMsg.setAttribute('role', 'alert');
+                            messagesGroup.appendChild(errorMsg);
+                        }
+                        errorMsg.textContent = 'Ce champ est obligatoire';
+                    }
+
+                    // Masquer le message LimeSurvey .ls-em-error si présent
+                    const lsEmError = listItem.querySelector('.ls-em-error');
+                    if (lsEmError) {
+                        lsEmError.style.display = 'none';
+                    }
+                }
+
+                // Éviter de dupliquer les listeners
+                if (input.dataset.numericMultiListenerAttached) {
+                    return;
+                }
+                input.dataset.numericMultiListenerAttached = 'true';
+
+                // Validation en temps réel
+                input.addEventListener('input', function() {
+                    const value = this.value.trim();
+                    const messagesGroup = inputGroup.querySelector('.fr-messages-group');
+
+                    // Masquer le message LimeSurvey .ls-em-error pendant la saisie
+                    const lsEmError = listItem.querySelector('.ls-em-error');
+                    if (lsEmError) {
+                        lsEmError.style.display = 'none';
+                    }
+
+                    // Si vide, retirer les messages mais garder l'état d'erreur
+                    if (value === '') {
+                        this.classList.add('fr-input--error');
+                        this.classList.remove('fr-input--valid');
+                        inputGroup.classList.add('fr-input-group--error');
+                        inputGroup.classList.remove('fr-input-group--valid');
+
+                        // Retirer les messages
+                        const errorMsg = messagesGroup.querySelector('.fr-message--error');
+                        if (errorMsg) errorMsg.remove();
+                        const validMsg = messagesGroup.querySelector('.fr-message--valid');
+                        if (validMsg) validMsg.remove();
+                        return;
+                    }
+
+                    // Vérifier si c'est un nombre valide
+                    const isValidNumber = /^-?\d+([.,]\d*)?$/.test(value) || /^-?\d*[.,]\d+$/.test(value);
+
+                    if (!isValidNumber) {
+                        // Format invalide → erreur
+                        this.classList.add('fr-input--error');
+                        this.classList.remove('fr-input--valid');
+                        inputGroup.classList.add('fr-input-group--error');
+                        inputGroup.classList.remove('fr-input-group--valid');
+
+                        // Retirer le message de succès
+                        const validMsg = messagesGroup.querySelector('.fr-message--valid');
+                        if (validMsg) validMsg.remove();
+
+                        // Ajouter le message d'erreur
+                        let errorMsg = messagesGroup.querySelector('.fr-message--error');
+                        if (!errorMsg) {
+                            errorMsg = document.createElement('p');
+                            errorMsg.className = 'fr-message fr-message--error';
+                            errorMsg.setAttribute('role', 'alert');
+                            messagesGroup.appendChild(errorMsg);
+                        }
+                        errorMsg.textContent = 'Seuls des nombres peuvent être entrés dans ce champ.';
+                    } else {
+                        // Format valide → succès
+                        this.classList.remove('fr-input--error');
+                        this.classList.add('fr-input--valid');
+                        inputGroup.classList.remove('fr-input-group--error');
+                        inputGroup.classList.add('fr-input-group--valid');
+
+                        // Retirer le message d'erreur
+                        const errorMsg = messagesGroup.querySelector('.fr-message--error');
+                        if (errorMsg) errorMsg.remove();
+
+                        // Ajouter le message de succès
+                        let validMsg = messagesGroup.querySelector('.fr-message--valid');
+                        if (!validMsg) {
+                            validMsg = document.createElement('p');
+                            validMsg.className = 'fr-message fr-message--valid';
+                            messagesGroup.appendChild(validMsg);
+                        }
+                        validMsg.textContent = 'Merci d\'avoir répondu';
+                    }
+
+                    // Vérifier si tous les champs de la question sont valides
+                    setTimeout(function() {
+                        const allInputs = question.querySelectorAll('input.numeric[data-number="1"]');
+                        let allValid = true;
+
+                        allInputs.forEach(function(inp) {
+                            const val = inp.value ? inp.value.trim() : '';
+                            const isValid = val !== '' && (/^-?\d+([.,]\d*)?$/.test(val) || /^-?\d*[.,]\d+$/.test(val));
+                            if (!isValid) {
+                                allValid = false;
+                            }
+                        });
+
+                        const dsfrErrorMsg = question.querySelector('.fr-message--error');
+
+                        if (allValid) {
+                            // Tous les champs sont valides → succès
+                            question.classList.remove('input-error', 'fr-input-group--error');
+                            question.classList.add('input-valid');
+
+                            // Retirer le message d'erreur global
+                            if (dsfrErrorMsg) {
+                                dsfrErrorMsg.remove();
+                            }
+
+                            // Mettre à jour le récapitulatif
+                            if (typeof updateErrorSummary === 'function') {
+                                setTimeout(updateErrorSummary, 50);
+                            }
+                        } else {
+                            // Il reste des champs invalides → erreur
+                            question.classList.add('input-error');
+                            question.classList.remove('input-valid');
+
+                            // S'assurer que le message d'erreur global est présent
+                            if (!dsfrErrorMsg) {
+                                const validContainer = question.querySelector('.question-valid-container');
+                                if (validContainer) {
+                                    const newErrorMsg = document.createElement('p');
+                                    newErrorMsg.className = 'fr-message fr-message--error';
+                                    newErrorMsg.textContent = 'Veuillez compléter toutes les parties.';
+                                    newErrorMsg.setAttribute('role', 'alert');
+                                    validContainer.appendChild(newErrorMsg);
+                                }
+                            }
+                        }
+                    }, 50);
+                });
+            });
+        });
+    }
+
+    // Initialiser la validation des multiples entrées numériques
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', handleNumericMultiValidation);
+    } else {
+        handleNumericMultiValidation();
+    }
+
+    // Réinitialiser après chargement AJAX
+    document.addEventListener('limesurvey:questionsLoaded', handleNumericMultiValidation);
+
+    // === Validation DSFR pour les questions simples (radio, select, date) ===
+
+    /**
+     * Gère la validation pour les questions simples : oui/non, genre, liste, date, etc.
+     * Ces questions passent en succès dès qu'une valeur est sélectionnée
+     */
+    function handleSimpleQuestionValidation() {
+        // Trouver toutes les questions en erreur qui ne sont pas des types complexes déjà gérés
+        const simpleQuestions = document.querySelectorAll('.question-container.input-error');
+
+        simpleQuestions.forEach(function(question) {
+            // Ignorer les questions déjà gérées par d'autres fonctions
+            if (question.classList.contains('numeric-multi') ||
+                question.classList.contains('multiple-short-txt') ||
+                question.dataset.simpleValidationAttached ||
+                question.classList.toString().match(/array-/)) {
+                return;
+            }
+            question.dataset.simpleValidationAttached = 'true';
+
+            // Masquer tous les messages d'erreur LimeSurvey
+            const allLsMessages = question.querySelectorAll('.ls-question-mandatory, .ls-question-mandatory-initial, .ls-question-mandatory-other');
+            allLsMessages.forEach(function(msg) {
+                msg.style.display = 'none';
+            });
+
+            // Chercher tous les contrôles de saisie
+            const radios = question.querySelectorAll('input[type="radio"]');
+            const checkboxes = question.querySelectorAll('input[type="checkbox"]');
+            const selects = question.querySelectorAll('select');
+            const dateInputs = question.querySelectorAll('input[type="date"], input[type="text"].date');
+
+            // Fonction pour marquer la question comme valide
+            function markQuestionValid() {
+                question.classList.remove('input-error', 'fr-input-group--error');
+                question.classList.add('input-valid');
+
+                // Masquer tous les messages d'erreur LimeSurvey
+                const allErrors = question.querySelectorAll('.ls-question-mandatory, .ls-question-mandatory-initial, .ls-question-mandatory-other');
+                allErrors.forEach(function(error) {
+                    error.style.display = 'none';
+                });
+
+                // Retirer le message d'erreur DSFR s'il existe
+                const dsfrError = question.querySelector('.fr-message--error');
+                if (dsfrError) {
+                    dsfrError.remove();
+                }
+
+                // Mettre à jour le récapitulatif
+                if (typeof updateErrorSummary === 'function') {
+                    setTimeout(updateErrorSummary, 50);
+                }
+            }
+
+            // Attacher les listeners aux radios
+            radios.forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        markQuestionValid();
+                    }
+                });
+            });
+
+            // Attacher les listeners aux checkboxes
+            checkboxes.forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    // Pour les checkboxes, vérifier qu'au moins une est cochée
+                    const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+                    if (anyChecked) {
+                        markQuestionValid();
+                    }
+                });
+            });
+
+            // Attacher les listeners aux selects
+            selects.forEach(function(select) {
+                select.addEventListener('change', function() {
+                    if (this.value && this.value !== '' && this.value !== '-oth-') {
+                        markQuestionValid();
+                    }
+                });
+            });
+
+            // Attacher les listeners aux dates
+            dateInputs.forEach(function(dateInput) {
+                dateInput.addEventListener('change', function() {
+                    if (this.value && this.value.trim() !== '') {
+                        markQuestionValid();
+                    }
+                });
+            });
+        });
+    }
+
+    // Initialiser la validation des questions simples
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', handleSimpleQuestionValidation);
+    } else {
+        handleSimpleQuestionValidation();
+    }
+
+    // Réinitialiser après chargement AJAX
+    document.addEventListener('limesurvey:questionsLoaded', handleSimpleQuestionValidation);
+
+    // === Transformation des messages de validation LimeSurvey en messages DSFR ===
+
+    /**
+     * Transforme les messages de validation générés par LimeSurvey en messages DSFR
+     * Applique les classes fr-message fr-message--info aux messages de validation
+     */
+    function transformValidationMessages() {
+        // Sélectionner tous les messages de validation LimeSurvey
+        const emMessages = document.querySelectorAll('.ls-question-message');
+        console.log('DSFR: Transformation des messages de validation, trouvés:', emMessages.length);
+
+        emMessages.forEach(message => {
+            console.log('DSFR: Traitement du message:', message.className, message.textContent.trim());
+            // Vérifier si le message n'a pas déjà été transformé
+            if (message.classList.contains('fr-message')) {
+                return;
+            }
+
+            // Déterminer le type de message
+            let messageType = 'info'; // Par défaut
+
+            if (message.classList.contains('ls-em-error')) {
+                messageType = 'error';
+            } else if (message.classList.contains('ls-em-warning')) {
+                messageType = 'warning';
+            } else if (message.classList.contains('ls-em-success') || message.classList.contains('ls-em-tip')) {
+                messageType = 'info'; // Les messages de succès et tips deviennent des infos
+            }
+
+            // Créer un nouveau paragraphe avec les classes DSFR
+            const dsfrMessage = document.createElement('p');
+            dsfrMessage.className = `fr-message fr-message--${messageType}`;
+            dsfrMessage.textContent = message.textContent.trim();
+            dsfrMessage.id = message.id ? `${message.id}-dsfr` : '';
+
+            // Remplacer le message original
+            message.replaceWith(dsfrMessage);
+        });
+    }
+
+    // Initialiser la transformation des messages
+    console.log('DSFR: Configuration des listeners pour transformation messages, readyState:', document.readyState);
+
+    if (document.readyState === 'loading') {
+        console.log('DSFR: Ajout listener DOMContentLoaded');
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DSFR: DOMContentLoaded déclenché');
+            transformValidationMessages();
+        });
+    } else {
+        console.log('DSFR: DOM déjà chargé, exécution immédiate');
+        transformValidationMessages();
+    }
+
+    // Aussi essayer avec un petit délai pour être sûr
+    setTimeout(function() {
+        console.log('DSFR: Timeout exécuté, nouvelle tentative de transformation');
+        transformValidationMessages();
+    }, 100);
+
+    // Réinitialiser après chargement AJAX
+    document.addEventListener('limesurvey:questionsLoaded', function() {
+        console.log('DSFR: Event limesurvey:questionsLoaded déclenché');
+        transformValidationMessages();
+    });
+
+    // === Fix pour les tableaux dropdown-array avec styles inline ===
+
+    /**
+     * Supprime les styles inline qui empêchent la linéarisation des tableaux sur mobile
+     */
+    function fixDropdownArrayInlineStyles() {
+        // Seulement sur mobile (< 768px)
+        if (window.innerWidth >= 768) {
+            console.log('DSFR: Correction styles ignorée (largeur écran >= 768px)');
+            return;
+        }
+
+        console.log('DSFR: Correction des styles inline sur tableaux dropdown-array');
+
+        // Cibler les tableaux dropdown-array
+        const dropdownArrays = document.querySelectorAll('table.dropdown-array');
+        console.log('DSFR: Tableaux dropdown-array trouvés:', dropdownArrays.length);
+
+        let totalCells = 0;
+        dropdownArrays.forEach((table, index) => {
+            // Trouver tous les td avec style inline
+            const cells = table.querySelectorAll('tbody tr td[style*="display"]');
+            console.log(`DSFR: Tableau ${index + 1}: ${cells.length} cellules avec style inline trouvées`);
+            totalCells += cells.length;
+
+            cells.forEach(cell => {
+                // Supprimer complètement l'attribut style
+                cell.removeAttribute('style');
+            });
+        });
+
+        console.log(`DSFR: ${totalCells} cellules au total, styles supprimés`);
+    }
+
+    // MutationObserver pour surveiller et supprimer les styles réappliqués
+    let styleObserver = null;
+    let resizeTimer;
+
+    function setupStyleObserver() {
+        // Ne surveiller que sur mobile
+        if (window.innerWidth >= 768) {
+            if (styleObserver) {
+                console.log('DSFR: Observer désactivé (desktop)');
+                styleObserver.disconnect();
+                styleObserver = null;
+            }
+            return;
+        }
+
+        // Si déjà actif, ne rien faire
+        if (styleObserver) {
+            return;
+        }
+
+        console.log('DSFR: Activation de l\'observer pour surveiller les styles inline');
+
+        // Créer l'observer
+        styleObserver = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                    const target = mutation.target;
+                    if (target.tagName === 'TD' && target.closest('table.dropdown-array')) {
+                        console.log('DSFR: Style réappliqué détecté, suppression immédiate');
+                        target.removeAttribute('style');
+                    }
+                }
+            });
+        });
+
+        // Observer tous les tableaux dropdown-array
+        const dropdownArrays = document.querySelectorAll('table.dropdown-array');
+        dropdownArrays.forEach(function(table) {
+            styleObserver.observe(table, {
+                attributes: true,
+                attributeFilter: ['style'],
+                subtree: true
+            });
+        });
+
+        console.log(`DSFR: Observer activé sur ${dropdownArrays.length} tableau(x) dropdown-array`);
+    }
+
+    // Activer l'observer après le nettoyage initial
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            fixDropdownArrayInlineStyles();
+            setupStyleObserver();
+        });
+    } else {
+        fixDropdownArrayInlineStyles();
+        setupStyleObserver();
+    }
+
+    // Réactiver l'observer après redimensionnement
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            fixDropdownArrayInlineStyles();
+            setupStyleObserver();
+        }, 250);
+    });
+
+    // Réactiver l'observer après chargement AJAX
+    document.addEventListener('limesurvey:questionsLoaded', function() {
+        fixDropdownArrayInlineStyles();
+        setupStyleObserver();
+    });
 
 })();

@@ -414,13 +414,12 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
                 }
             }
 
-            // IMPORTANT : Ajouter l'attribut required aux inputs pour l'accessibilité et la validation HTML5
+            // IMPORTANT : Ajouter aria-required pour l'accessibilité
             // LimeSurvey ne le fait pas automatiquement sur les questions obligatoires
             const inputs = question.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="tel"], textarea, select');
             inputs.forEach(input => {
-                // Ne pas ajouter required sur les inputs cachés ou disabled
-                if (input.type !== 'hidden' && !input.disabled && !input.hasAttribute('required')) {
-                    input.setAttribute('required', '');
+                // Ne pas ajouter sur les inputs cachés ou disabled
+                if (input.type !== 'hidden' && !input.disabled && !input.hasAttribute('aria-required')) {
                     input.setAttribute('aria-required', 'true');
                 }
             });

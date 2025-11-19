@@ -1,0 +1,39 @@
+{# Modale Données personnelles #}
+<dialog id="privacy-modal" class="fr-modal" aria-labelledby="privacy-modal-title">
+    <div class="fr-container fr-container--fluid fr-fr-container">
+        <div class="fr-grid-row fr-grid-row--center">
+            <div class="fr-col-12 fr-col-md-10">
+                <div class="fr-modal__body">
+                    <div class="fr-modal__header">
+                        <button class="fr-btn--close fr-btn" aria-controls="privacy-modal">{{ gT("Close") }}</button>
+                    </div>
+                    <div class="fr-modal__content">
+                        <h1 id="privacy-modal-title" class="fr-modal__title">
+                            Politique de confidentialité
+                        </h1>
+
+                        <h2>Responsable du traitement</h2>
+                        <p>[Nom de l'organisme]</p>
+
+                        <h2>Données collectées</h2>
+                        <p>Les données suivantes sont collectées :</p>
+                        <ul>
+                            <li>Réponses aux questions du questionnaire</li>
+                            <li>Données techniques de connexion (si applicable)</li>
+                        </ul>
+
+                        <h2>Finalité</h2>
+                        <p>Les données collectées servent uniquement à [objectif du questionnaire].</p>
+
+                        <h2>Conservation</h2>
+                        <p>Les données sont conservées pendant [durée] puis supprimées.</p>
+
+                        <h2>Vos droits</h2>
+                        <p>Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression de vos données.</p>
+                        <p>Contact : [email de contact]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</dialog>

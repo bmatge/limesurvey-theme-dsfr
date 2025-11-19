@@ -28,8 +28,11 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
             const itemsList = container.querySelector('.selector--inputondemand-list');
             if (!itemsList) return;
 
+            // Utiliser capture=true pour intercepter avant les autres listeners
             button.addEventListener('click', function(e) {
                 e.preventDefault();
+                e.stopImmediatePropagation(); // Bloquer les autres listeners (LimeSurvey natif)
+
                 const hiddenItems = itemsList.querySelectorAll('.selector--inputondemand-list-item.d-none');
 
                 if (hiddenItems.length > 0) {
@@ -41,7 +44,7 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
 
                     if (hiddenItems.length === 1) button.style.display = 'none';
                 }
-            });
+            }, true); // Capture phase = true pour s'exécuter avant les autres
         });
     }
 
@@ -255,15 +258,250 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
 
     }
 
+    /**
+     * Validation DSFR pour le champ captcha
+     * Remplace la validation HTML5 native par une validation DSFR avec message d'erreur
+     */
+    function initCaptchaValidation() {
+        const captchaForm = document.getElementById('form-captcha');
+        const captchaInput = document.getElementById('loadsecurity');
+        const messagesGroup = document.getElementById('loadsecurity-messages');
+        const inputGroup = captchaInput?.closest('.fr-input-group');
+
+        if (!captchaForm || !captchaInput || !messagesGroup) {
+            return; // Pas de formulaire captcha sur cette page
+        }
+
+        captchaForm.addEventListener('submit', function(e) {
+            // Nettoyer les erreurs précédentes
+            inputGroup.classList.remove('fr-input-group--error');
+            messagesGroup.innerHTML = '';
+
+            // Valider le champ
+            if (!captchaInput.value || captchaInput.value.trim() === '') {
+                e.preventDefault();
+                e.stopPropagation();
+
+                // Ajouter la classe d'erreur
+                inputGroup.classList.add('fr-input-group--error');
+
+                // Ajouter le message d'erreur DSFR
+                const errorMessage = document.createElement('p');
+                errorMessage.className = 'fr-message fr-message--error';
+                errorMessage.textContent = 'Veuillez saisir votre réponse';
+                messagesGroup.appendChild(errorMessage);
+
+                // Focus sur le champ pour l'accessibilité
+                captchaInput.focus();
+
+                return false;
+            }
+        });
+    }
+
     // Initialiser au chargement
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCaptchaReload);
+        document.addEventListener('DOMContentLoaded', function() {
+            initCaptchaReload();
+            initCaptchaValidation();
+        });
     } else {
         initCaptchaReload();
+        initCaptchaValidation();
     }
 
     // Réinitialiser après événements AJAX
-    document.addEventListener('limesurvey:questionsLoaded', initCaptchaReload);
+    document.addEventListener('limesurvey:questionsLoaded', function() {
+        initCaptchaReload();
+        initCaptchaValidation();
+    });
+
+    /**
+     * Gestion des champs obligatoires :
+     * - Ajoute la classe .has-required-field aux labels/legends des champs obligatoires
+     * - Ajoute une mention "Les champs marqués d'un * sont obligatoires" en haut de page
+     */
+    function handleRequiredFields() {
+        // 1. Trouver tous les champs obligatoires
+        // Méthode A: Attribut required/aria-required (captcha, formulaires)
+        const requiredFields = document.querySelectorAll('input[required], textarea[required], select[required], input[aria-required="true"], textarea[aria-required="true"], select[aria-required="true"]');
+
+        // Méthode B: Classe .mandatory sur les questions (pages LimeSurvey)
+        const mandatoryQuestions = document.querySelectorAll('.mandatory.question-container, .mandatory[id^="question"]');
+
+        // Méthode C: Badges "Obligatoire"
+        const mandatoryBadges = document.querySelectorAll('.fr-badge[aria-label*="Mandatory"], .fr-badge[aria-label*="Obligatoire"]');
+
+        if (requiredFields.length === 0 && mandatoryQuestions.length === 0 && mandatoryBadges.length === 0) {
+            return; // Pas de champs obligatoires sur cette page
+        }
+
+        // 2. Traiter les champs avec attribut required
+        requiredFields.forEach(field => {
+            // Chercher le label associé (plusieurs stratégies)
+            let label = null;
+
+            // Stratégie 1: Label avec for="id"
+            if (field.id) {
+                label = document.querySelector(`label[for="${field.id}"]`);
+            }
+
+            // Stratégie 2: Label parent direct
+            if (!label) {
+                label = field.closest('label');
+            }
+
+            // Stratégie 3: Label ou legend frère précédent
+            if (!label) {
+                const inputGroup = field.closest('.fr-input-group, .fr-fieldset__element');
+                if (inputGroup) {
+                    label = inputGroup.querySelector('.fr-label, .fr-fieldset__legend');
+                }
+            }
+
+            // Stratégie 4: Chercher dans le parent fieldset
+            if (!label) {
+                const fieldset = field.closest('fieldset');
+                if (fieldset) {
+                    label = fieldset.querySelector('.fr-fieldset__legend');
+                }
+            }
+
+            // Stratégie 5: Span spécifique comme #ls-captcha-text
+            if (!label && field.getAttribute('aria-labelledby')) {
+                const labelId = field.getAttribute('aria-labelledby');
+                label = document.getElementById(labelId);
+            }
+
+            // Ajouter la classe si on a trouvé un label
+            if (label && !label.classList.contains('has-required-field')) {
+                label.classList.add('has-required-field');
+            }
+        });
+
+        // 3. Traiter les questions avec classe .mandatory
+        mandatoryQuestions.forEach(question => {
+            // Chercher le label principal de la question
+            // Structure LimeSurvey : .question-text > .ls-label-question > p
+            let questionLabel = question.querySelector('.ls-label-question');
+
+            // Si pas de classe ls-label-question, chercher .question-text en fallback
+            if (!questionLabel) {
+                questionLabel = question.querySelector('.question-text');
+            }
+
+            // Vérifier si pas déjà traité (classe marqueur)
+            if (questionLabel && !questionLabel.classList.contains('asterisk-injected')) {
+                // Marquer comme traité (ne PAS utiliser has-required-field pour éviter le CSS ::before)
+                questionLabel.classList.add('asterisk-injected');
+
+                // Injecter l'astérisque directement dans le DOM
+                // Chercher le premier élément de texte (p, span, div, etc.)
+                const textElement = questionLabel.querySelector('p, span, div, h1, h2, h3, h4, h5, h6') || questionLabel;
+
+                // Vérifier qu'on n'a pas déjà ajouté l'astérisque
+                if (!textElement.querySelector('.required-asterisk')) {
+                    const asterisk = document.createElement('span');
+                    asterisk.className = 'required-asterisk';
+                    asterisk.style.color = 'var(--text-default-error)';
+                    asterisk.style.fontWeight = '700';
+                    asterisk.style.marginRight = '0.25rem';
+                    asterisk.setAttribute('aria-hidden', 'true');
+                    asterisk.textContent = '* ';
+
+                    // Insérer l'astérisque au début du contenu
+                    textElement.insertBefore(asterisk, textElement.firstChild);
+                }
+            }
+
+            // IMPORTANT : Ajouter l'attribut required aux inputs pour l'accessibilité et la validation HTML5
+            // LimeSurvey ne le fait pas automatiquement sur les questions obligatoires
+            const inputs = question.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="tel"], textarea, select');
+            inputs.forEach(input => {
+                // Ne pas ajouter required sur les inputs cachés ou disabled
+                if (input.type !== 'hidden' && !input.disabled && !input.hasAttribute('required')) {
+                    input.setAttribute('required', '');
+                    input.setAttribute('aria-required', 'true');
+                }
+            });
+        });
+
+        // 4. Ajouter la mention en haut de page (une seule fois)
+        if (document.getElementById('required-fields-notice')) {
+            return; // Déjà ajoutée
+        }
+
+        // Trouver le point d'insertion : juste avant les questions
+
+        // Stratégie 1: Page captcha - insérer avant le formulaire (avec fr-container)
+        const captchaForm = document.querySelector('.form-captcha');
+        if (captchaForm) {
+            const notice = document.createElement('div');
+            notice.id = 'required-fields-notice';
+            notice.className = 'fr-container fr-my-2w';
+            notice.innerHTML = '<p class="fr-text--sm" style="color: var(--text-mention-grey);"><span class="fr-icon-error-warning-line" aria-hidden="true" style="margin-right: 0.5rem;"></span>Les champs marqués d\'un <span style="color: var(--text-default-error); font-weight: 700;" aria-hidden="true">*</span> sont obligatoires</p>';
+
+            const formParent = captchaForm.parentElement;
+            if (formParent) {
+                formParent.insertBefore(notice, captchaForm);
+                return;
+            }
+        }
+
+        // Créer la mention pour les pages de questions (sans fr-container car déjà dans un groupe)
+        const notice = document.createElement('div');
+        notice.id = 'required-fields-notice';
+        notice.className = 'fr-my-3w';
+        notice.innerHTML = '<p class="fr-text--sm" style="color: var(--text-mention-grey);"><span class="fr-icon-error-warning-line" aria-hidden="true" style="margin-right: 0.5rem;"></span>Les champs marqués d\'un <span style="color: var(--text-default-error); font-weight: 700;" aria-hidden="true">*</span> sont obligatoires</p>';
+
+        // Stratégie 2: Pages de questions - Insérer juste avant la première question
+        // dans le premier groupe (après nom/description du groupe)
+        const firstGroup = document.querySelector('[id^="group-"]');
+        if (firstGroup) {
+            // Chercher la première question à l'intérieur du groupe (id="question6", etc.)
+            const firstQuestion = firstGroup.querySelector('[id^="question"]');
+            if (firstQuestion) {
+                // Insérer juste avant la première question
+                firstQuestion.parentElement.insertBefore(notice, firstQuestion);
+                return;
+            }
+        }
+
+        // Stratégie 3: Chercher directement la première question (fallback)
+        const firstQuestion = document.querySelector('[id^="question"], .question-container, .ls-question, .question-item');
+        if (firstQuestion) {
+            firstQuestion.parentElement.insertBefore(notice, firstQuestion);
+            return;
+        }
+
+        // Stratégie 4: Insérer dans le conteneur principal après les alertes
+        const mainContent = document.querySelector('#main-col, .ls-survey-content, .survey-content, .main-content');
+        if (mainContent) {
+            const lastAlert = mainContent.querySelector('.fr-alert:last-of-type, .error-messages:last-of-type');
+            if (lastAlert) {
+                lastAlert.insertAdjacentElement('afterend', notice);
+            } else {
+                mainContent.insertBefore(notice, mainContent.firstChild);
+            }
+            return;
+        }
+
+        // Stratégie 5: Fallback final - insérer dans le premier groupe ou fr-container
+        const firstContainer = document.querySelector('[id^="group-"], .fr-container');
+        if (firstContainer) {
+            firstContainer.insertBefore(notice, firstContainer.firstChild);
+        }
+    }
+
+    // Initialiser au chargement
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', handleRequiredFields);
+    } else {
+        handleRequiredFields();
+    }
+
+    // Réinitialiser après navigation AJAX
+    document.addEventListener('limesurvey:questionsLoaded', handleRequiredFields);
 
     // === Transformation des erreurs LimeSurvey vers DSFR ===
 
@@ -1466,25 +1704,35 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
                             messagesGroup.appendChild(errorMsg);
                         }
                         errorMsg.textContent = 'Seuls des nombres peuvent être entrés dans ce champ.';
+
+                        // Marquer que cette question a eu une erreur
+                        question.dataset.hadError = 'true';
                     } else {
                         // Format valide → succès
                         this.classList.remove('fr-input--error');
-                        this.classList.add('fr-input--valid');
                         inputGroup.classList.remove('fr-input-group--error');
-                        inputGroup.classList.add('fr-input-group--valid');
 
                         // Retirer le message d'erreur
                         const errorMsg = messagesGroup.querySelector('.fr-message--error');
-                        if (errorMsg) errorMsg.remove();
-
-                        // Ajouter le message de succès
-                        let validMsg = messagesGroup.querySelector('.fr-message--valid');
-                        if (!validMsg) {
-                            validMsg = document.createElement('p');
-                            validMsg.className = 'fr-message fr-message--valid';
-                            messagesGroup.appendChild(validMsg);
+                        if (errorMsg) {
+                            errorMsg.remove();
+                            // Marquer que cette question a eu une erreur
+                            question.dataset.hadError = 'true';
                         }
-                        validMsg.textContent = 'Merci d\'avoir répondu';
+
+                        // Ajouter le message de succès UNIQUEMENT si la question a eu une erreur auparavant
+                        if (question.dataset.hadError === 'true') {
+                            this.classList.add('fr-input--valid');
+                            inputGroup.classList.add('fr-input-group--valid');
+
+                            let validMsg = messagesGroup.querySelector('.fr-message--valid');
+                            if (!validMsg) {
+                                validMsg = document.createElement('p');
+                                validMsg.className = 'fr-message fr-message--valid';
+                                messagesGroup.appendChild(validMsg);
+                            }
+                            validMsg.textContent = 'Merci d\'avoir répondu';
+                        }
                     }
 
                     // Vérifier si tous les champs de la question sont valides
@@ -1506,6 +1754,19 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
                             // Tous les champs sont valides → succès
                             question.classList.remove('input-error', 'fr-input-group--error');
                             question.classList.add('input-valid');
+
+                            // Retirer fr-input-group--error de TOUS les inputs maintenant valides
+                            allInputs.forEach(function(inp) {
+                                const val = inp.value ? inp.value.trim() : '';
+                                const isValid = val !== '' && (/^-?\d+([.,]\d*)?$/.test(val) || /^-?\d*[.,]\d+$/.test(val));
+                                if (isValid) {
+                                    const grp = inp.closest('.fr-input-group');
+                                    if (grp) {
+                                        grp.classList.remove('fr-input-group--error');
+                                        inp.classList.remove('fr-input--error');
+                                    }
+                                }
+                            });
 
                             // Retirer le message d'erreur global
                             if (dsfrErrorMsg) {

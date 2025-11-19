@@ -822,4 +822,40 @@ textarea,
     display: block !important;
 }
 
+/* Réserver l'espace pour les messages d'erreur (évite le layout shift) */
+.fr-messages-group {
+    min-height: 2rem; /* Hauteur approximative d'un message fr-message */
+}
+
+/* Quand il y a effectivement un message, le min-height s'ajuste naturellement */
+.fr-messages-group:empty {
+    min-height: 1.5rem; /* Plus petit quand vide pour ne pas prendre trop d'espace */
+}
+
+/* Masquer les messages d'erreur natifs LimeSurvey quand on a des fr-messages-group DSFR */
+.fr-input-group .error-message,
+.fr-input-group + .error-message {
+    display: none !important;
+}
+
+/* ============================================
+   CHAMPS OBLIGATOIRES - Astérisque rouge
+   ============================================ */
+
+/* Masquer les badges "Obligatoire" (tous types : info, warning, etc.) */
+.fr-badge[aria-label*="Mandatory"],
+.fr-badge[aria-label*="Obligatoire"] {
+    display: none !important;
+}
+
+/* Astérisque rouge pour les champs obligatoires (classe ajoutée par JavaScript)
+   NOTE: Pour les questions LimeSurvey, l'astérisque est injecté via DOM (span inline)
+   Ce CSS ::before sert de fallback pour d'autres cas (labels simples, captcha, etc.) */
+.has-required-field::before {
+    content: "* ";
+    color: var(--text-default-error);
+    font-weight: 700;
+    margin-right: 0.25rem;
+}
+
 /* TODO: Ajouter les styles spécifiques ici au fur et à mesure */

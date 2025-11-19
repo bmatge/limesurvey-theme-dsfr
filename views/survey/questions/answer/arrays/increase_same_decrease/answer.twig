@@ -12,12 +12,13 @@
 #}
 
 <!-- Array Increase/Same/Decrease (Type E) - DSFR -->
-<div class="fr-table fr-table--bordered fr-table--responsive">
+<div class="ls-table-wrapper array-increase-same-decrease" role="group" aria-labelledby="ls-question-text-{{ basename }}">
     {% if help %}
         <div class="fr-hint-text fr-mb-2w">{{ help }}</div>
     {% endif %}
 
-    <table class="array-isd-table">
+    <div class="fr-table fr-table--bordered" data-fr-js-table="true">
+        <table class="array-isd-table radio-array" role="group" aria-labelledby="ls-question-text-{{ basename }}" data-fr-js-table-element="true">
         <thead>
             <tr>
                 <th scope="col" class="col-answers"></th>
@@ -92,7 +93,8 @@
                 </tr>
             {% endfor %}
         </tbody>
-    </table>
+        </table>
+    </div>
 </div>
 
 <!-- end of Array Increase/Same/Decrease -->

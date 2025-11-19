@@ -1,21 +1,17 @@
-<div class="{{ aSurveyInfo.class.maincoldivdiva }} fr-alert fr-alert--info fr-mb-3w" {{ aSurveyInfo.attr.maincoldivdiva }}>
-    {% block formheading %}
-        <p class="fr-alert__title">{{ gT("Before you start, please prove you are human.") }}</p>
-    {% endblock %}
+<div class="fr-container fr-my-2w">
+    <div class="fr-alert fr-alert--info {{ aSurveyInfo.class.maincoldivdiva }}" {{ aSurveyInfo.attr.maincoldivdiva }}>
+        {% block formheading %}
+            <p class="fr-alert__title">{{ gT("Before you start, please prove you are human.") }}</p>
+        {% endblock %}
+    </div>
 </div>
-<div class="{{ aSurveyInfo.class.maincoldivdivb }} card fr-callout__text bg-light fr-container--fluid fr-mb-3w fr-p-2w" {{ aSurveyInfo.attr.maincoldivdivb }}>
+
+<div class="fr-container fr-my-2w">
+    <div class="{{ aSurveyInfo.class.maincoldivdivb }}" {{ aSurveyInfo.attr.maincoldivdivb }}>
 
     {% block description %}
-        
-    {% endblock %}
 
-    {% if  not empty(aSurveyInfo.aForm.aEnterErrors) %}
-        <ul class='{{ aSurveyInfo.class.maincoldivdivbul }} fr-alert fr-alert--error list-unstyled' role="alert" {{ aSurveyInfo.attr.maincoldivdivbul }}>
-            {% for  key, error in aSurveyInfo.aForm.aEnterErrors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    {% endblock %}
 
     <div class="form-{{ aSurveyInfo.aForm.sType }} {{ aSurveyInfo.class.maincoldivdivbdiv }}" {{ aSurveyInfo.attr.maincoldivdivbdiv }} >
         {#
@@ -28,6 +24,7 @@
                 'id'          : 'form-' ~ aSurveyInfo.aForm.sType ,
                 'name'        : 'limesurvey',
                 'class'       : 'ls-form form form-horizontal',
+                'novalidate'  : true,
             }
         %}
 
@@ -71,11 +68,20 @@
                         </div>
 
                         <!-- Champ de saisie en dessous -->
-                        <div class='{{ aSurveyInfo.class.maincolformdivbdiv }} fr-input-group' {{ aSurveyInfo.attr.maincolformdivbdiv }}>
+                        <div class='{{ aSurveyInfo.class.maincolformdivbdiv }} fr-input-group{% if not empty(aSurveyInfo.aForm.aEnterErrors) %} fr-input-group--error{% endif %}' {{ aSurveyInfo.attr.maincolformdivbdiv }}>
                             <label class="fr-label" for="loadsecurity">
                                 {{ gT("Answer") }}
                             </label>
-                            <input class='fr-input {{ aSurveyInfo.class.maincolformdivbdivdivinput }}' {{ aSurveyInfo.attr.maincolformdivbdivdivinput }} aria-required="true" aria-labelledby="ls-captcha-text" placeholder="{{ gT("Enter your answer here") }}">
+                            <input class='fr-input {{ aSurveyInfo.class.maincolformdivbdivdivinput }}' {{ aSurveyInfo.attr.maincolformdivbdivdivinput }} required aria-required="true" aria-labelledby="ls-captcha-text" aria-describedby="loadsecurity-messages" placeholder="{{ gT("Enter your answer here") }}">
+                            <div class="fr-messages-group" id="loadsecurity-messages" aria-live="polite">
+                                {% if not empty(aSurveyInfo.aForm.aEnterErrors) %}
+                                    {% for key, error in aSurveyInfo.aForm.aEnterErrors %}
+                                        <p class="fr-message fr-message--error">
+                                            {{ error }}
+                                        </p>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </fieldset>
@@ -92,3 +98,4 @@
         </form>
     </div>
 </div>
+</div> <!-- /fr-container -->

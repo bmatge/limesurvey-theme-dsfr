@@ -17,7 +17,8 @@
 
 <!-- Array by column - DSFR -->
 <div class="ls-table-wrapper" role="group" aria-labelledby="ls-question-text-{{ basename }}">
-    <table class="{{ coreClass }}" role="group" aria-labelledby="ls-question-text-{{ basename }}">
+    <div class="fr-table fr-table--bordered" data-fr-js-table="true">
+        <table class="{{ coreClass }}" role="group" aria-labelledby="ls-question-text-{{ basename }}" data-fr-js-table-element="true">
         <colgroup>
             <col class="col-answers" style="width: {{ answerwidth }}%;" />
             {% for i, question in aQuestions %}
@@ -69,7 +70,8 @@
                 </tr>
             {% endfor %}
         </tbody>
-    </table>
+        </table>
+    </div>
 </div>
 
 {% for i, ld in anscode %}

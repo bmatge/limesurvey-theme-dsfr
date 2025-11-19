@@ -450,7 +450,8 @@ input[type="search"],
 input[type="password"],
 textarea {
     /* Fond gris DSFR */
-    background-color: var(--background-contrast-grey);
+    /* DISABLED - Let DSFR thead background-image show through */
+    /*     background-color: var(--background-contrast-grey); */
 
     /* Bordure uniquement en bas (gris foncé/noir) */
     border: none;
@@ -540,7 +541,8 @@ select,
 .fr-select,
 select.form-control {
     /* Fond gris DSFR */
-    background-color: var(--background-contrast-grey);
+    /* DISABLED - Let DSFR thead background-image show through */
+    /*     background-color: var(--background-contrast-grey); */
 
     /* Bordure uniquement en bas (gris foncé/noir) */
     border: none;
@@ -853,6 +855,44 @@ input[type="submit"]:hover {
     margin-top: 0 !important;
     padding-top: 0.5rem !important;
     padding-bottom: 0.5rem !important;
+}
+
+/* ============================================
+   QUESTIONS À MULTIPLES ENTRÉES NUMÉRIQUES
+   ============================================ */
+
+/* Alignement horizontal des préfixes, input et suffixes */
+.ls-input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+/* Préfixes et suffixes */
+.ls-input-group-extra {
+    flex-shrink: 0;
+    font-size: 0.875rem;
+    color: var(--text-mention-grey, #666);
+}
+
+/* L'input group DSFR doit prendre la largeur restante */
+.ls-input-group .fr-input-group {
+    flex: 1;
+    min-width: 0; /* Permet au flex item de shrink en dessous de sa taille de contenu */
+}
+
+/* Sur mobile, empiler verticalement */
+@media (max-width: 767px) {
+    .ls-input-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.25rem;
+    }
+
+    .ls-input-group-extra {
+        font-size: 0.75rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1631,10 +1671,35 @@ li.ls-group-dynamic {
 /* En-têtes de colonnes */
 .ls-table-wrapper table.table-array-radio thead th,
 .ls-table-wrapper table.radio-array thead th {
-    background-color: var(--background-contrast-grey);
+    /* DISABLED - Let DSFR thead background-image show through */
+    /* background-color: var(--background-contrast-grey); */
     font-weight: 700;
     color: var(--text-title-grey);
     text-align: center;
+}
+
+/* RÈGLE GLOBALE : Forcer le style DSFR complet sur TOUS les thead
+   Cette règle utilise !important pour surcharger toutes les règles spécifiques
+   DSFR utilise DEUX propriétés background:
+   1. background-color pour le fond gris
+   2. background-image (gradient) pour la bordure bottom
+   Note: Le background ne s'hérite pas, il faut l'appliquer sur les th/td
+*/
+.fr-table thead th,
+.fr-table thead td,
+.fr-table--bordered thead th,
+.fr-table--bordered thead td,
+.ls-table-wrapper .fr-table thead th,
+.ls-table-wrapper .fr-table thead td,
+.ls-table-wrapper table thead th,
+.ls-table-wrapper table thead td {
+    background-color: var(--background-contrast-grey) !important;
+    background-image: linear-gradient(0deg, var(--border-plain-grey), var(--border-plain-grey)) !important;
+    background-position: bottom !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% 2px !important;
+    color: var(--text-title-grey) !important;
+    font-weight: 700 !important;
 }
 
 /* Surcharge de la bordure Bootstrap pour utiliser la couleur DSFR */
@@ -1651,13 +1716,32 @@ li.ls-group-dynamic {
     border-top-color: var(--border-default-grey);
 }
 
-/* Bordures renforcées en bas de la ligne d'en-tête */
-.ls-table-wrapper table.table-array-radio thead tr.ls-heading th,
-.ls-table-wrapper table.table-array-radio thead tr.ls-heading td,
-.ls-table-wrapper table.radio-array thead tr.ls-heading th,
-.ls-table-wrapper table.radio-array thead tr.ls-heading td {
-    border-bottom: 2px solid var(--border-default-grey);
+/* Bordure bottom uniforme sur TOUS les éléments du thead
+   Fix pour surcharger le border:0 du DSFR natif qui ne met pas de vraies bordures
+   (DSFR utilise background-image:linear-gradient au lieu de border)
+   On utilise border-bottom shorthand avec !important et spécificité maximale */
+/*
+.ls-table-wrapper table.radio-array.fr-table thead tr > th,
+.ls-table-wrapper table.radio-array.fr-table thead tr > td,
+.ls-table-wrapper table.radio-array.fr-table--bordered thead tr > th,
+.ls-table-wrapper table.radio-array.fr-table--bordered thead tr > td,
+.ls-table-wrapper table.fr-table.fr-table--bordered thead tr > th,
+.ls-table-wrapper table.fr-table.fr-table--bordered thead tr > td,
+.ls-table-wrapper table.fr-table thead tr > th,
+.ls-table-wrapper table.fr-table thead tr > td,
+table.radio-array.fr-table.fr-table--bordered thead tr > th,
+table.radio-array.fr-table.fr-table--bordered thead tr > td,
+table.radio-array.fr-table thead tr > th,
+table.radio-array.fr-table thead tr > td,
+table.fr-table.fr-table--bordered thead tr > th,
+table.fr-table.fr-table--bordered thead tr > td,
+table.fr-table--bordered thead tr > th,
+table.fr-table--bordered thead tr > td,
+table.fr-table thead tr > th,
+table.fr-table thead tr > td {
+    border-bottom: 2px solid var(--border-default-grey) !important;
 }
+*/
 
 /* En-têtes de lignes (première colonne) */
 .ls-table-wrapper table.table-array-radio tbody th.answertext,
@@ -1716,7 +1800,8 @@ li.ls-group-dynamic {
 
 /* En-têtes de colonnes */
 .ls-table-wrapper table.array-radio thead th {
-    background-color: var(--background-contrast-grey);
+    /* DISABLED - Let DSFR thead background-image show through */
+    /*     background-color: var(--background-contrast-grey); */
     font-weight: 700;
     color: var(--text-title-grey);
     text-align: center;
@@ -1734,10 +1819,13 @@ li.ls-group-dynamic {
 }
 
 /* Bordures renforcées en bas de la ligne d'en-tête */
+/* DISABLED - Testing global rule (line 1680) - Can be restored if needed */
+/*
 .ls-table-wrapper table.array-radio thead tr.ls-heading th,
 .ls-table-wrapper table.array-radio thead tr.ls-heading td {
     border-bottom: 2px solid var(--border-plain-grey);
 }
+*/
 
 /* En-têtes de lignes (première colonne) */
 .ls-table-wrapper table.array-radio tbody th.answertext {
@@ -1824,13 +1912,19 @@ li.ls-group-dynamic {
 
 .array-increase-same-decrease table.radio-array th,
 .array-increase-same-decrease table.radio-array td {
+    border: 1px solid var(--border-default-grey, #ddd);
     padding: 0.75rem;
     text-align: left;
 }
 
 /* En-têtes de colonnes */
-.array-increase-same-decrease table.radio-array thead th {
+.array-increase-same-decrease table.radio-array thead th,
+.array-increase-same-decrease table.radio-array thead td {
     background-color: var(--background-contrast-grey) !important;
+    background-image: linear-gradient(0deg, var(--border-plain-grey), var(--border-plain-grey)) !important;
+    background-position: bottom !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% 2px !important;
     font-weight: 700;
     color: var(--text-title-grey) !important;
     text-align: center;
@@ -1850,12 +1944,15 @@ li.ls-group-dynamic {
 }
 
 /* Bordures renforcées en bas de la ligne d'en-tête */
+/* DISABLED - Testing global rule (line 1680) - Can be restored if needed */
+/*
 .array-increase-same-decrease table.radio-array thead tr.ls-heading th,
 .array-increase-same-decrease table.radio-array thead tr.ls-heading td,
 .array-increase-same-decrease table.radio-array thead tr.ls-header th,
 .array-increase-same-decrease table.radio-array thead tr.ls-header td {
     border-bottom: 2px solid var(--border-default-grey) !important;
 }
+*/
 
 /* En-têtes de lignes (première colonne) */
 .array-increase-same-decrease table.radio-array tbody th.answertext {
@@ -1893,13 +1990,19 @@ li.ls-group-dynamic {
 
 .array-yes-uncertain-no table.radio-array th,
 .array-yes-uncertain-no table.radio-array td {
+    border: 1px solid var(--border-default-grey, #ddd);
     padding: 0.75rem;
     text-align: left;
 }
 
 /* En-têtes de colonnes */
-.array-yes-uncertain-no table.radio-array thead th {
-    background-color: var(--background-contrast-grey, #f6f6f6) !important;
+.array-yes-uncertain-no table.radio-array thead th,
+.array-yes-uncertain-no table.radio-array thead td {
+    background-color: var(--background-contrast-grey) !important;
+    background-image: linear-gradient(0deg, var(--border-plain-grey), var(--border-plain-grey)) !important;
+    background-position: bottom !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% 2px !important;
     font-weight: 700;
     color: var(--text-label-grey) !important;
     text-align: center;
@@ -1917,10 +2020,13 @@ li.ls-group-dynamic {
 }
 
 /* Bordures renforcées en bas de la ligne d'en-tête */
+/* DISABLED - Testing global rule (line 1680) - Can be restored if needed */
+/*
 .array-yes-uncertain-no table.radio-array thead tr.ls-heading th,
 .array-yes-uncertain-no table.radio-array thead tr.ls-heading td {
     border-bottom: 2px solid var(--border-default-grey) !important;
 }
+*/
 
 /* En-têtes de lignes (première colonne) */
 .array-yes-uncertain-no table.radio-array tbody th.answertext {
@@ -1968,7 +2074,8 @@ table.array-flexible-dual-scale td {
 /* En-têtes de colonnes */
 .ls-table-wrapper table.array-flexible-dual-scale thead th,
 table.array-flexible-dual-scale thead th {
-    background-color: var(--background-contrast-grey, #f6f6f6);
+    /* DISABLED - Let DSFR thead background-image show through */
+    /*     background-color: var(--background-contrast-grey, #f6f6f6); */
     font-weight: 700;
     color: #161616;
     text-align: center;
@@ -1989,12 +2096,15 @@ table.array-flexible-dual-scale thead tr.ls-heading td {
 }
 
 /* Bordures renforcées en bas de la ligne d'en-tête */
+/* DISABLED - Testing global rule (line 1680) - Can be restored if needed */
+/*
 .ls-table-wrapper table.array-flexible-dual-scale thead tr.ls-heading th,
 .ls-table-wrapper table.array-flexible-dual-scale thead tr.ls-heading td,
 table.array-flexible-dual-scale thead tr.ls-heading th,
 table.array-flexible-dual-scale thead tr.ls-heading td {
     border-bottom: 2px solid var(--border-default-grey);
 }
+*/
 
 /* En-têtes de lignes (première colonne) */
 .ls-table-wrapper table.array-flexible-dual-scale tbody th.answertext,
@@ -2027,16 +2137,19 @@ table.array-flexible-dual-scale tbody tr:hover {
 /* En-têtes de groupe pour dual scale (gauche/droite) */
 .ls-table-wrapper table.array-flexible-dual-scale thead tr.ls-heading.groups th.dsheader,
 table.array-flexible-dual-scale thead tr.ls-heading.groups th.dsheader {
-    background-color: var(--background-contrast-grey, #f6f6f6);
+    /* DISABLED - Let DSFR thead background-image show through */
+    /*     background-color: var(--background-contrast-grey, #f6f6f6); */
     font-weight: 700;
     color: #161616;
-    border-bottom: 2px solid var(--border-default-grey);
+    /* DISABLED - Testing global rule (line 1680) - Can be restored if needed */
+    /* border-bottom: 2px solid var(--border-default-grey); */
 }
 
 /* Séparateurs dans les tableaux dual scale */
 .ls-table-wrapper table.array-flexible-dual-scale td.dual_scale_separator,
 table.array-flexible-dual-scale td.dual_scale_separator {
-    background-color: var(--background-contrast-grey, #f6f6f6);
+    /* DISABLED - Let DSFR thead background-image show through */
+    /*     background-color: var(--background-contrast-grey, #f6f6f6); */
     text-align: center;
     font-weight: 500;
 }
@@ -2064,9 +2177,15 @@ table.array-flexible-dual-scale td.dual_scale_separator {
 /* En-têtes de colonnes Scale A / Scale B */
 .ls-table-wrapper table thead th.left-header,
 .ls-table-wrapper table thead th.right-header {
-    background-color: var(--background-contrast-grey, #f6f6f6) !important;
+    /* Copier exactement les propriétés DSFR de .fr-table thead */
+    /* DISABLED - Let DSFR thead background-image show through */
+    /*     background-color: var(--background-contrast-grey); */
+    background-image: linear-gradient(0deg, var(--border-plain-grey), var(--border-plain-grey));
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: 100% 2px;
     font-weight: 700;
-    color: var(--text-label-grey) !important;
+    color: var(--text-title-grey);
     text-align: center;
 }
 
@@ -2076,11 +2195,27 @@ table.array-flexible-dual-scale td.dual_scale_separator {
 }
 
 /* Bordures renforcées en bas de la ligne d'en-tête */
+/* DISABLED - Testing global rule (line 1680) - Can be restored if needed */
+/*
 .ls-table-wrapper table thead tr.ls-heading th.left-header,
 .ls-table-wrapper table thead tr.ls-heading th.right-header,
 .ls-table-wrapper table thead tr.ls-heading td {
     border-bottom: 2px solid var(--border-default-grey) !important;
 }
+*/
+
+/* Ajouter la bordure via background-image sur les TH spécifiquement */
+/* DISABLED - Testing global rule (line 1680) - Can be restored if needed */
+/*
+.ls-table-wrapper table thead tr.ls-heading th.left-header,
+.ls-table-wrapper table thead tr.ls-heading th.right-header {
+    background-color: var(--background-contrast-grey) !important;
+    background-image: linear-gradient(0deg, var(--border-plain-grey), var(--border-plain-grey)) !important;
+    background-position: bottom !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% 2px !important;
+}
+*/
 
 /* En-têtes de lignes (première colonne) */
 .ls-table-wrapper table:has(.ddarrayseparator) tbody th.answertext {

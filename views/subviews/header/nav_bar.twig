@@ -36,7 +36,7 @@ For the survey navigator ("Next", "Back", etc.), see: navigation/navigator.twig
                             {% if aSurveyInfo.options.brandlogo == "on" and aSurveyInfo.options.brandlogofile %}
                                 <div class="fr-header__operator">
                                     <a href="{{ aSurveyInfo.surveyUrl }}" title="{{ gT("Home") }} - {{ aSurveyInfo.name }}">
-                                        {{ image(aSurveyInfo.options.brandlogofile, aSurveyInfo.name, {"class": "fr-responsive-img", "style": "width: 3.5rem"}) }}
+                                        {{ image(aSurveyInfo.options.brandlogofile, aSurveyInfo.name, {"class": "fr-responsive-img", "style": "width: 6rem"}) }}
                                     </a>
                                 </div>
                             {% endif %}

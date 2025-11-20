@@ -62,6 +62,7 @@
         <fixnumauto type="buttons" category="Options générales" width="4" title="Correction automatique des valeurs numériques" options="enable|partial|disable" optionlabels="Oui|Pour expression|Non">enable</fixnumauto>
 
         <!-- Images et logos -->
+        <logo_warning type="textarea" category="Images" width="12" rows="4" title="⚠️ Avertissement DSFR" readonly="readonly">Seuls les opérateurs et directions recevant du public sont autorisés à afficher leur logo dans l'en-tête. Si un logo est utilisé, vous devez modifier le texte Marianne pour qu'il affiche "République&lt;br&gt;Française"</logo_warning>
         <brandlogo type="buttons" category="Images" width="4" title="Afficher le logo" options="on|off" optionlabels="Oui|Non">on</brandlogo>
         <brandlogofile type="dropdown" category="Images" width="6" title="Fichier logo" parent="brandlogo">./files/logo.png</brandlogofile>
         <!-- <hideprivacyinfo type="buttons" category="Options générales" width="4" title="Masquer les informations de confidentialité" options="on|off" optionlabels="Oui|Non">off</hideprivacyinfo> -->

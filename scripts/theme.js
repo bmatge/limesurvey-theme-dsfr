@@ -24,7 +24,7 @@
     // ============================================
 
     // Charger le JS DSFR depuis les ressources locales
-    // Les fichiers sont dans le dossier dsfr-dist/js/
+    // Les fichiers sont dans le dossier js/
     // Trouver l'URL du thème en analysant le script actuel
     function getThemeUrl() {
         // Chercher le script theme.js actuel pour déduire le chemin
@@ -58,7 +58,7 @@
     }
 
     const themeUrl = getThemeUrl();
-    const dsfrPath = themeUrl + '/dsfr-dist/js/';
+    const dsfrPath = themeUrl + '/js/';
 
     const dsfrScript = document.createElement('script');
     dsfrScript.src = dsfrPath + 'dsfr.module.min.js';

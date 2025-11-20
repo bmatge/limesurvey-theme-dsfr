@@ -1,189 +1,173 @@
-# Thème DSFR pour LimeSurvey
+# DSFR - Ressources locales
 
-Thème conforme au **Système de Design de l'État Français (DSFR)** pour les enquêtes LimeSurvey.
+Ce dossier contient toutes les ressources DSFR (Système de Design de l'État Français) hébergées localement pour garantir l'autonomie complète du thème LimeSurvey.
 
-## 🎨 À propos
-
-Ce thème applique les standards du [Système de Design de l'État Français](https://www.systeme-de-design.gouv.fr/) aux enquêtes LimeSurvey, garantissant :
-
-- ✅ Conformité aux normes de l'État Français
-- ✅ Accessibilité RGAA
-- ✅ Responsive design
-- ✅ Thème clair/sombre
-- ✅ Compatibilité avec tous les types de questions LimeSurvey
-
-## 📦 Installation
-
-### Avec Docker (recommandé pour le développement)
-
-1. **Cloner le dépôt** (si ce n'est pas déjà fait)
-```bash
-git clone [url-du-repo]
-cd LimeSurvey-DSFR
-```
-
-2. **Démarrer Docker**
-```bash
-docker-compose up -d
-```
-
-3. **Accéder à LimeSurvey**
-   - URL : http://localhost:8080
-   - Identifiants admin : `admin` / `admin`
-
-4. **Activer le thème**
-   - Connectez-vous à l'interface d'administration
-   - Allez dans **Configuration** > **Thèmes**
-   - Sélectionnez le thème **DSFR** pour vos enquêtes
-
-### Installation manuelle
-
-Si vous avez déjà une instance LimeSurvey :
-
-1. Copiez le dossier `themes/survey/dsfr` vers votre installation LimeSurvey
-2. Dans l'admin LimeSurvey : **Configuration** > **Thèmes**
-3. Le thème DSFR apparaîtra dans la liste des thèmes disponibles
-
-## 🚀 Développement en temps réel
-
-Grâce au montage de volume Docker, vos modifications sont **instantanément visibles** :
-
-1. **Modifiez les fichiers** dans `themes/survey/dsfr/`
-   - CSS : `css/theme.css` ou `css/custom.css`
-   - JavaScript : `scripts/theme.js` ou `scripts/custom.js`
-
-2. **Rechargez la page** dans votre navigateur → les changements apparaissent immédiatement
-
-3. **Pour les modifications de config.xml** :
-   - Allez dans l'admin LimeSurvey
-   - **Configuration** > **Thèmes** > **DSFR** > **Réinitialiser**
-
-## 📁 Structure du thème
+## Structure
 
 ```
-themes/survey/dsfr/
-├── config.xml              # Configuration du thème
+dsfr-dist/
 ├── css/
-│   ├── theme.css          # Styles DSFR principaux
-│   ├── custom.css         # Vos styles personnalisés
-│   └── print_theme.css    # Styles d'impression
-├── scripts/
-│   ├── theme.js           # JavaScript DSFR
-│   └── custom.js          # Vos scripts personnalisés
-├── files/                  # Ressources (logos, images)
-├── views/                  # Templates Twig (optionnel)
-└── README.md              # Ce fichier
+│   ├── dsfr.min.css          # CSS principal DSFR
+│   ├── icons.min.css         # Icônes Remix Icon
+│   └── icons-system.min.css  # Icônes système
+├── js/
+│   ├── dsfr.module.min.js    # JavaScript DSFR (ES modules)
+│   └── dsfr.nomodule.min.js  # JavaScript DSFR (legacy browsers)
+├── fonts/
+│   ├── Marianne-*.woff2      # Fonts Marianne (format woff2)
+│   ├── Marianne-*.woff       # Fonts Marianne (format woff)
+│   ├── Spectral-*.woff2      # Fonts Spectral (format woff2)
+│   └── Spectral-*.woff       # Fonts Spectral (format woff)
+└── icons/
+    └── (SVG icons - référencés par icons.min.css)
 ```
 
-## ⚙️ Configuration
+## Version actuelle
 
-Le thème propose plusieurs options configurables dans l'interface d'administration :
+**DSFR v1.11.2**
 
-### Options générales
-- **Conteneur de l'enquête** : Activer/désactiver le conteneur
-- **Afficher les popups** : Gestion des messages
-- **Position de l'aide** : Haut ou bas des questions
+## Pourquoi des ressources locales ?
 
-### Options DSFR
-- **Variante du thème** : Clair ou sombre
-- **Afficher Marianne** : Logo de la République Française
-- **Liens de pied de page** : Mentions légales, accessibilité, etc.
+1. **Autonomie** : Le thème fonctionne sans connexion internet
+2. **Performance** : Pas de dépendance aux CDN externes
+3. **Sécurité** : Contrôle total sur les ressources chargées
+4. **Conformité** : Respect des exigences de souveraineté numérique
+5. **Stabilité** : Protection contre les changements ou indisponibilités des CDN
 
-## 🎨 Personnalisation
+## Comment mettre à jour DSFR
 
-### CSS personnalisé
+### Méthode 1 : Script automatique (recommandé)
 
-Utilisez `css/custom.css` pour vos styles spécifiques :
-
-```css
-/* Exemple : modifier la couleur primaire */
-:root {
-    --limesurvey-primary: #000091; /* Bleu France */
-}
-
-/* Ajouter vos styles personnalisés */
-.ma-classe-custom {
-    /* ... */
-}
-```
-
-### JavaScript personnalisé
-
-Utilisez `scripts/custom.js` pour vos scripts :
-
-```javascript
-(function() {
-    'use strict';
-
-    // Votre code ici
-
-})();
-```
-
-## 🔧 Commandes Docker utiles
+Créez un script `update-dsfr.sh` à la racine du thème :
 
 ```bash
-# Démarrer les conteneurs
-docker-compose up -d
+#!/bin/bash
+# Script de mise à jour des ressources DSFR
 
-# Voir les logs
-docker-compose logs -f limesurvey
+VERSION="1.11"  # Modifiez cette version selon vos besoins
+BASE_URL="https://unpkg.com/@gouvfr/dsfr@${VERSION}/dist"
+DIST_DIR="./dsfr-dist"
 
-# Arrêter les conteneurs
-docker-compose down
+echo "Mise à jour DSFR vers la version ${VERSION}..."
 
-# Arrêter et supprimer les données
-docker-compose down -v
+# CSS
+echo "Téléchargement des CSS..."
+curl -sL "${BASE_URL}/dsfr.min.css" -o "${DIST_DIR}/css/dsfr.min.css"
+curl -sL "${BASE_URL}/utility/icons/icons.min.css" -o "${DIST_DIR}/css/icons.min.css"
+curl -sL "${BASE_URL}/utility/icons/icons-system/icons-system.min.css" -o "${DIST_DIR}/css/icons-system.min.css"
 
-# Redémarrer après des changements
-docker-compose restart limesurvey
+# JavaScript
+echo "Téléchargement des JS..."
+curl -sL "${BASE_URL}/dsfr.module.min.js" -o "${DIST_DIR}/js/dsfr.module.min.js"
+curl -sL "${BASE_URL}/dsfr.nomodule.min.js" -o "${DIST_DIR}/js/dsfr.nomodule.min.js"
+
+# Fonts Marianne
+echo "Téléchargement des fonts Marianne..."
+for variant in Light Regular Medium Bold; do
+  for style in "" "_Italic"; do
+    curl -sL "${BASE_URL}/fonts/Marianne-${variant}${style}.woff2" -o "${DIST_DIR}/fonts/Marianne-${variant}${style}.woff2"
+    curl -sL "${BASE_URL}/fonts/Marianne-${variant}${style}.woff" -o "${DIST_DIR}/fonts/Marianne-${variant}${style}.woff"
+  done
+done
+
+# Fonts Spectral
+echo "Téléchargement des fonts Spectral..."
+for variant in Regular ExtraBold; do
+  curl -sL "${BASE_URL}/fonts/Spectral-${variant}.woff2" -o "${DIST_DIR}/fonts/Spectral-${variant}.woff2"
+  curl -sL "${BASE_URL}/fonts/Spectral-${variant}.woff" -o "${DIST_DIR}/fonts/Spectral-${variant}.woff"
+done
+
+echo "✅ Mise à jour terminée !"
+echo "N'oubliez pas de tester le thème après la mise à jour."
 ```
 
-## 📚 Ressources
+Rendez le script exécutable et lancez-le :
 
-- [Documentation DSFR](https://www.systeme-de-design.gouv.fr/)
-- [Documentation LimeSurvey](https://manual.limesurvey.org/)
-- [Guide des thèmes LimeSurvey](https://manual.limesurvey.org/Themes)
-- [Composants DSFR](https://www.systeme-de-design.gouv.fr/composants)
+```bash
+chmod +x update-dsfr.sh
+./update-dsfr.sh
+```
 
-## 🐛 Dépannage
+### Méthode 2 : Mise à jour manuelle
 
-### Le thème n'apparaît pas dans la liste
+1. **CSS** :
+   ```bash
+   cd dsfr-dist/css
+   curl -O https://unpkg.com/@gouvfr/dsfr@1.11/dist/dsfr.min.css
+   curl -O https://unpkg.com/@gouvfr/dsfr@1.11/dist/utility/icons/icons.min.css
+   ```
 
-1. Vérifiez que le dossier `themes/survey/dsfr` existe
-2. Vérifiez que `config.xml` est valide
-3. Videz le cache LimeSurvey : **Configuration** > **Paramètres globaux** > **Vider le cache**
+2. **JavaScript** :
+   ```bash
+   cd dsfr-dist/js
+   curl -O https://unpkg.com/@gouvfr/dsfr@1.11/dist/dsfr.module.min.js
+   curl -O https://unpkg.com/@gouvfr/dsfr@1.11/dist/dsfr.nomodule.min.js
+   ```
 
-### Les modifications CSS/JS ne s'appliquent pas
+3. **Fonts** :
+   ```bash
+   cd dsfr-dist/fonts
+   # Télécharger chaque font individuellement depuis :
+   # https://unpkg.com/@gouvfr/dsfr@1.11/dist/fonts/
+   ```
 
-1. Rechargez la page avec **Ctrl + Shift + R** (vidage du cache navigateur)
-2. Vérifiez les erreurs dans la console du navigateur (F12)
-3. Pour `config.xml`, réinitialisez le thème dans l'admin
+### Méthode 3 : Via npm (si disponible)
 
-### Le DSFR ne se charge pas
+Si vous avez npm installé sur votre serveur :
 
-1. Vérifiez votre connexion internet (le CSS/JS est chargé via CDN)
-2. Consultez la console du navigateur pour les erreurs de chargement
-3. Pour une installation hors ligne, installez le DSFR via npm
+```bash
+# Installer DSFR via npm
+npm install @gouvfr/dsfr@1.11
 
-## 🤝 Contribution
+# Copier les fichiers nécessaires
+cp node_modules/@gouvfr/dsfr/dist/dsfr.min.css dsfr-dist/css/
+cp node_modules/@gouvfr/dsfr/dist/utility/icons/icons.min.css dsfr-dist/css/
+cp node_modules/@gouvfr/dsfr/dist/dsfr.module.min.js dsfr-dist/js/
+cp node_modules/@gouvfr/dsfr/dist/dsfr.nomodule.min.js dsfr-dist/js/
+cp -r node_modules/@gouvfr/dsfr/dist/fonts/* dsfr-dist/fonts/
 
-Les contributions sont les bienvenues ! N'hésitez pas à :
+# Nettoyer
+rm -rf node_modules package-lock.json
+```
 
-1. Forker le projet
-2. Créer une branche (`git checkout -b feature/amelioration`)
-3. Commiter vos changements (`git commit -m 'Ajout d'une fonctionnalité'`)
-4. Pousser vers la branche (`git push origin feature/amelioration`)
-5. Ouvrir une Pull Request
+## Vérification après mise à jour
 
-## 📄 Licence
+1. **Vérifier les chemins** :
+   - Les CSS doivent correctement référencer les fonts avec `url(../fonts/...)`
+   - Les icônes doivent être accessibles
 
-GNU General Public License version 2 or later
+2. **Tester le thème** :
+   - Charger une enquête LimeSurvey
+   - Vérifier que les styles DSFR s'appliquent correctement
+   - Vérifier que les icônes s'affichent
+   - Tester les composants interactifs (modales, accordéons, etc.)
 
-## 📧 Contact
+3. **Test hors-ligne** :
+   - Désactiver votre connexion internet
+   - Recharger une page d'enquête
+   - Vérifier que tout fonctionne parfaitement
 
-Pour toute question ou suggestion, n'hésitez pas à ouvrir une issue sur GitHub.
+## Compatibilité des versions
 
----
+| DSFR Version | LimeSurvey | Date de test |
+|--------------|------------|--------------|
+| 1.11.2       | 6.0+       | 2025-11-15   |
 
-**Note** : Ce thème est en cours de développement. Les retours et contributions sont appréciés !
+## Sources officielles
+
+- **DSFR** : https://www.systeme-de-design.gouv.fr/
+- **Documentation** : https://www.systeme-de-design.gouv.fr/composants-et-modeles/
+- **GitHub** : https://github.com/GouvernementFR/dsfr
+- **NPM** : https://www.npmjs.com/package/@gouvfr/dsfr
+- **CDN unpkg** : https://unpkg.com/@gouvfr/dsfr@1.11/
+
+## Support
+
+Pour toute question ou problème :
+- GitHub Issues : https://github.com/bmatge/limesurvey-theme-dsfr/issues
+- Documentation LimeSurvey DSFR : Voir README.md à la racine du thème
+
+## Licence
+
+Les ressources DSFR sont sous licence MIT.
+Voir : https://github.com/GouvernementFR/dsfr/blob/main/LICENSE.md

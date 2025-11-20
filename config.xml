@@ -31,6 +31,10 @@
     <!-- Fichiers CSS et JavaScript -->
     <files>
         <css>
+            <!-- Fichiers CSS DSFR (doivent être déclarés explicitement) -->
+            <replace>css/dsfr-no-datauri.min.css</replace>
+            <replace>css/icons.min.css</replace>
+            <replace>css/dsfr-grid-helpers.css</replace>
             <!-- On remplace le CSS de base pour utiliser DSFR -->
             <replace>css/theme.css</replace>
             <replace>css/custom.css</replace>
@@ -51,19 +55,19 @@
     <!-- Options du thème (configurables dans l'interface admin) -->
     <options>
         <!-- Options simples -->
-        <container type="buttons" category="Options générales" width="4" title="Conteneur de l'enquête" options="on|off" optionlabels="Oui|Non">on</container>
-        <showpopups type="buttons" category="Options générales" width="4" title="Afficher les popups" options="1|0|-1" optionlabels="Popup|Sur la page|Non">1</showpopups>
+        <!-- <container type="buttons" category="Options générales" width="4" title="Conteneur de l'enquête" options="on|off" optionlabels="Oui|Non">on</container> -->
+        <!-- <showpopups type="buttons" category="Options générales" width="4" title="Afficher les popups" options="1|0|-1" optionlabels="Popup|Sur la page|Non">1</showpopups> -->
         <showclearall type="buttons" category="Options générales" width="4" title="Bouton 'Tout effacer'" options="on|off" optionlabels="Oui|Non">off</showclearall>
-        <questionhelptextposition type="buttons" category="Options générales" width="4" title="Position de l'aide" options="top|bottom" optionlabels="Haut|Bas">top</questionhelptextposition>
+        <!-- <questionhelptextposition type="buttons" category="Options générales" width="4" title="Position de l'aide" options="top|bottom" optionlabels="Haut|Bas">top</questionhelptextposition> -->
         <fixnumauto type="buttons" category="Options générales" width="4" title="Correction automatique des valeurs numériques" options="enable|partial|disable" optionlabels="Oui|Pour expression|Non">enable</fixnumauto>
 
         <!-- Images et logos -->
         <brandlogo type="buttons" category="Images" width="4" title="Afficher le logo" options="on|off" optionlabels="Oui|Non">on</brandlogo>
         <brandlogofile type="dropdown" category="Images" width="6" title="Fichier logo" parent="brandlogo">./files/logo.png</brandlogofile>
-        <hideprivacyinfo type="buttons" category="Options générales" width="4" title="Masquer les informations de confidentialité" options="on|off" optionlabels="Oui|Non">off</hideprivacyinfo>
+        <!-- <hideprivacyinfo type="buttons" category="Options générales" width="4" title="Masquer les informations de confidentialité" options="on|off" optionlabels="Oui|Non">off</hideprivacyinfo> -->
 
         <!-- Variantes DSFR (thème clair/sombre) -->
-        <dsfr_theme type="dropdown" category="DSFR" title="Variante du thème" width="4">light
+        <dsfr_theme type="dropdown" category="Header et footer" title="Variante du thème" width="4">light
             <dropdownoptions>
                 <optgroup>
                     <option value="light">Clair</option>
@@ -73,8 +77,31 @@
         </dsfr_theme>
 
         <!-- Options spécifiques DSFR -->
-        <show_marianne type="buttons" category="DSFR" width="4" title="Afficher Marianne" options="on|off" optionlabels="Oui|Non">on</show_marianne>
-        <show_footer_links type="buttons" category="DSFR" width="4" title="Liens de pied de page" options="on|off" optionlabels="Oui|Non">on</show_footer_links>
+        <show_marianne type="buttons" category="Header et footer" width="4" title="Afficher Marianne" options="on|off" optionlabels="Oui|Non">on</show_marianne>
+        <show_footer_links type="buttons" category="Header et footer" width="4" title="Liens de pied de page" options="on|off" optionlabels="Oui|Non">on</show_footer_links>
+        <marianne_text type="textarea" category="Header et footer" width="6" rows="2" title="Texte Marianne" />
+        <header_title type="textarea" category="Header et footer" width="6" rows="2" title="Titre dans l'en-tête" />
+        <footer_text type="textarea" category="Header et footer" width="12" rows="3" title="Texte dans le pied de page" />
+        <intellectual_property type="textarea" category="Header et footer" width="12" rows="3" title="Propriété intellectuelle" />
+
+        <!-- Onglet Accessibilité -->
+        <accessibility_content type="textarea" category="Accessibilité" width="12" rows="40" title="Contenu Accessibilité (le titre H1 est déjà dans le template, ne pas le répéter ici)" />
+
+        <!-- Onglet Mentions légales -->
+        <editor type="textarea" category="Mentions légales" width="12" rows="5" title="Éditeur" />
+        <publication_director type="textarea" category="Mentions légales" width="12" rows="3" title="Directeur de publication" />
+        <host type="textarea" category="Mentions légales" width="12" rows="3" title="Hébergeur" />
+        <legal_content type="textarea" category="Mentions légales" width="12" rows="10" title="Contenu personnalisé (remplace tout le contenu par défaut si rempli)" />
+
+        <!-- Onglet Données personnelles -->
+        <data_controller type="textarea" category="Données personnelles" width="12" rows="3" title="Responsable de traitement" />
+        <survey_purpose type="textarea" category="Données personnelles" width="12" rows="3" title="Objectif du questionnaire" />
+        <data_retention type="text" category="Données personnelles" width="6" title="Durée de conservation" />
+        <contact_email type="text" category="Données personnelles" width="6" title="Email de contact" />
+        <privacy_content type="textarea" category="Données personnelles" width="12" rows="10" title="Contenu personnalisé (remplace tout le contenu par défaut si rempli)" />
+
+        <!-- Onglet Gestion des cookies -->
+        <cookies_content type="textarea" category="Gestion des cookies" width="12" rows="10" title="Contenu Gestion des cookies (le titre H1 est déjà dans le template, ne pas le répéter ici)" />
     </options>
 
     <!-- Configuration du moteur de rendu -->

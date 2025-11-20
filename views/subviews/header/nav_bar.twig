@@ -23,7 +23,13 @@ For the survey navigator ("Next", "Back", etc.), see: navigation/navigator.twig
                             <div class="fr-header__logo">
                                 {% if aSurveyInfo.options.show_marianne == "on" or aSurveyInfo.options.show_marianne is not defined %}
                                     <a href="{{ aSurveyInfo.surveyUrl }}" title="{{ gT("Home") }} - {{ aSurveyInfo.name }}">
-                                        <p class="fr-logo">République<br>Française</p>
+                                        <p class="fr-logo">
+                                            {% if aSurveyInfo.options.marianne_text %}
+                                                {{ aSurveyInfo.options.marianne_text|raw }}
+                                            {% else %}
+                                                République<br>Française
+                                            {% endif %}
+                                        </p>
                                     </a>
                                 {% endif %}
                             </div>
@@ -55,7 +61,13 @@ For the survey navigator ("Next", "Back", etc.), see: navigation/navigator.twig
                                 <p class="fr-header__service-title fr-text--sm">{{ aSurveyInfo.options.organization_name }}</p>
                             {% endif %}
                             {% if aSurveyInfo.description %}
-                                <p class="fr-header__service-tagline">{{ aSurveyInfo.name }}</p>
+                                <p class="fr-header__service-tagline">
+                                    {% if aSurveyInfo.options.header_title %}
+                                        {{ aSurveyInfo.options.header_title|raw }}
+                                    {% else %}
+                                        {{ aSurveyInfo.name }}
+                                    {% endif %}
+                                </p>
                             {% endif %}
                         </div>
                     </div>

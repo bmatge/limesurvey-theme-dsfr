@@ -12,7 +12,13 @@ Les liens pointent vers # - à personnaliser selon votre organisme
                 </a>
             </div>
             <div class="fr-footer__content">
-                <p class="fr-footer__content-desc">{{ aSurveyInfo.name }}</p>
+                <p class="fr-footer__content-desc">
+                    {% if aSurveyInfo.options.footer_text %}
+                        {{ aSurveyInfo.options.footer_text|raw }}
+                    {% else %}
+                        {{ aSurveyInfo.name }}
+                    {% endif %}
+                </p>
         <ul class="fr-footer__content-list">
           <li class="fr-footer__content-item">
             <a title="info.gouv.fr - nouvelle fenêtre" id="footer__content-link-0" href="https://info.gouv.fr" target="_blank" rel="noopener external" class="fr-footer__content-link">info.gouv.fr</a>
@@ -33,7 +39,7 @@ Les liens pointent vers # - à personnaliser selon votre organisme
             <ul class="fr-footer__bottom-list">
                 <li class="fr-footer__bottom-item">
                     <button class="fr-footer__bottom-link" data-fr-opened="false" aria-controls="accessibility-modal">
-                        Accessibilité : non conforme
+                        Accessibilité : partiellement conforme
                     </button>
                 </li>
                 <li class="fr-footer__bottom-item">
@@ -53,11 +59,15 @@ Les liens pointent vers # - à personnaliser selon votre organisme
                 </li>
             </ul>
             <div class="fr-footer__bottom-copy">
-                <p>
-                    Sauf mention explicite de propriété intellectuelle détenue par des tiers,
-                    les contenus de ce site sont proposés sous
-                    <a href="https://github.com/etalab/licence-ouverte/blob/master/LO.md" target="_blank" rel="noopener external">licence etalab-2.0</a>
-                </p>
+                {% if aSurveyInfo.options.intellectual_property %}
+                    {{ aSurveyInfo.options.intellectual_property|raw }}
+                {% else %}
+                    <p>
+                        Sauf mention explicite de propriété intellectuelle détenue par des tiers,
+                        les contenus de ce site sont proposés sous
+                        <a href="https://github.com/etalab/licence-ouverte/blob/master/LO.md" target="_blank" rel="noopener external">licence etalab-2.0</a>
+                    </p>
+                {% endif %}
             </div>
         </div>
     </div>

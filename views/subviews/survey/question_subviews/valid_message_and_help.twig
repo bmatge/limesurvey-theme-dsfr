@@ -21,7 +21,7 @@
 
 <!-- LimeSurvey valid message and help -->
 <div class="{{ aSurveyInfo.class.questionvalidcontainer }} text-info fr-col-12 dsfr-validation-container" {{ aSurveyInfo.attr.questionvalidcontainer }}>
-    <div class="dsfr-valid-message" style="display: none;">{{ aQuestion.valid_message | raw }}</div> {# The validation message, eg: "Only numbers may be entered in this field.". Hidden by default, shown only after error correction #}
-    <div class="dsfr-man-message">{{ aQuestion.man_message | raw }}</div> {# The question mandatory error message: "This question is mandatory!". This text is inside EM Helper, and can be changed by creating a translation file #}
-    <div class="dsfr-file-valid-message" style="display: none;">{{ aQuestion.file_valid_message | raw }}</div> {# Used only for file upload question type... TODO: check if we can remove it and use valid_message for file upload question type too #}
+    <div class="dsfr-valid-message" role="alert" aria-live="polite" aria-atomic="true" style="display: none;">{{ aQuestion.valid_message | raw }}</div> {# The validation message, eg: "Only numbers may be entered in this field.". Hidden by default, shown only after error correction #}
+    <div class="dsfr-man-message" role="alert" aria-live="assertive" aria-atomic="true">{{ aQuestion.man_message | raw }}</div> {# The question mandatory error message: "This question is mandatory!". This text is inside EM Helper, and can be changed by creating a translation file #}
+    <div class="dsfr-file-valid-message" role="alert" aria-live="polite" aria-atomic="true" style="display: none;">{{ aQuestion.file_valid_message | raw }}</div> {# Used only for file upload question type... TODO: check if we can remove it and use valid_message for file upload question type too #}
 </div>

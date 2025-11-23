@@ -30,6 +30,7 @@
 <div role="group" aria-labelledby="ls-question-text-{{ basename }}">
     <div class="fr-table fr-table--bordered" data-fr-js-table="true">
         <table class="{{ coreClass }}">
+            <caption class="fr-sr-only">{{ gT('Dual scale response matrix') }}</caption>
             <colgroup class="col-responses">
                 <col class="answertext" style="width: {{ answerwidth }}%;" />
                 {% for code, label in labelans0 %}
@@ -52,29 +53,29 @@
             <thead>
                 {% if leftheader or rightheader %}
                     <tr class="ls-heading dualscale-header">
-                        <td>&nbsp;</td>
-                        <th class="fr-text--bold" colspan="{{ labelans0|length }}">{{ processString(leftheader) }}</th>
-                        {% if separatorwidth %}<td>&nbsp;</td>{% endif %}
-                        <th class="fr-text--bold" colspan="{{ labelans1|length }}">{{ processString(rightheader) }}</th>
-                        {% if shownoanswer %}<td>&nbsp;</td>{% endif %}
-                        {% if rightexists %}<td>&nbsp;</td>{% endif %}
+                        <th scope="col"></th>
+                        <th scope="colgroup" class="fr-text--bold" colspan="{{ labelans0|length }}">{{ processString(leftheader) }}</th>
+                        {% if separatorwidth %}<th scope="col"></th>{% endif %}
+                        <th scope="colgroup" class="fr-text--bold" colspan="{{ labelans1|length }}">{{ processString(rightheader) }}</th>
+                        {% if shownoanswer %}<th scope="col"></th>{% endif %}
+                        {% if rightexists %}<th scope="col"></th>{% endif %}
                     </tr>
                 {% endif %}
 
                 <tr class="ls-heading dualscale-labels">
-                    <td>&nbsp;</td>
+                    <th scope="col"></th>
                     {% for code, label in labelans0 %}
-                        <th class="fr-text--bold answertext" role="columnheader">{{ processString(label) }}</th>
+                        <th scope="col" class="fr-text--bold answertext">{{ processString(label) }}</th>
                     {% endfor %}
-                    {% if separatorwidth %}<td>&nbsp;</td>{% endif %}
+                    {% if separatorwidth %}<th scope="col"></th>{% endif %}
                     {% for code, label in labelans1 %}
-                        <th class="fr-text--bold answertext" role="columnheader">{{ processString(label) }}</th>
+                        <th scope="col" class="fr-text--bold answertext">{{ processString(label) }}</th>
                     {% endfor %}
                     {% if shownoanswer %}
-                        <th class="fr-text--bold noanswer-text">{{ gT('No answer') }}</th>
+                        <th scope="col" class="fr-text--bold noanswer-text">{{ gT('No answer') }}</th>
                     {% endif %}
                     {% if rightexists %}
-                        <td>&nbsp;</td>
+                        <th scope="col"></th>
                     {% endif %}
                 </tr>
             </thead>
@@ -86,7 +87,7 @@
                     {% endif %}
 
                     <tr id="javatbd{{ subquestion.myfname }}" class="answers-list dualscale-row {% if i % 2 %}ls-odd{% else %}ls-even{% endif %}{% if subquestion.alert %} ls-mandatory-error{% endif %}" role="group">
-                        <th id="answertext{{ subquestion.myfname }}" class="answertext fr-text--bold{% if answerwidth==0 %} fr-sr-only{% endif %}" role="rowheader">
+                        <th scope="row" id="answertext{{ subquestion.myfname }}" class="answertext fr-text--bold{% if answerwidth==0 %} fr-sr-only{% endif %}">
                             {{ processString(subquestion.answertext) }}
                         </th>
 
@@ -101,7 +102,7 @@
                                     aria-labelledby="answertext{{ subquestion.myfname }}"
                                     {{ labelcode0_checked[subquestion.title][ld]|raw }}
                                 />
-                                <label class="ls-label-xs-visibility" for="answer{{ subquestion.myfname0 }}-{{ ld }}" aria-hidden="true">
+                                <label class="fr-sr-only" for="answer{{ subquestion.myfname0 }}-{{ ld }}">
                                     {{ processString(labelans0[j]) }}
                                 </label>
                             </td>
@@ -125,7 +126,7 @@
                                     aria-labelledby="answertext{{ subquestion.myfname }}"
                                     {{ labelcode1_checked[subquestion.title][ld]|raw }}
                                 />
-                                <label class="ls-label-xs-visibility" for="answer{{ subquestion.myfname1 }}-{{ ld }}" aria-hidden="true">
+                                <label class="fr-sr-only" for="answer{{ subquestion.myfname1 }}-{{ ld }}">
                                     {{ processString(labelans1[j]) }}
                                 </label>
                             </td>

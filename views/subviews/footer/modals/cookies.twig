@@ -12,20 +12,23 @@
                             Gestion des cookies
                         </h1>
 
-                        <h2>Cookies utilisés</h2>
-                        <p>Ce site utilise les cookies suivants :</p>
+                        {% if aSurveyInfo.options.cookies_content %}
+                            {{ aSurveyInfo.options.cookies_content|raw }}
+                        {% else %}
+                            <h2>Cookies utilisés</h2>
+                            <p>Ce site utilise les cookies suivants :</p>
 
-                        <h3>Cookies strictement nécessaires</h3>
-                        <ul>
-                            <li><strong>Session LimeSurvey</strong> : permet de conserver votre progression dans le questionnaire</li>
-                            <li><strong>Langue</strong> : mémorise votre choix de langue</li>
-                        </ul>
+                            <h3>Cookies strictement nécessaires</h3>
+                            <ul>
+                                <li><strong>Session LimeSurvey</strong> : permet de conserver votre progression dans le questionnaire</li>
+                                <li><strong>Langue</strong> : mémorise votre choix de langue</li>
+                            </ul>
 
-                        <h3>Cookies analytiques</h3>
-                        <p>Aucun cookie analytique ou de suivi n'est utilisé sur ce site.</p>
+                            <h3>Autres cookies analytiques</h3>
+                            <p>Aucun autre cookie analytique n'est utilisé sur ce site.</p>
 
-                        <h2>Désactivation</h2>
-                        <p>Vous pouvez désactiver les cookies dans les paramètres de votre navigateur. Attention : cela peut empêcher le fonctionnement du questionnaire.</p>
+
+                        {% endif %}
                     </div>
                 </div>
             </div>

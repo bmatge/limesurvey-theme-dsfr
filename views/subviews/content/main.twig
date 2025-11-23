@@ -23,29 +23,31 @@
 {# Include the form opening tag #}
 {{ include('./subviews/header/start_form.twig') }} <!-- main form -->
 
-    {# This will display the script and the hidden inputs needed for ExpressionScript Engine #}
-    {{ aSurveyInfo.EM.ScriptsAndHiddenInputs  }}
+    <main id="main-content">
+        {# This will display the script and the hidden inputs needed for ExpressionScript Engine #}
+        {{ aSurveyInfo.EM.ScriptsAndHiddenInputs  }}
 
-    {# Include the alert for no JavaScript #}
-    {{ include('./subviews/messages/no_js_alert.twig') }}
+        {# Include the alert for no JavaScript #}
+        {{ include('./subviews/messages/no_js_alert.twig') }}
 
-    {# If survey mode is "All in One", it will add the welcome/privacy messages if needed #}
-    {{ include('./subviews/privacy/allinone_mode_welcome_privacy.twig') }}
+        {# If survey mode is "All in One", it will add the welcome/privacy messages if needed #}
+        {{ include('./subviews/privacy/allinone_mode_welcome_privacy.twig') }}
 
-    {#
-        PRESENT THE QUESTION GROUPS
+        {#
+            PRESENT THE QUESTION GROUPS
 
-        This is the main part. It will render each question group for this page (depending of Survey Mode setting )
-        Each group will then render its own questions
+            This is the main part. It will render each question group for this page (depending of Survey Mode setting )
+            Each group will then render its own questions
 
-     #}
-    {% for  aGroup in aSurveyInfo.aGroups %}
-        {{ include('./subviews/survey/group.twig') }}
-    {% endfor %}
+         #}
+        {% for  aGroup in aSurveyInfo.aGroups %}
+            {{ include('./subviews/survey/group.twig') }}
+        {% endfor %}
 
-    {# Presents the navigator #}
-    {% if aSurveyInfo.aNavigator.show %}
-        {{ include('./subviews/navigation/navigator.twig') }}
-    {% endif %}
+        {# Presents the navigator #}
+        {% if aSurveyInfo.aNavigator.show %}
+            {{ include('./subviews/navigation/navigator.twig') }}
+        {% endif %}
+    </main>
 
 </form> <!-- main form -->

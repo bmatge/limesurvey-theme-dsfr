@@ -12,22 +12,30 @@
                             Mentions légales
                         </h1>
 
-                        <h2>Éditeur</h2>
-                        <p>
-                            <strong>[Nom de l'organisme]</strong><br>
-                            [Adresse]<br>
-                            [Code postal] [Ville]<br>
-                            Tél : [Téléphone]
-                        </p>
+                        {% if aSurveyInfo.options.legal_content %}
+                            {{ aSurveyInfo.options.legal_content|raw }}
+                        {% else %}
+                            <h2>Éditeur</h2>
+                            {% if aSurveyInfo.options.editor %}
+                                {{ aSurveyInfo.options.editor|raw }}
+                            {% else %}
+                                <p>[Rensigner cette information dans les options du thème]</p>
+                            {% endif %}
 
-                        <h2>Directeur de la publication</h2>
-                        <p>[Nom et fonction]</p>
+                            <h2>Directeur de la publication</h2>
+                            {% if aSurveyInfo.options.publication_director %}
+                                {{ aSurveyInfo.options.publication_director|raw }}
+                            {% else %}
+                                <p>[Rensigner cette information dans les options du thème]</p>
+                            {% endif %}
 
-                        <h2>Hébergement</h2>
-                        <p>
-                            <strong>LimeSurvey</strong><br>
-                            Plus d'informations : <a href="https://www.limesurvey.org" target="_blank" rel="noopener">limesurvey.org</a>
-                        </p>
+                            <h2>Hébergeur</h2>
+                            {% if aSurveyInfo.options.host %}
+                                {{ aSurveyInfo.options.host|raw }}
+                            {% else %}
+                                <p>[Rensigner cette information dans les options du thème]</p>
+                            {% endif %}
+                        {% endif %}
                     </div>
                 </div>
             </div>

@@ -75,6 +75,17 @@
     {% endblock %}
     <body class=" {{ aSurveyInfo.class.body }} lang-{{aSurveyInfo.languagecode}} {{aSurveyInfo.surveyformat}} {% if( aSurveyInfo.options.brandlogo == "on") %}brand-logo{%endif%}" {{ aSurveyInfo.attr.body }}>
 
+        {# DSFR Skip Link for accessibility #}
+        <div class="fr-skiplinks">
+            <nav class="fr-container" role="navigation" aria-label="{{ gT('Quick access') }}">
+                <ul class="fr-skiplinks__list">
+                    <li>
+                        <a class="fr-link" href="#main-content">{{ gT('Skip to main content') }}</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
         {# Notice if emcache is on or off, used by tests. #}
         {% if aSurveyInfo.emcache %}
             <span style="display: none;" id="__emcache_debug" value="on"></span>

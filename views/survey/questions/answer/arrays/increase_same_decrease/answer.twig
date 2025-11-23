@@ -18,7 +18,8 @@
     {% endif %}
 
     <div class="fr-table fr-table--bordered" data-fr-js-table="true">
-        <table class="array-isd-table radio-array" role="group" aria-labelledby="ls-question-text-{{ basename }}" data-fr-js-table-element="true">
+        <table class="array-isd-table radio-array" data-fr-js-table-element="true">
+        <caption class="fr-sr-only">{{ gT('Increase/Same/Decrease response matrix') }}</caption>
         <thead>
             <tr>
                 <th scope="col" class="col-answers"></th>

@@ -31,7 +31,7 @@
      data-samechoiceheight="{{samechoiceheight}}"
      data-samelistheight="{{samelistheight}}">
     <!-- Hidden select elements for session persistence -->
-    <ul class="list-unstyled ls-js-hidden-sr answers-list select-list" role="group" aria-labelledby="ls-question-text-{{basename}} ls-question-validation-{{basename}}">
+    <ul class="list-unstyled fr-sr-only answers-list select-list" role="group" aria-labelledby="ls-question-text-{{basename}} ls-question-validation-{{basename}}">
         {{sSelects|raw}}
     </ul>
 
@@ -40,7 +40,7 @@
         <div class="fr-grid-row fr-grid-row--gutters">
             <!-- Available choices (left column) -->
             <div class="fr-col-12 fr-col-md-6 ranking-available-items">
-                <strong class="sortable-subtitle sortable-rank-subtitle fr-text--lg fr-mb-2w">{{choice_title}}</strong>
+                <h4 class="sortable-subtitle sortable-rank-subtitle fr-h6 fr-mb-2w">{{choice_title}}</h4>
                 <ul id="sortable-choice-{{qId}}" class="sortable-choice sortable-list list-group" role="list">
                     {% for ansrow in answers %}
                         <li id="javatbd{{rankingName}}{{ansrow.code}}"
@@ -63,7 +63,7 @@
 
             <!-- Ranked choices (right column) -->
             <div class="fr-col-12 fr-col-md-6 ranking-sorted-items">
-                <strong class="sortable-subtitle sortable-rank-subtitle fr-text--lg fr-mb-2w">{{rank_title}}</strong>
+                <h4 class="sortable-subtitle sortable-rank-subtitle fr-h6 fr-mb-2w">{{rank_title}}</h4>
                 <ul id="sortable-rank-{{qId}}" class="sortable-rank sortable-list list-group" role="list" aria-label="{{rank_title}}">
                     <li class="d-none ls-remove"></li>
                 </ul>

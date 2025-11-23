@@ -859,3 +859,39 @@ textarea,
 }
 
 /* TODO: Ajouter les styles spécifiques ici au fur et à mesure */
+
+/* ============================================
+   LOGO MARIANNE (DRAPEAU + BLOC)
+   ============================================ */
+
+/* Drapeau tricolore */
+.fr-logo:before {
+    background-image: url(../files/logos/marianne-flag.svg), linear-gradient(90deg, #000091, #000091 50%, #e1000f 0, #e1000f), linear-gradient(90deg, #000, #000);
+    background-position: 0 -0.0625rem, 0 0, 0 0;
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    background-size: 2.75rem 1.125rem, 2.75rem 1rem, 0;
+    content: "";
+    display: block !important;
+    height: 1rem;
+    margin-bottom: 0.333rem;
+    width: 2.75rem;
+    box-shadow: 0 0 0 1px #fff;
+}
+
+/* Bloc graphique Marianne (Liberté Égalité Fraternité) */
+.fr-logo:after {
+    background-image: url(../files/logos/marianne-block.svg);
+    background-position: 0 calc(100% + 1.875rem);
+    background-repeat: no-repeat;
+    background-size: 5.25rem 3.75rem;
+    content: "";
+    display: block !important;
+    min-width: 2.625rem;
+    padding-top: 2.2083333333rem;
+}
+
+@media (min-width: 62em) {
+    .fr-logo:after {
+        background-position: -2.625rem 100%;
+    }
+}

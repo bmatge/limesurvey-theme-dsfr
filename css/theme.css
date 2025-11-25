@@ -26,16 +26,15 @@
  * pour convertir les classes Bootstrap, mais on a déjà tout converti.
  *
  * Pour mettre à jour DSFR, voir docs/DSFR-DISTRIBUTION.md
+ *
+ * Les fichiers DSFR suivants sont chargés automatiquement par LimeSurvey
+ * (déclarés dans config.xml, dans l'ordre):
+ * 1. dsfr-no-datauri.min.css - CSS principal DSFR
+ * 2. icons.min.css - Icônes DSFR (références SVG)
+ * 3. dsfr-grid-helpers.css - Helpers de grille personnalisés
+ * 4. theme.css - Ce fichier (styles personnalisés)
+ * 5. custom.css - Surcharges + linéarisation tableaux (PRIORITÉ ABSOLUE)
  */
-
-/* Import des CSS DSFR via @import pour garantir l'ordre de cascade correct */
-@import url('./dsfr-no-datauri.min.css');
-
-/* Import des icônes DSFR (références SVG externes au lieu de data URIs) */
-@import url('./icons.min.css');
-
-/* Import des helpers de grille DSFR personnalisés */
-@import url('./dsfr-grid-helpers.css');
 
 /* ============================================
    VARIABLES DSFR

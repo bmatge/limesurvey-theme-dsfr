@@ -31,11 +31,7 @@
     <!-- Fichiers CSS et JavaScript -->
     <files>
         <css>
-            <!-- Fichiers CSS DSFR (doivent être déclarés explicitement) -->
-            <replace>css/dsfr-no-datauri.min.css</replace>
-            <replace>css/icons.min.css</replace>
-            <replace>css/dsfr-grid-helpers.css</replace>
-            <!-- On remplace le CSS de base pour utiliser DSFR -->
+            <!-- CSS principal (contient @import DSFR) -->
             <replace>css/theme.css</replace>
             <replace>css/custom.css</replace>
             <!-- Supprimer les CSS Bootstrap du core LimeSurvey -->

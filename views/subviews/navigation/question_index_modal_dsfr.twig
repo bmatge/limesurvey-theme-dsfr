@@ -16,10 +16,10 @@ Question Index Modal avec Sommaire DSFR
                             </button>
                         </div>
                         <div class="fr-modal__content">
+                            <h2 id="question-index-modal-title">{{ gT("Question index") }}</h2>
 
                             <!-- Sommaire DSFR -->
                             <nav class="fr-summary" role="navigation" aria-labelledby="question-index-modal-title">
-                                <h2 class="fr-summary__title" id="question-index-modal-title">{{ gT("Question index") }}</h2>
 
                                 <ol class="fr-summary__list">
                                     {% for step, indexItem in aSurveyInfo.aQuestionIndex.items %}

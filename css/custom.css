@@ -1005,6 +1005,33 @@ textarea,
         box-sizing: border-box !important;
     }
 
+    /* ACCESSIBILITÉ : Afficher les labels fr-sr-only dans les CELLULES (td) des tableaux linéarisés
+       En mode mobile, les headers de tableau sont cachés, donc ces labels deviennent
+       essentiels pour comprendre le contexte des inputs/radios/checkboxes
+       NOTE: Uniquement dans les <td>, pas dans <th>, <thead> ou <caption> */
+    .fr-table table tbody tr td .fr-sr-only,
+    .fr-table--bordered table tbody tr td .fr-sr-only,
+    table.radio-array tbody tr td .fr-sr-only,
+    table.questions-list tbody tr td .fr-sr-only,
+    table.dropdown-array tbody tr td .fr-sr-only,
+    table.table tbody tr td .fr-sr-only {
+        position: static !important;
+        width: auto !important;
+        height: auto !important;
+        padding: 0 !important;
+        margin: 0 0 0.25rem 0 !important;
+        overflow: visible !important;
+        clip: auto !important;
+        white-space: normal !important;
+        border: 0 !important;
+        /* Afficher le label en bloc au-dessus du champ */
+        display: block !important;
+        font-size: 0.875rem !important;
+        font-weight: 400 !important;
+        color: var(--text-label-grey) !important;
+        line-height: 1.5rem !important;
+    }
+
     /* Alignement des radio/checkbox avec leurs labels sur mobile */
     .fr-table table tbody tr td input[type="radio"],
     .fr-table table tbody tr td input[type="checkbox"],

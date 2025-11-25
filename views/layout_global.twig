@@ -75,12 +75,25 @@
     {% endblock %}
     <body class=" {{ aSurveyInfo.class.body }} lang-{{aSurveyInfo.languagecode}} {{aSurveyInfo.surveyformat}} {% if( aSurveyInfo.options.brandlogo == "on") %}brand-logo{%endif%}" {{ aSurveyInfo.attr.body }}>
 
-        {# DSFR Skip Link for accessibility #}
+        {# DSFR Skip Links for accessibility #}
         <div class="fr-skiplinks">
-            <nav class="fr-container" role="navigation" aria-label="{{ gT('Quick access') }}">
+            <nav class="fr-container" role="navigation" aria-label="{{ gT('Accès rapide') }}">
                 <ul class="fr-skiplinks__list">
                     <li>
-                        <a class="fr-link" href="#main-content">{{ gT('Skip to main content') }}</a>
+                        <a class="fr-link" href="#main-content">{{ gT('Contenu') }}</a>
+                    </li>
+                    {% if (aSurveyInfo.aQuestionIndex.bShow == true) and (aSurveyInfo.format != 'A') %}
+                        <li>
+                            <a class="fr-link"
+                               href="#question-index-modal"
+                               data-fr-opened="false"
+                               aria-controls="question-index-modal">
+                                {{ gT('Index des questions') }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <a class="fr-link" href="#footer">{{ gT('Pied de page') }}</a>
                     </li>
                 </ul>
             </nav>

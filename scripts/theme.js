@@ -231,23 +231,64 @@
         const initialTheme = getCurrentTheme();
         applyTheme(initialTheme);
 
-        // Attacher les événements aux boutons (desktop et mobile)
-        const toggleButtons = document.querySelectorAll('#fr-theme-toggle, #fr-theme-toggle-mobile');
+        // Gérer les boutons toggle (fallback si modale pas disponible ou pour usage direct)
+        const toggleButtons = document.querySelectorAll('[aria-controls="fr-theme-modal"]');
         toggleButtons.forEach(function(button) {
             if (button) {
+                // Si la modale n'existe pas, faire un toggle simple
                 button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    toggleTheme();
+                    const modal = document.getElementById('fr-theme-modal');
+                    if (!modal) {
+                        // Fallback: toggle simple si pas de modale
+                        e.preventDefault();
+                        toggleTheme();
+                    }
+                    // Sinon, le DSFR gère l'ouverture de la modale automatiquement
                 });
             }
         });
 
+        // Gérer les changements dans la modale DSFR (si elle existe)
+        const radios = document.querySelectorAll('input[name="fr-radios-theme"]');
+        if (radios.length > 0) {
+            radios.forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        const selectedTheme = this.value;
+                        if (selectedTheme === 'system') {
+                            // Option système : utiliser la préférence OS
+                            localStorage.setItem(THEME_KEY, 'system');
+                            const systemTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? THEME_DARK : THEME_LIGHT;
+                            applyTheme(systemTheme);
+                        } else {
+                            // Thème explicite (light ou dark)
+                            applyTheme(selectedTheme);
+                        }
+                    }
+                });
+            });
+
+            // Mettre à jour l'état initial des radios selon la préférence actuelle
+            const currentSavedTheme = localStorage.getItem(THEME_KEY);
+            if (currentSavedTheme === 'system' || !currentSavedTheme) {
+                const systemRadio = document.getElementById('fr-radios-theme-system');
+                if (systemRadio) systemRadio.checked = true;
+            } else if (currentSavedTheme === THEME_LIGHT) {
+                const lightRadio = document.getElementById('fr-radios-theme-light');
+                if (lightRadio) lightRadio.checked = true;
+            } else if (currentSavedTheme === THEME_DARK) {
+                const darkRadio = document.getElementById('fr-radios-theme-dark');
+                if (darkRadio) darkRadio.checked = true;
+            }
+        }
+
         // Écouter les changements de préférence système
-        // (uniquement si l'utilisateur n'a pas défini de préférence manuelle)
+        // (uniquement si l'utilisateur a choisi "Système")
         if (window.matchMedia) {
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-                // Ne changer que si l'utilisateur n'a pas de préférence sauvegardée
-                if (!localStorage.getItem(THEME_KEY)) {
+                const saved = localStorage.getItem(THEME_KEY);
+                // Ne réagir que si l'utilisateur a choisi "Système" ou n'a pas de préférence
+                if (saved === 'system' || !saved) {
                     const newTheme = e.matches ? THEME_DARK : THEME_LIGHT;
                     applyTheme(newTheme);
                 }

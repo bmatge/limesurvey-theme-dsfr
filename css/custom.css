@@ -128,18 +128,6 @@ html, body {
     padding-top: 0 !important;
 }
 
-/* Masquer les labels xs-visibility sur desktop uniquement */
-/* Sur mobile (< 768px), ils seront visibles grâce à la media query dans theme.css */
-@media (min-width: 768px) {
-    table .ls-label-xs-visibility {
-        position: absolute;
-        left: -10000px;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-    }
-}
-
 /* Centrer radios/checkbox dans cellules */
 table td {
     text-align: center;

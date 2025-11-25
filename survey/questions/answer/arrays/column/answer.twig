@@ -61,7 +61,7 @@
                                 aria-labelledby="label-{{ ansrow.code }}"
                                 {{ checked[ansrow.code][ld] }}
                             />
-                            <label class="ls-label-xs-visibility" for="answer{{ aQuestions[i].myfname }}-{{ ansrow.code }}" aria-hidden="true">
+                            <label class="fr-sr-only" for="answer{{ aQuestions[i].myfname }}-{{ ansrow.code }}">
                                 {{ processString(aQuestions[i].question) }}
                             </label>
                         </td>

@@ -70,22 +70,23 @@ For the survey navigator ("Next", "Back", etc.), see: navigation/navigator.twig
                         <div class="fr-header__tools">
                             <div class="fr-header__tools-links">
                                 {% if aSurveyInfo.aQuestionIndex.bShow == true and aSurveyInfo.format != 'A' %}
-                                    <a href="#question-index-modal"
-                                       data-fr-opened="false"
-                                       aria-controls="question-index-modal"
-                                       class="fr-btn--team fr-btn"
-                                       title="{{ gT("Question index") }}">
+                                    <button type="button"
+                                            data-fr-opened="false"
+                                            aria-controls="question-index-modal"
+                                            class="fr-btn--team fr-btn"
+                                            title="{{ gT("Question index") }}">
                                         {{ gT("Question index") }}
-                                    </a>
+                                    </button>
                                 {% endif %}
 
-                                {# Sélecteur de thème clair/sombre #}
+                                {# Sélecteur de thème clair/sombre - Bouton déclencheur modale DSFR #}
                                 <div class="fr-header__tools-links">
-                                    <button class="fr-btn fr-icon-theme-fill fr-btn--icon-left"
-                                            aria-label="{{ gT("Display settings") }}"
-                                            id="fr-theme-toggle"
-                                            title="{{ gT("Switch theme (light/dark)") }}">
-                                        <span class="fr-hidden-lg">{{ gT("Theme") }}</span>
+                                    <button class="fr-btn fr-btn--display fr-btn--icon-left"
+                                            type="button"
+                                            aria-controls="fr-theme-modal"
+                                            data-fr-opened="false"
+                                            title="{{ gT("Paramètres d'affichage") }}">
+                                        {{ gT("Paramètres d'affichage") }}
                                     </button>
                                 </div>
 
@@ -136,21 +137,22 @@ For the survey navigator ("Next", "Back", etc.), see: navigation/navigator.twig
                     </button>
                     <div class="fr-header__menu-links">
                         {% if aSurveyInfo.aQuestionIndex.bShow == true and aSurveyInfo.format != 'A' %}
-                            <a href="#question-index-modal"
-                               data-fr-opened="false"
-                               aria-controls="question-index-modal"
-                               class="fr-btn--team fr-btn"
-                               title="{{ gT("Question index") }}">
+                            <button type="button"
+                                    data-fr-opened="false"
+                                    aria-controls="question-index-modal"
+                                    class="fr-btn--team fr-btn"
+                                    title="{{ gT("Question index") }}">
                                 {{ gT("Question index") }}
-                            </a>
+                            </button>
                         {% endif %}
 
-                        {# Sélecteur de thème clair/sombre (mobile) #}
-                        <button class="fr-btn fr-icon-theme-fill fr-btn--icon-left"
-                                aria-label="{{ gT("Display settings") }}"
-                                id="fr-theme-toggle-mobile"
-                                title="{{ gT("Switch theme (light/dark)") }}">
-                            {{ gT("Theme") }}
+                        {# Sélecteur de thème clair/sombre (mobile) - Bouton déclencheur modale DSFR #}
+                        <button class="fr-btn fr-btn--display fr-btn--icon-left"
+                                type="button"
+                                aria-controls="fr-theme-modal"
+                                data-fr-opened="false"
+                                title="{{ gT("Paramètres d'affichage") }}">
+                            {{ gT("Paramètres d'affichage") }}
                         </button>
 
                         {% if aSurveyInfo.alanguageChanger.show %}
@@ -187,4 +189,7 @@ For the survey navigator ("Next", "Back", etc.), see: navigation/navigator.twig
             </div>
         {% endif %}
     </header>
+
+    {# Modale DSFR pour les paramètres d'affichage (thème clair/sombre/système) #}
+    {% include 'subviews/header/theme_modal.twig' %}
 {% endif %}

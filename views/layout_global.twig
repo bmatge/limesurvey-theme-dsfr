@@ -79,9 +79,7 @@
         <div class="fr-skiplinks">
             <nav class="fr-container" role="navigation" aria-label="{{ gT('Accès rapide') }}">
                 <ul class="fr-skiplinks__list">
-                    <li>
-                        <a class="fr-link" href="#main-content">{{ gT('Contenu') }}</a>
-                    </li>
+
                     {% if (aSurveyInfo.aQuestionIndex.bShow == true) and (aSurveyInfo.format != 'A') %}
                         <li>
                             <a class="fr-link"
@@ -92,6 +90,9 @@
                             </a>
                         </li>
                     {% endif %}
+                    <li>
+                        <a class="fr-link" href="#main-content">{{ gT('Contenu') }}</a>
+                    </li>
                     <li>
                         <a class="fr-link" href="#footer">{{ gT('Pied de page') }}</a>
                     </li>

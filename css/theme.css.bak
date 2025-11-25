@@ -33,7 +33,7 @@
  * 2. icons.min.css - Icônes DSFR (références SVG)
  * 3. dsfr-grid-helpers.css - Helpers de grille personnalisés
  * 4. theme.css - Ce fichier (styles personnalisés)
- * 5. custom.css - Surcharges + linéarisation tableaux (PRIORITÉ ABSOLUE)
+ * 5. custom.css - Styles custom additionnels
  */
 
 /* ============================================
@@ -1345,6 +1345,214 @@ footer.fr-footer,
     background-color: transparent !important;
 }
 
+/* Labels de colonnes pour vue mobile - cachés en desktop */
+.ls-label-xs-visibility {
+    display: none;
+}
+
+/* Afficher les labels en vue mobile (< 768px) */
+@media (max-width: 767px) {
+    .ls-label-xs-visibility {
+        display: inline-block !important;
+        position: static !important;
+        width: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+        /* Style DSFR pour les labels */
+        font-size: 0.875rem !important;
+        line-height: 1.5rem !important;
+        font-weight: 700 !important;
+        color: var(--text-label-grey, #161616) !important;
+        vertical-align: top !important;
+        /* Marges pour alignement avec input */
+        margin-left: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
+        margin-top: 0 !important;
+        /* Permettre le wrapping du texte */
+        max-width: calc(100% - 2.5rem) !important;
+        overflow-wrap: break-word !important;
+        word-wrap: break-word !important;
+        word-break: normal !important;
+        white-space: normal !important;
+    }
+
+    /* ============================================
+       LINÉARISATION TABLEAUX EN VUE MOBILE
+       Force l'affichage en cartes verticales
+       ============================================ */
+
+    /* Masquer le tableau natif et forcer le mode bloc */
+    .fr-table table,
+    .fr-table--bordered table,
+    div[class*="fr-table"] table,
+    table.radio-array,
+    table.questions-list,
+    table.dropdown-array,
+    table.table {
+        border: 0 !important;
+        display: block !important;
+    }
+
+    /* Cacher complètement les en-têtes de colonnes */
+    .fr-table table thead,
+    .fr-table--bordered table thead,
+    div[class*="fr-table"] table thead,
+    table.radio-array thead,
+    table.questions-list thead,
+    table.dropdown-array thead,
+    table.table thead {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* Tbody en mode bloc */
+    .fr-table table tbody,
+    .fr-table--bordered table tbody,
+    div[class*="fr-table"] table tbody,
+    table.radio-array tbody,
+    table.questions-list tbody,
+    table.dropdown-array tbody,
+    table.table tbody {
+        display: block !important;
+    }
+
+    /* Chaque ligne devient une carte */
+    .fr-table table tbody tr,
+    .fr-table--bordered table tbody tr,
+    div[class*="fr-table"] table tbody tr,
+    table.radio-array tbody tr,
+    table.questions-list tbody tr,
+    table.dropdown-array tbody tr,
+    table.table tbody tr {
+        display: block !important;
+        margin-bottom: 1.5rem !important;
+        padding: 0.75rem !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Fix padding-left pour les TR avec class radio-list/answers-list
+       (custom.css force padding-left: 0 sur ces classes) */
+    .fr-table table tbody tr.radio-list,
+    .fr-table table tbody tr.answers-list,
+    .fr-table--bordered table tbody tr.radio-list,
+    .fr-table--bordered table tbody tr.answers-list,
+    table.radio-array tbody tr.radio-list,
+    table.radio-array tbody tr.answers-list,
+    table.questions-list tbody tr.radio-list,
+    table.questions-list tbody tr.answers-list {
+        padding-left: 0.75rem !important;
+    }
+
+    /* Toutes les cellules en mode bloc vertical */
+    .fr-table table tbody tr th,
+    .fr-table--bordered table tbody tr th,
+    .fr-table table tbody tr td,
+    .fr-table--bordered table tbody tr td,
+    div[class*="fr-table"] table tbody tr th,
+    div[class*="fr-table"] table tbody tr td,
+    table.radio-array tbody tr th,
+    table.radio-array tbody tr td,
+    table.questions-list tbody tr th,
+    table.questions-list tbody tr td,
+    table.dropdown-array tbody tr th,
+    table.dropdown-array tbody tr td,
+    table.table tbody tr th,
+    table.table tbody tr td {
+        display: block !important;
+        text-align: left !important;
+        border: none !important;
+        padding: 0.25rem 0 !important;
+        margin: 0 !important;
+        background-color: transparent !important;
+        width: 100% !important;
+        /* Permettre le wrapping du contenu */
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Alignement des radio/checkbox avec leurs labels sur mobile */
+    .fr-table table tbody tr td input[type="radio"],
+    .fr-table table tbody tr td input[type="checkbox"],
+    .fr-table--bordered table tbody tr td input[type="radio"],
+    .fr-table--bordered table tbody tr td input[type="checkbox"],
+    table.radio-array tbody tr td input[type="radio"],
+    table.radio-array tbody tr td input[type="checkbox"],
+    table.questions-list tbody tr td input[type="radio"],
+    table.questions-list tbody tr td input[type="checkbox"],
+    table.dropdown-array tbody tr td input[type="radio"],
+    table.dropdown-array tbody tr td input[type="checkbox"],
+    table.table tbody tr td input[type="radio"],
+    table.table tbody tr td input[type="checkbox"] {
+        display: inline-block !important;
+        vertical-align: top !important;
+        margin-right: 0 !important;
+        margin-top: 0.125rem !important; /* Petit ajustement pour aligner avec le texte */
+    }
+
+    /* Header de ligne (th) mis en évidence */
+    .fr-table table tbody tr th,
+    .fr-table--bordered table tbody tr th,
+    div[class*="fr-table"] table tbody tr th,
+    table.radio-array tbody tr th,
+    table.questions-list tbody tr th,
+    table.dropdown-array tbody tr th,
+    table.table tbody tr th {
+        font-size: 1.125rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 0.75rem !important;
+        padding-top: 0 !important;
+        padding-bottom: 0.75rem !important;
+        border-bottom: 1px solid var(--border-default-grey, #ddd) !important;
+        /* Forcer le wrapping des labels longs */
+        overflow-wrap: break-word !important;
+        word-break: break-word !important;
+    }
+
+    /* Les fr-input-group et fr-select-group doivent rester en bloc */
+    .fr-table table tbody tr td .fr-input-group,
+    .fr-table--bordered table tbody tr td .fr-input-group,
+    div[class*="fr-table"] table tbody tr td .fr-input-group,
+    table.radio-array tbody tr td .fr-input-group,
+    table.questions-list tbody tr td .fr-input-group,
+    table.dropdown-array tbody tr td .fr-input-group,
+    table.dropdown-array tbody tr td .fr-select-group,
+    table.table tbody tr td .fr-input-group {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    /* Les inputs doivent prendre toute la largeur */
+    .fr-table table tbody tr td .fr-input,
+    .fr-table--bordered table tbody tr td .fr-input,
+    div[class*="fr-table"] table tbody tr td .fr-input,
+    table.radio-array tbody tr td .fr-input,
+    table.questions-list tbody tr td .fr-input,
+    table.dropdown-array tbody tr td .fr-input,
+    table.table tbody tr td .fr-input {
+        width: 100% !important;
+    }
+
+    /* Les selects doivent aussi prendre toute la largeur */
+    .fr-table table tbody tr td select,
+    .fr-table--bordered table tbody tr td select,
+    div[class*="fr-table"] table tbody tr td select,
+    table.radio-array tbody tr td select,
+    table.questions-list tbody tr td select,
+    table.dropdown-array tbody tr td select,
+    table.table tbody tr td select,
+    .fr-table table tbody tr td .fr-select,
+    .fr-table--bordered table tbody tr td .fr-select,
+    div[class*="fr-table"] table tbody tr td .fr-select,
+    table.radio-array tbody tr td .fr-select,
+    table.questions-list tbody tr td .fr-select,
+    table.dropdown-array tbody tr td .fr-select,
+    table.table tbody tr td .fr-select {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
 
 /* ============================================
    ÉTATS D'ERREUR ET DE VALIDITÉ POUR TABLEAUX

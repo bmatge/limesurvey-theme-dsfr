@@ -1,15 +1,22 @@
 {# Modale Gestion des cookies #}
-<dialog id="cookies-modal" class="fr-modal" aria-labelledby="cookies-modal-title">
-    <div class="fr-container fr-container--fluid fr-fr-container">
+<dialog id="cookies-modal"
+        class="fr-modal"
+        aria-labelledby="cookies-modal-title"
+        aria-modal="true">
+    <div class="fr-container fr-container--fluid fr-container-md">
         <div class="fr-grid-row fr-grid-row--center">
             <div class="fr-col-12 fr-col-md-10">
                 <div class="fr-modal__body">
                     <div class="fr-modal__header">
-                        <button class="fr-btn--close fr-btn" aria-controls="cookies-modal">{{ gT("Close") }}</button>
+                        <button type="button"
+                                class="fr-btn--close fr-btn"
+                                aria-controls="cookies-modal">
+                            {{ gT("Close") }}
+                        </button>
                     </div>
                     <div class="fr-modal__content">
                         <h1 id="cookies-modal-title" class="fr-modal__title">
-                            Gestion des cookies
+                            {{ gT("Gestion des cookies") }}
                         </h1>
 
                         {% if aSurveyInfo.options.cookies_content %}

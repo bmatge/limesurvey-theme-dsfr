@@ -79,17 +79,6 @@
         <div class="fr-skiplinks">
             <nav class="fr-container" role="navigation" aria-label="{{ gT('Accès rapide') }}">
                 <ul class="fr-skiplinks__list">
-
-                    {% if (aSurveyInfo.aQuestionIndex.bShow == true) and (aSurveyInfo.format != 'A') %}
-                        <li>
-                            <a class="fr-link"
-                               href="#question-index-modal"
-                               data-fr-opened="false"
-                               aria-controls="question-index-modal">
-                                {{ gT('Index des questions') }}
-                            </a>
-                        </li>
-                    {% endif %}
                     <li>
                         <a class="fr-link" href="#main-content">{{ gT('Contenu') }}</a>
                     </li>
@@ -124,6 +113,10 @@
                 {% block nav_bar %}
                     {{ include('./subviews/header/nav_bar.twig') }}
                 {% endblock %}
+
+                {# H1 sr-only pour améliorer la navigation avec lecteurs d'écran (RGAA 9.1) #}
+                {# Placé ici pour être le premier titre de la page, avant la barre de progression (H2) #}
+                <h1 class="fr-sr-only">{{ gT(aSurveyInfo.name) }}</h1>
 
                 {# Top Container: in this template, it contains only  #}
                 {% block progress %}

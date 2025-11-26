@@ -5,10 +5,84 @@
  * sans modifier theme.js
  */
 
-console.log('DSFR custom.js chargé - version 2024-11-18');
+// Message de bienvenue
+console.log('%c\n' +
+    '             Développé avec ❤️ par la                   \n' +
+    '                                                        \n' +
+    '       ███╗   ███╗██╗██╗    ██╗███████╗██████╗           \n' +
+    '       ████╗ ████║██║██║    ██║██╔════╝██╔══██╗          \n' +
+    '       ██╔████╔██║██║██║ █╗ ██║█████╗  ██████╔╝          \n' +
+    '       ██║╚██╔╝██║██║██║███╗██║██╔══╝  ██╔══██╗          \n' +
+    '       ██║ ╚═╝ ██║██║╚███╔███╔╝███████╗██████╔╝          \n' +
+    '       ╚═╝     ╚═╝╚═╝ ╚══╝╚══╝ ╚══════╝╚═════╝           \n' +
+    '                                                        \n' +
+    '           Mission Ingénierie du Web                   \n' +
+    '    Ministère de l\'Économie et des Finances         \n' +
+    '    https://github.com/bmatge/limesurvey-theme-dsfr  \n' +
+    '    Thème DSFR pour LimeSurvey - 2025 - Etalab 2.0    \n',
+    'color: #000091; font-weight: bold;'
+);
 
 (function() {
     'use strict';
+
+    // === Prévention des erreurs LimeSurvey/Bootstrap ===
+
+    /**
+     * Crée un objet Proxy qui retourne automatiquement des valeurs par défaut
+     * pour n'importe quelle propriété accédée (récursif)
+     */
+    function createSafeProxy() {
+        return new Proxy(function() {}, {
+            get: function(_target, prop) {
+                // Propriétés spéciales
+                if (prop === 'then' || prop === 'catch') {
+                    return undefined; // Éviter d'être considéré comme une Promise
+                }
+                // Retourner un nouveau Proxy pour permettre l'accès en chaîne
+                return createSafeProxy();
+            },
+            apply: function() {
+                // Si appelé comme fonction, retourner ''
+                return '';
+            }
+        });
+    }
+
+    /**
+     * Empêcher les erreurs TempusDominus
+     * LimeSurvey peut essayer d'initialiser TempusDominus sur des éléments inexistants
+     * Utilise un Proxy pour gérer automatiquement toutes les propriétés manquantes
+     */
+    if (window.tempusDominus && window.tempusDominus.TempusDominus) {
+        const originalTempusDominus = window.tempusDominus.TempusDominus;
+        window.tempusDominus.TempusDominus = function(element, options) {
+            // Vérifier que l'élément existe avant d'initialiser
+            if (!element || (typeof element === 'string' && !document.querySelector(element))) {
+                // Retourner un Proxy qui gère automatiquement toutes les propriétés
+                return createSafeProxy();
+            }
+            try {
+                return new originalTempusDominus(element, options);
+            } catch (e) {
+                // En cas d'erreur, retourner un Proxy safe
+                return createSafeProxy();
+            }
+        };
+    }
+
+    /**
+     * Empêcher l'erreur jQuery tooltip "is not a function"
+     * Bootstrap Tooltip n'est pas chargé dans le thème DSFR
+     */
+    if (window.jQuery) {
+        // Fournir un stub pour .tooltip() si elle n'existe pas
+        if (!window.jQuery.fn.tooltip) {
+            window.jQuery.fn.tooltip = function() {
+                return this; // Chaînage jQuery sans erreur
+            };
+        }
+    }
 
     // === Fix pour les questions Multiple Short Text avec Input On Demand ===
 
@@ -2025,10 +2099,8 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
     function transformValidationMessages() {
         // Sélectionner tous les messages de validation LimeSurvey
         const emMessages = document.querySelectorAll('.ls-question-message');
-        console.log('DSFR: Transformation des messages de validation, trouvés:', emMessages.length);
 
         emMessages.forEach(message => {
-            console.log('DSFR: Traitement du message:', message.className, message.textContent.trim());
             // Vérifier si le message n'a pas déjà été transformé
             if (message.classList.contains('fr-message')) {
                 return;
@@ -2057,28 +2129,21 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
     }
 
     // Initialiser la transformation des messages
-    console.log('DSFR: Configuration des listeners pour transformation messages, readyState:', document.readyState);
-
     if (document.readyState === 'loading') {
-        console.log('DSFR: Ajout listener DOMContentLoaded');
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DSFR: DOMContentLoaded déclenché');
             transformValidationMessages();
         });
     } else {
-        console.log('DSFR: DOM déjà chargé, exécution immédiate');
         transformValidationMessages();
     }
 
     // Aussi essayer avec un petit délai pour être sûr
     setTimeout(function() {
-        console.log('DSFR: Timeout exécuté, nouvelle tentative de transformation');
         transformValidationMessages();
     }, 100);
 
     // Réinitialiser après chargement AJAX
     document.addEventListener('limesurvey:questionsLoaded', function() {
-        console.log('DSFR: Event limesurvey:questionsLoaded déclenché');
         transformValidationMessages();
     });
 
@@ -2090,30 +2155,21 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
     function fixDropdownArrayInlineStyles() {
         // Seulement sur mobile (< 768px)
         if (window.innerWidth >= 768) {
-            console.log('DSFR: Correction styles ignorée (largeur écran >= 768px)');
             return;
         }
 
-        console.log('DSFR: Correction des styles inline sur tableaux dropdown-array');
-
         // Cibler les tableaux dropdown-array
         const dropdownArrays = document.querySelectorAll('table.dropdown-array');
-        console.log('DSFR: Tableaux dropdown-array trouvés:', dropdownArrays.length);
 
-        let totalCells = 0;
-        dropdownArrays.forEach((table, index) => {
+        dropdownArrays.forEach((table) => {
             // Trouver tous les td avec style inline
             const cells = table.querySelectorAll('tbody tr td[style*="display"]');
-            console.log(`DSFR: Tableau ${index + 1}: ${cells.length} cellules avec style inline trouvées`);
-            totalCells += cells.length;
 
             cells.forEach(cell => {
                 // Supprimer complètement l'attribut style
                 cell.removeAttribute('style');
             });
         });
-
-        console.log(`DSFR: ${totalCells} cellules au total, styles supprimés`);
     }
 
     // MutationObserver pour surveiller et supprimer les styles réappliqués
@@ -2124,7 +2180,6 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
         // Ne surveiller que sur mobile
         if (window.innerWidth >= 768) {
             if (styleObserver) {
-                console.log('DSFR: Observer désactivé (desktop)');
                 styleObserver.disconnect();
                 styleObserver = null;
             }
@@ -2136,15 +2191,12 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
             return;
         }
 
-        console.log('DSFR: Activation de l\'observer pour surveiller les styles inline');
-
         // Créer l'observer
         styleObserver = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
                 if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
                     const target = mutation.target;
                     if (target.tagName === 'TD' && target.closest('table.dropdown-array')) {
-                        console.log('DSFR: Style réappliqué détecté, suppression immédiate');
                         target.removeAttribute('style');
                     }
                 }
@@ -2160,8 +2212,6 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
                 subtree: true
             });
         });
-
-        console.log(`DSFR: Observer activé sur ${dropdownArrays.length} tableau(x) dropdown-array`);
     }
 
     // Activer l'observer après le nettoyage initial

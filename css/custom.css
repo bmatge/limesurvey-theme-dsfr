@@ -1313,6 +1313,20 @@ textarea,
     display: none !important;
 }
 
+/* Force display of DSFR fieldset even when LimeSurvey adds visually-hidden class */
+.choice-5-pt-radio .fr-fieldset[data-display-mode="1"].visually-hidden,
+.choice-5-pt-radio .fr-fieldset[data-display-mode="2"].visually-hidden {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+    clip-path: none !important;
+}
+
 .star-rating-no-answer .star-rating-input:checked + .fr-label {
     background-color: var(--background-action-high-blue-france);
     color: var(--text-inverted-grey);

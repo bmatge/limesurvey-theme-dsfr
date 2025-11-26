@@ -1307,6 +1307,12 @@ textarea,
     background-color: var(--background-action-high-blue-france-hover);
 }
 
+/* Hide default LimeSurvey star/emoji markup when DSFR theme is used */
+.choice-5-pt-radio .stars-list,
+.choice-5-pt-radio .emoji-list {
+    display: none !important;
+}
+
 .star-rating-no-answer .star-rating-input:checked + .fr-label {
     background-color: var(--background-action-high-blue-france);
     color: var(--text-inverted-grey);

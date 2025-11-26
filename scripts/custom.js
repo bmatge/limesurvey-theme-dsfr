@@ -382,10 +382,15 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
         // 3. Traiter les questions avec classe .mandatory
         mandatoryQuestions.forEach(question => {
             // Chercher le label principal de la question
-            // Structure LimeSurvey : .question-text > .ls-label-question > p
-            let questionLabel = question.querySelector('.ls-label-question');
+            // Structure DSFR : h3 avec id="ls-question-text-{SGQ}"
+            let questionLabel = question.querySelector('[id^="ls-question-text-"]');
 
-            // Si pas de classe ls-label-question, chercher .question-text en fallback
+            // Si pas trouvé, chercher .ls-label-question en fallback
+            if (!questionLabel) {
+                questionLabel = question.querySelector('.ls-label-question');
+            }
+
+            // Si toujours pas trouvé, chercher .question-text
             if (!questionLabel) {
                 questionLabel = question.querySelector('.question-text');
             }
@@ -395,9 +400,12 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
                 // Marquer comme traité (ne PAS utiliser has-required-field pour éviter le CSS ::before)
                 questionLabel.classList.add('asterisk-injected');
 
-                // Injecter l'astérisque directement dans le DOM
-                // Chercher le premier élément de texte (p, span, div, etc.)
-                const textElement = questionLabel.querySelector('p, span, div, h1, h2, h3, h4, h5, h6') || questionLabel;
+                // Pour les h1-h6, injecter directement dans l'élément
+                // Pour les autres, chercher le premier élément de texte
+                let textElement = questionLabel;
+                if (!questionLabel.tagName.match(/^H[1-6]$/)) {
+                    textElement = questionLabel.querySelector('p, span, div, h1, h2, h3, h4, h5, h6') || questionLabel;
+                }
 
                 // Vérifier qu'on n'a pas déjà ajouté l'astérisque
                 if (!textElement.querySelector('.required-asterisk')) {
@@ -522,18 +530,39 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
                 return;
             }
 
-            // Trouver le fr-input-group dans cette question
-            const inputGroup = question.querySelector('.fr-input-group');
+            // Trouver le fr-input-group OU le fr-fieldset dans cette question
+            let inputGroup = question.querySelector('.fr-input-group');
+            let messagesGroup = null;
 
+            // Si pas de fr-input-group, c'est peut-être une question avec fieldset (checkbox/radio)
             if (!inputGroup) {
-                return;
-            }
+                // Pour les questions checkbox/radio, créer ou trouver un conteneur de messages
+                const validContainer = question.querySelector('.question-valid-container');
+                if (validContainer) {
+                    // Chercher un messages-group existant
+                    messagesGroup = validContainer.querySelector('.fr-messages-group');
 
-            // 3. Trouver le fr-messages-group
-            const messagesGroup = inputGroup.querySelector('.fr-messages-group');
+                    // Si pas de messages-group, en créer un
+                    if (!messagesGroup) {
+                        messagesGroup = document.createElement('div');
+                        messagesGroup.className = 'fr-messages-group';
+                        messagesGroup.id = 'messages-' + question.id;
+                        messagesGroup.setAttribute('aria-live', 'polite');
+                        validContainer.insertBefore(messagesGroup, validContainer.firstChild);
+                    }
+                } else {
+                    return; // Pas de conteneur, on ne peut rien faire
+                }
+            } else {
+                // Cas normal : fr-input-group existe
+                messagesGroup = inputGroup.querySelector('.fr-messages-group');
 
-            if (!messagesGroup) {
-                return;
+                if (!messagesGroup) {
+                    return;
+                }
+
+                // Ajouter la classe d'erreur DSFR
+                inputGroup.classList.add('fr-input-group--error');
             }
 
             // IMPORTANT : Vérifier si un message existe déjà pour éviter la duplication
@@ -542,9 +571,6 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
                 return; // Déjà traité
             }
 
-            // 1. Ajouter la classe d'erreur DSFR
-            inputGroup.classList.add('fr-input-group--error');
-
             // 2. Trouver le message d'erreur LimeSurvey
             // Ordre de priorité intelligent :
             // - Si champ vide : "obligatoire" prime
@@ -552,18 +578,18 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
             let lsErrorContainer = null;
             let errorText = '';
 
-            // Vérifier si le champ est vide
-            const inputElement = question.querySelector('.fr-input, input, textarea, select');
-            const isEmpty = !inputElement || !inputElement.value || inputElement.value.trim() === '';
-
+            // Chercher tous les messages d'erreur possibles
             const mandatoryError = question.querySelector('.ls-question-mandatory');
+            const multiplechoiceError = question.querySelector('.ls-question-mandatory-multiplechoice');
             const validationErrors = question.querySelectorAll('.ls-em-tip, .em_num_answers, .ls-em-error');
 
-            if (isEmpty && mandatoryError) {
-                // Champ vide + obligatoire → message "obligatoire"
+            // Pour les questions checkbox/ranking, prioriser le message spécifique s'il existe
+            if (multiplechoiceError) {
+                lsErrorContainer = multiplechoiceError;
+            } else if (mandatoryError) {
                 lsErrorContainer = mandatoryError;
             } else {
-                // Champ rempli → chercher les erreurs de validation
+                // Chercher les erreurs de validation
                 for (let i = 0; i < validationErrors.length; i++) {
                     const error = validationErrors[i];
                     if (error.offsetParent !== null) { // Visible
@@ -571,26 +597,34 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
                         break;
                     }
                 }
-                // Fallback sur mandatory si pas de validation visible
-                if (!lsErrorContainer && mandatoryError) {
-                    lsErrorContainer = mandatoryError;
+            }
+
+            // Si pas de message d'erreur trouvé, vérifier si c'est une question ranking
+            if (!lsErrorContainer) {
+                // Pour les questions ranking, LimeSurvey ne génère pas toujours de message
+                // Créer un message générique
+                if (question.classList.contains('ranking')) {
+                    errorText = 'Veuillez compléter ce classement.';
+                } else {
+                    return;
+                }
+            } else {
+                // Extraire le texte du message (sans les icônes)
+                errorText = lsErrorContainer.textContent.trim();
+                // Nettoyer les icônes et espaces multiples
+                errorText = errorText.replace(/\s+/g, ' ').trim();
+
+                if (!errorText) {
+                    // Message vide, créer un message générique selon le type de question
+                    if (question.classList.contains('ranking')) {
+                        errorText = 'Veuillez compléter ce classement.';
+                    } else {
+                        errorText = 'Cette question est obligatoire';
+                    }
                 }
             }
 
-            if (!lsErrorContainer) {
-                return;
-            }
-
-            // Extraire le texte du message (sans les icônes)
-            errorText = lsErrorContainer.textContent.trim();
-            // Nettoyer les icônes et espaces multiples
-            errorText = errorText.replace(/\s+/g, ' ').trim();
-
-            if (!errorText) {
-                return;
-            }
-
-            // 4. Créer le message d'erreur DSFR
+            // 3. Créer le message d'erreur DSFR
             const errorMessage = document.createElement('p');
             errorMessage.className = 'fr-message fr-message--error';
             errorMessage.id = messagesGroup.id + '-error';
@@ -600,14 +634,14 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
             // Ajouter le message dans le messages-group
             messagesGroup.appendChild(errorMessage);
 
-            // 5. Cacher le message LimeSurvey original
-            const questionValidContainer = question.querySelector('.question-valid-container');
-            if (questionValidContainer) {
-                questionValidContainer.style.display = 'none';
-            }
+            // 4. Masquer les messages LimeSurvey originaux (mais ne pas cacher tout le conteneur)
+            if (mandatoryError) mandatoryError.style.display = 'none';
+            if (multiplechoiceError) multiplechoiceError.style.display = 'none';
+            validationErrors.forEach(function(err) {
+                err.style.display = 'none';
+            });
 
-
-            // 6. Ajouter les listeners pour retirer l'erreur quand l'utilisateur corrige
+            // 5. Ajouter les listeners pour retirer l'erreur quand l'utilisateur corrige
             attachErrorRemovalListeners(question, inputGroup, messagesGroup);
         });
     }
@@ -630,8 +664,10 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
             // Vérifier si le champ est vide
             if (value === '') {
                 // Champ vide → erreur obligatoire
-                inputGroup.classList.add('fr-input-group--error');
-                inputGroup.classList.remove('fr-input-group--valid');
+                if (inputGroup) {
+                    inputGroup.classList.add('fr-input-group--error');
+                    inputGroup.classList.remove('fr-input-group--valid');
+                }
                 question.classList.add('input-error');
                 question.classList.remove('input-valid');
 
@@ -663,8 +699,10 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
 
                 if (!isValidNumber) {
                     // Format invalide → erreur de validation
-                    inputGroup.classList.add('fr-input-group--error');
-                    inputGroup.classList.remove('fr-input-group--valid');
+                    if (inputGroup) {
+                        inputGroup.classList.add('fr-input-group--error');
+                        inputGroup.classList.remove('fr-input-group--valid');
+                    }
                     question.classList.add('input-error');
                     question.classList.remove('input-valid');
 
@@ -695,7 +733,9 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
             }
 
             // Champ valide → succès
-            inputGroup.classList.remove('fr-input-group--error');
+            if (inputGroup) {
+                inputGroup.classList.remove('fr-input-group--error');
+            }
             question.classList.remove('input-error');
 
             // Retirer la classe d'erreur de l'input
@@ -711,7 +751,9 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
 
             // Ajouter les classes et message de succès UNIQUEMENT si la question a eu une erreur auparavant
             if (question.dataset.hadError === 'true') {
-                inputGroup.classList.add('fr-input-group--valid');
+                if (inputGroup) {
+                    inputGroup.classList.add('fr-input-group--valid');
+                }
                 question.classList.add('input-valid');
                 input.classList.add('fr-input--valid');
 
@@ -747,7 +789,9 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
         radiosCheckboxes.forEach(function(input) {
             input.addEventListener('change', function() {
                 // Pour radio/checkbox, retirer les erreurs
-                inputGroup.classList.remove('fr-input-group--error');
+                if (inputGroup) {
+                    inputGroup.classList.remove('fr-input-group--error');
+                }
                 question.classList.remove('input-error');
 
                 // Retirer le message d'erreur et marquer qu'une erreur a été corrigée
@@ -760,7 +804,9 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
 
                 // Ajouter les classes et message de succès UNIQUEMENT si la question a eu une erreur auparavant
                 if (question.dataset.hadError === 'true') {
-                    inputGroup.classList.add('fr-input-group--valid');
+                    if (inputGroup) {
+                        inputGroup.classList.add('fr-input-group--valid');
+                    }
                     question.classList.add('input-valid');
 
                     let validMessage = messagesGroup.querySelector('.fr-message--valid');
@@ -776,6 +822,48 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
                 setTimeout(updateErrorSummary, 50);
             }, { once: true });
         });
+
+        // Pour les questions ranking - observer les changements dans la liste de classement
+        if (question.classList.contains('ranking')) {
+            const rankingList = question.querySelector('.sortable-rank');
+            if (rankingList) {
+                // Observer les changements dans la liste de classement
+                const rankingObserver = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        // Si des éléments ont été ajoutés à la liste de classement
+                        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                            // Retirer l'erreur
+                            question.classList.remove('input-error');
+
+                            const errorMsg = messagesGroup.querySelector('.fr-message--error');
+                            if (errorMsg) {
+                                errorMsg.remove();
+                                question.dataset.hadError = 'true';
+                            }
+
+                            // Ajouter le message de succès
+                            question.classList.add('input-valid');
+                            let validMessage = messagesGroup.querySelector('.fr-message--valid');
+                            if (!validMessage) {
+                                validMessage = document.createElement('p');
+                                validMessage.className = 'fr-message fr-message--valid';
+                                validMessage.id = messagesGroup.id + '-valid';
+                                messagesGroup.appendChild(validMessage);
+                            }
+                            validMessage.textContent = 'Merci d\'avoir répondu';
+
+                            setTimeout(updateErrorSummary, 50);
+                        }
+                    });
+                });
+
+                // Démarrer l'observation
+                rankingObserver.observe(rankingList, {
+                    childList: true,
+                    subtree: false
+                });
+            }
+        }
     }
 
     /**
@@ -1061,18 +1149,32 @@ console.log('DSFR custom.js chargé - version 2024-11-18');
             const questionId = question.id;
 
             // Trouver le texte de la question
-            const questionTextElement = question.querySelector('.ls-label-question, .question-text');
-            let questionText = questionTextElement ? questionTextElement.textContent.trim() : 'Question sans titre';
+            // Structure DSFR : h3 avec id="ls-question-text-{SGQ}"
+            let questionTextElement = question.querySelector('[id^="ls-question-text-"]');
 
-            // Trouver le numéro de question si disponible
-            const questionNumberElement = question.querySelector('.question-number');
-            let questionNumber = questionNumberElement ? questionNumberElement.textContent.trim() : '';
+            // Fallback sur ancienne structure
+            if (!questionTextElement) {
+                questionTextElement = question.querySelector('.ls-label-question, .question-text');
+            }
+
+            let questionText = 'Question sans titre';
+
+            if (questionTextElement) {
+                // Cloner l'élément pour le manipuler sans affecter le DOM
+                const clone = questionTextElement.cloneNode(true);
+
+                // Retirer tous les éléments enfants (astérisque, badge, numéro, code)
+                clone.querySelectorAll('.required-asterisk, .fr-badge, .question-number, .question-code, span, p').forEach(el => el.remove());
+
+                // Récupérer uniquement le texte restant
+                questionText = clone.textContent.trim().replace(/\s+/g, ' ');
+            }
 
             // Trouver le message d'erreur DSFR
             const errorMessageElement = question.querySelector('.fr-message--error');
             let errorMessage = errorMessageElement ? errorMessageElement.textContent.trim() : '';
 
-            // Construire le label avec question + erreur (sans numéro)
+            // Construire le label avec question + erreur
             let label = questionText;
 
             // Ajouter le message d'erreur

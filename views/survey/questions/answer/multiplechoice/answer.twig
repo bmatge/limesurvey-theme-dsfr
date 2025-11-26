@@ -15,12 +15,14 @@
 
 <!-- answer -->
 <input type="hidden" name="MULTI{{name}}" value="{{anscount}}" />
-<fieldset class="list-unstyled ls-answers checkbox-list answers-list dsfr-answers {{coreClass}} {% if iNbCols > 1 %} ls-column-count-{{iNbCols}}{% endif %}"{% if iNbCols > 1 %} data-column-count={{iNbCols}}{% endif %} aria-labelledby="ls-question-text-{{name}}">
-    <legend class="fr-sr-only">{{ gT('Select one or more answers') }}</legend>
-    {% for aRow in aRows %}
-        {% set rowTemplate = aRow.other ? './survey/questions/answer/multiplechoice/rows/answer_row_other.twig' : './survey/questions/answer/multiplechoice/rows/answer_row.twig' %}
-        <!-- Row {{loop.index}} -->
-        {% include rowTemplate with aRow %}
-    {% endfor %}
+<fieldset class="fr-fieldset {{coreClass}}" aria-labelledby="ls-question-text-{{name}}"{% if iNbCols > 1 %} data-column-count={{iNbCols}}{% endif %}>
+    <legend class="fr-fieldset__legend fr-sr-only">{{ gT('Select one or more answers') }}</legend>
+    <div class="fr-fieldset__content">
+        {% for aRow in aRows %}
+            {% set rowTemplate = aRow.other ? './survey/questions/answer/multiplechoice/rows/answer_row_other.twig' : './survey/questions/answer/multiplechoice/rows/answer_row.twig' %}
+            <!-- Row {{loop.index}} -->
+            {% include rowTemplate with aRow %}
+        {% endfor %}
+    </div>
 </fieldset>
 <!-- end of answer -->

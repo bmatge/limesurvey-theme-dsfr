@@ -1325,10 +1325,10 @@ footer.fr-footer,
    On surcharge ici pour respecter le comportement attendu de LimeSurvey
    avec alternance ls-odd/ls-even */
 
-/* Surcharge du fond alterné DSFR natif sur tbody */
+/* Application du fond gris DSFR sur tous les tbody (compatible mode sombre) */
 .fr-table tbody,
 .fr-table--bordered tbody {
-    background-color: transparent !important;
+    background-color: var(--background-alt-grey) !important;
 }
 
 /* Reset du fond gris par défaut du DSFR sur tous les td */

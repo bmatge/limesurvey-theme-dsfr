@@ -45,6 +45,7 @@
             <remove>awesome-bootstrap-checkbox/awesome-bootstrap-checkbox-rtl.css</remove>
         </css>
         <js>
+            <!-- Scripts du thème (theme.js charge automatiquement le DSFR JS) -->
             <replace>scripts/theme.js</replace>
             <replace>scripts/custom.js</replace>
         </js>

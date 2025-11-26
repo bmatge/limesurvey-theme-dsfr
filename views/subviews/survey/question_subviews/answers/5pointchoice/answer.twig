@@ -18,34 +18,30 @@
                 {% for aRow in aRows %}
                     {% if aRow.value != "" %}
                         {% set starLabel = aRow.value ~ ' ' ~ (aRow.value > 1 ? gT('stars') : gT('star')) %}
-                        <div class="fr-fieldset__element fr-fieldset__element--inline">
-                            <div class="star-rating-item" data-star="{{aRow.value}}">
-                                <input type="radio"
-                                       name="{{aRow.name}}"
-                                       id="answer{{aRow.id}}"
-                                       value="{{aRow.value}}"
-                                       {{aRow.checkedState}}
-                                       class="star-rating-input"
-                                       aria-label="{{ starLabel }}">
-                                <label for="answer{{aRow.id}}" class="star-rating-label">
-                                    <span class="star-icon-wrapper">
-                                        <i class="fr-icon-star-line star-empty" aria-hidden="true"></i>
-                                        <i class="fr-icon-star-fill star-filled" aria-hidden="true"></i>
-                                    </span>
-                                    <span class="fr-sr-only">{{ starLabel }}</span>
-                                </label>
-                            </div>
+                        <div class="star-rating-item" data-star="{{aRow.value}}">
+                            <input type="radio"
+                                   name="{{aRow.name}}"
+                                   id="answer{{aRow.id}}"
+                                   value="{{aRow.value}}"
+                                   {{aRow.checkedState}}
+                                   class="star-rating-input"
+                                   aria-label="{{ starLabel }}">
+                            <label for="answer{{aRow.id}}" class="star-rating-label">
+                                <span class="star-icon-wrapper">
+                                    <i class="fr-icon-star-line star-empty" aria-hidden="true"></i>
+                                    <i class="fr-icon-star-fill star-filled" aria-hidden="true"></i>
+                                </span>
+                                <span class="fr-sr-only">{{ starLabel }}</span>
+                            </label>
                         </div>
                     {% endif %}
                 {% endfor %}
                 {# No answer option if present #}
                 {% for aRow in aRows %}
                     {% if aRow.value == "" %}
-                        <div class="fr-fieldset__element fr-fieldset__element--inline star-rating-no-answer-wrapper">
-                            <div class="star-rating-no-answer">
-                                <input type="radio" name="{{aRow.name}}" id="answer{{aRow.id}}" value="" {{aRow.checkedState}} class="star-rating-input">
-                                <label for="answer{{aRow.id}}" class="fr-label">{{aRow.labelText}}</label>
-                            </div>
+                        <div class="star-rating-no-answer">
+                            <input type="radio" name="{{aRow.name}}" id="answer{{aRow.id}}" value="" {{aRow.checkedState}} class="star-rating-input">
+                            <label for="answer{{aRow.id}}" class="fr-label">{{aRow.labelText}}</label>
                         </div>
                     {% endif %}
                 {% endfor %}

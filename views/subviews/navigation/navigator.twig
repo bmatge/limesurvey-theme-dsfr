@@ -17,7 +17,7 @@
             <div class="fr-col-auto">
                 {% if (not aSurveyInfo.popupPreview) and aNavigator.aMovePrev.show %}
                     <button {{ aSurveyInfo.attr.navigatorbuttonprev }}
-                            type="button"
+                            type="submit"
                             class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-arrow-left-line {{ aNavigator.disabled }}"
                             {% if aNavigator.disabled %}disabled{% endif %}>
                         {{ gT("Previous") }}
@@ -31,13 +31,14 @@
 
                     {% if aNavigator.aMoveNext.value == "movesubmit" %}
                         <button {{ aSurveyInfo.attr.navigatorbuttonsubmit }}
+                                type="submit"
                                 class="fr-btn fr-btn--icon-right fr-icon-check-line {{ aNavigator.disabled }}"
                                 {% if aNavigator.disabled %}disabled{% endif %}>
                             {{ gT("Submit") }}
                         </button>
                     {% else %}
                         <button {{ aSurveyInfo.attr.navigatorbuttonnext }}
-                                type="button"
+                                type="submit"
                                 class="fr-btn fr-btn--icon-right fr-icon-arrow-right-line {{ aNavigator.disabled }}"
                                 {% if aNavigator.disabled %}disabled{% endif %}>
                             {{ gT("Next") }}

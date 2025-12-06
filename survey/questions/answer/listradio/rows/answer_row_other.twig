@@ -1,0 +1,53 @@
+{#
+/**
+ * List radio 'Other' row - DSFR Theme
+ * DSFR-compliant radio button with text input for "Other" option
+ *
+ * Variables available:
+ * @var $name
+ * @var $answer_other
+ * @var $sDisplayStyle
+ * @var $myfname
+ * @var $othertext
+ * @var $checkedState
+ * @var $kpclass
+ * @var $checkconditionFunction
+ */
+#}
+
+<!-- answer_row_other DSFR -->
+<div class="fr-fieldset__element" {{ sDisplayStyle }}>
+    <div id='javatbd{{ myfname }}' class="fr-radio-group">
+        <input
+            type="radio"
+            value="-oth-"
+            name="{{ name }}"
+            id="SOTH{{ name }}"
+            {{ checkedState }}
+        />
+        <label class="fr-label" for="SOTH{{ name }}" id="label-id-{{ name }}">
+            {{ processString(othertext) }}
+        </label>
+    </div>
+
+    <!-- Text input for "Other" -->
+    <div class="fr-input-group fr-mt-1w">
+        <input
+            type="text"
+            class="fr-input {{ kpclass }}"
+            id="answer{{ name }}othertext"
+            name="{{ name }}other"
+            title="{{ flatString(processString(othertext,1),1) }}"
+            {{ answer_other }}
+            aria-labelledby="label-id-{{ name }}"
+            {% if numbers_only %} data-number="1" {% endif %}
+        />
+    </div>
+
+    <script>
+        $("#answer{{ name }}othertext").on("keyup",function(){
+            if($.trim($(this).val())!=''){ $('#SOTH{{ name }}').click(); };
+        });
+    </script>
+</div>
+<!-- end of answer_row_other -->

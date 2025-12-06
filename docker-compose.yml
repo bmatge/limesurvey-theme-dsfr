@@ -1,0 +1,58 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: limesurvey_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: limesurvey
+      MYSQL_USER: limesurvey
+      MYSQL_PASSWORD: limesurvey
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - limesurvey_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  limesurvey:
+    image: martialblog/limesurvey:6-apache
+    container_name: limesurvey_app
+    ports:
+      - "8080:8080"
+    environment:
+      DB_TYPE: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: limesurvey
+      DB_USERNAME: limesurvey
+      DB_PASSWORD: limesurvey
+      ADMIN_USER: admin
+      ADMIN_NAME: Admin
+      ADMIN_EMAIL: admin@example.com
+      ADMIN_PASSWORD: admin
+      # Mode debug (optionnel, utile pour le développement)
+      LIMESURVEY_DEBUG: 2
+      LIMESURVEY_SQL_DEBUG: 0
+    volumes:
+      # Montage du dossier themes pour développement en temps réel
+      - ./themes:/var/www/html/themes
+      # Montage du dossier upload pour persistance
+      - ./upload:/var/www/html/upload
+      - ../../limesurvey-theme-dsfr:/var/www/html/upload/themes/survey/dsfr
+      # Optionnel : montage du dossier plugins si vous en développez
+      # - ./plugins:/var/www/html/plugins
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - limesurvey_network
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  limesurvey_network:
+    driver: bridge

@@ -1,0 +1,17 @@
+{#
+/**
+ * 5-Point Choice Row - DSFR Theme
+ * Single radio button for 1-5 scale
+ */
+#}
+
+<!-- item_row -->
+<div class="fr-col-auto">
+    <div class="fr-radio-group">
+        <input type="radio" name="{{ name }}" id="answer{{ name }}{{ value }}" value="{{ value }}" {{ checked }}>
+        <label class="fr-label" for="answer{{ name }}{{ value }}">
+            {{ text }}
+        </label>
+    </div>
+</div>
+<!-- end of item_row -->

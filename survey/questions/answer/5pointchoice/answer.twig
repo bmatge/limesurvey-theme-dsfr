@@ -1,0 +1,17 @@
+{#
+/**
+ * 5-Point Choice - DSFR Theme
+ * Inline radio buttons (1 2 3 4 5) with DSFR fr-radio-group
+ */
+#}
+
+<!-- 5-Point Choice DSFR -->
+<fieldset class="fr-fieldset" aria-labelledby="ls-question-text-{{ basename }}">
+    <div class="fr-fieldset__content">
+        <div class="fr-grid-row fr-grid-row--gutters">
+            {{ sRows }}
+        </div>
+    </div>
+</fieldset>
+
+{{ C.Html.hiddenField("java"~name,value,({'id' : "java"~name,'disabled' : true})) }}

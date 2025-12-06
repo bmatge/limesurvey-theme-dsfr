@@ -1,0 +1,38 @@
+{#
+/**
+ * List Dropdown - DSFR Theme
+ * Select dropdown with DSFR fr-select component
+ *
+ * Variables available:
+ * @var $sOptions
+ * @var $sOther
+ * @var $name
+ * @var $dropdownSize
+ * @var $value
+ */
+#}
+
+<!-- DSFR Dropdown -->
+<div class="fr-select-group {{ coreClass }}">
+    <select
+        class="fr-select"
+        name="{{ name }}"
+        id="answer{{ name }}"
+        {% if dropdownSize %} size={{ dropdownSize }} {% endif %}
+        aria-labelledby="ls-question-text-{{ basename }}"
+    >
+        {# Options #}
+        {{ sOptions }}
+    </select>
+
+    {# Other text field if needed #}
+    {{ sOther }}
+
+    {# Value for expression manager javascript #}
+    {{ C.Html.hiddenField("java"~name,value,({
+        'id' : "java"~name,
+        'disabled' : "disabled",
+    }))
+    }}
+</div>
+<!-- end of answer -->

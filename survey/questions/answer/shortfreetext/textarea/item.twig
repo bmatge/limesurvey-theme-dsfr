@@ -1,0 +1,63 @@
+{#
+/**
+ * Shortfreetext - DSFR Theme
+ * Textarea style with DSFR fr-input component
+ *
+ * Variables available:
+ * @var $freeTextId
+ * @var $extraclass
+ * @var $labelText
+ * @var $name
+ * @var $drows
+ * @var $tiwidth
+ * @var $dispVal
+ * @var $placeholder
+ * @var $maxlength
+ */
+#}
+
+<!-- DSFR Textarea -->
+{% if withColumn %}
+<div class='{{ coreClass }} fr-grid-row'>
+    <div class="{{ extraclass }}">
+{% else %}
+<div class='{{ coreClass }} {{ extraclass }}'>
+{% endif %}
+    <div class="fr-input-group">
+        {% if prefix != '' or suffix != '' %}
+            <div class="fr-input-wrap">
+        {% endif %}
+            <!-- Prefix -->
+            {% if prefix != '' %}
+                <span class="fr-text--sm fr-text--bold fr-mb-1w fr-display-block">{{ processString(prefix) }}</span>
+            {% endif %}
+
+            <!-- Textarea DSFR -->
+            <textarea
+                class="fr-input {{ kpclass }}"
+                name="{{ name }}"
+                id="{{ freeTextId }}"
+                rows="{{ drows }}"
+                placeholder="{{ flatString(processString(placeholder,1),1) }}"
+                {% if inputsize %}cols="{{ inputsize }}" {% endif %}
+                {% if maxlength %}maxlength="{{ maxlength }}" {% endif %}
+                {% if numberonly %}data-number="1" {% endif %}
+                aria-labelledby="ls-question-text-{{ basename }}"
+            >{{ dispVal }}</textarea>
+
+            <!-- Suffix -->
+            {% if suffix %}
+                <span class="fr-text--sm fr-text--bold fr-mt-1w fr-display-block">{{ processString(suffix) }}</span>
+            {% endif %}
+        {% if prefix != '' or suffix != '' %}
+            </div>
+        {% endif %}
+    </div>
+{% if withColumn %}
+    </div>
+</div>
+{% else %}
+</div>
+{% endif %}
+
+<!-- end of answer -->

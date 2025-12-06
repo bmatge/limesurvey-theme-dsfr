@@ -1,0 +1,66 @@
+{#
+/**
+ * Numerical Question - DSFR Theme
+ * Input number with DSFR fr-input component
+ *
+ * Variables available:
+ * @var $extraclass
+ * @var $id
+ * @var $prefix
+ * @var $answertypeclass
+ * @var $fValue
+ * @var $integeronly
+ * @var $maxlength
+ * @var $suffix
+ * @var $placeholder
+ */
+#}
+
+<!-- DSFR Numerical Input -->
+{% if withColumn %}
+<div class='{{ coreClass }} fr-grid-row'>
+    <div class="{{ extraclass }}">
+{% else %}
+<div class='{{ coreClass }} {{ extraclass }}'>
+{% endif %}
+    <div class="fr-input-group">
+        {% if prefix != '' or suffix != '' %}
+            <div class="fr-input-wrap">
+        {% endif %}
+            <!-- Prefix -->
+            {% if prefix != '' %}
+                <span class="fr-text--sm fr-text--bold fr-mr-1w">{{ processString(prefix) }}</span>
+            {% endif %}
+
+            <!-- Input Number DSFR -->
+            {{ C.Html.textField(id,fValue,({
+                'id' : "answer"~id,
+                'class' : "fr-input "~answertypeclass,
+                'title' : gT('Only numbers may be entered in this field.'),
+                'size' : (inputsize ? inputsize : null),
+                'placeholder' : flatString(processString(placeholder,1),1),
+                'maxlength' : (maxlength ? maxlength : null),
+                'data-number' : 1,
+                'data-integer' : integeronly,
+                'aria-labelledby' : "ls-question-text-"~basename,
+                'inputmode' : 'numeric',
+                'pattern' : (integeronly ? '[0-9]*' : '[0-9]*[.,]?[0-9]*')
+            }))
+            }}
+
+            <!-- Suffix -->
+            {% if suffix != '' %}
+                <span class="fr-text--sm fr-text--bold fr-ml-1w">{{ processString(suffix) }}</span>
+            {% endif %}
+        {% if prefix != '' or suffix != '' %}
+            </div>
+        {% endif %}
+    </div>
+{% if withColumn %}
+    </div>
+</div>
+{% else %}
+</div>
+{% endif %}
+
+<!-- end of answer -->

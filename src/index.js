@@ -29,6 +29,7 @@ import { handleArrayValidation, handleSimpleQuestionValidation } from './validat
 import { transformValidationMessages } from './validation/validation-messages.js';
 import { fixDropdownArrayInlineStyles, setupStyleObserver } from './dropdowns/dropdown-array.js';
 import { initSearchableDropdowns } from './dropdowns/combobox.js';
+import { initStepperProgress } from './ui/stepper-progress.js';
 import {
     initConditionalQuestionsAria,
     setupConditionalQuestionsObserver,
@@ -82,6 +83,10 @@ onReady(() => {
     // Combobox DSFR accessible : remplace bootstrap-select sur les
     // list_dropdown avec recherche (cf. src/dropdowns/combobox.js).
     initSearchableDropdowns();
+
+    // Stepper DSFR : pilote la barre de progression via --fr-progress
+    // (contourne la limite DSFR à 8 étapes — cf. src/ui/stepper-progress.js).
+    initStepperProgress();
 
     // Questions conditionnelles (a11y)
     initConditionalQuestionsAria();
@@ -161,6 +166,7 @@ onPjax(() => {
     setTimeout(initAllRankingQuestions, 300);
     initRelevanceHandlers();
     initSearchableDropdowns();
+    initStepperProgress();
     // Si la page pjax répond avec des erreurs de validation côté serveur,
     // le résumé doit être (re)construit — à l'identique des branches onReady
     // et onQuestionsLoaded.

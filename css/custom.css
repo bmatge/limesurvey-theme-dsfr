@@ -74,10 +74,13 @@ body > article {
 }
 
 /* ============================================
-   STEPPER DSFR - Fallback visuel
-   ============================================ */
-
-/* DSFR gère le stepper - minimal override */
+   STEPPER DSFR - Barre de progression universelle
+   ============================================
+   DSFR officiel limite la barre à 8 étapes (boucle SCSS @for 1→8 dans la
+   lib). Pour supporter N étapes quelconque, on pilote la largeur via une
+   custom property `--fr-progress` calculée à l'exécution par
+   src/ui/stepper-progress.js (current / total × 100 %). Une seule règle
+   au lieu de N×N. */
 .fr-stepper__steps {
     position: relative;
     overflow: hidden;
@@ -89,26 +92,10 @@ body > article {
     top: 0;
     left: 0;
     height: 100%;
+    width: var(--fr-progress, 0%);
     background-color: var(--background-action-high-blue-france);
     transition: width 0.3s ease;
 }
-
-/* Calcul de la largeur basé sur les data attributes */
-.fr-stepper__steps[data-fr-current-step="1"][data-fr-steps="1"]::after { width: 100%; }
-.fr-stepper__steps[data-fr-current-step="1"][data-fr-steps="2"]::after { width: 50%; }
-.fr-stepper__steps[data-fr-current-step="2"][data-fr-steps="2"]::after { width: 100%; }
-.fr-stepper__steps[data-fr-current-step="1"][data-fr-steps="3"]::after { width: 33.33%; }
-.fr-stepper__steps[data-fr-current-step="2"][data-fr-steps="3"]::after { width: 66.66%; }
-.fr-stepper__steps[data-fr-current-step="3"][data-fr-steps="3"]::after { width: 100%; }
-.fr-stepper__steps[data-fr-current-step="1"][data-fr-steps="4"]::after { width: 25%; }
-.fr-stepper__steps[data-fr-current-step="2"][data-fr-steps="4"]::after { width: 50%; }
-.fr-stepper__steps[data-fr-current-step="3"][data-fr-steps="4"]::after { width: 75%; }
-.fr-stepper__steps[data-fr-current-step="4"][data-fr-steps="4"]::after { width: 100%; }
-.fr-stepper__steps[data-fr-current-step="1"][data-fr-steps="5"]::after { width: 20%; }
-.fr-stepper__steps[data-fr-current-step="2"][data-fr-steps="5"]::after { width: 40%; }
-.fr-stepper__steps[data-fr-current-step="3"][data-fr-steps="5"]::after { width: 60%; }
-.fr-stepper__steps[data-fr-current-step="4"][data-fr-steps="5"]::after { width: 80%; }
-.fr-stepper__steps[data-fr-current-step="5"][data-fr-steps="5"]::after { width: 100%; }
 
 /* ============================================
    COMPOSANTS LIMESURVEY SPÉCIFIQUES
@@ -123,9 +110,13 @@ html, body {
     overflow-anchor: none !important;
 }
 
-/* Supprimer padding-top excessif */
+/* Supprimer padding-top excessif et porter l'espacement haut sur le
+   conteneur principal : le stepper (cf. progress_bar.twig) n'a plus de
+   `fr-mb-*`, c'est `#outerframeContainer` qui assure la marge stable
+   entre le header et le contenu, qu'il y ait un stepper au-dessus ou non. */
 #outerframeContainer {
     padding-top: 0 !important;
+    margin-top: 1.5rem;
 }
 
 /* Masquer les labels xs-visibility sur desktop uniquement */

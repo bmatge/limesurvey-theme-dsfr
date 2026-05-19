@@ -7,8 +7,12 @@
 #}
 
 {% if aSurveyInfo.showprogress == 'Y' and aSurveyInfo.format != 'A' and not aSurveyInfo.aCompleted and aSurveyInfo.aQuestionIndex.items %}
+    {# Stepper sans margin-bottom : on porte l'espacement bas sur
+       #outerframeContainer (cf. css/custom.css) pour que la marge reste
+       cohérente même quand le stepper n'est pas rendu (questionnaire
+       mono-page, format allinone, etc.). #}
     <!-- DSFR Stepper -->
-    <div class="fr-container fr-my-4w">
+    <div class="fr-container fr-mt-4w">
         {# Utiliser les données de l'index des questions #}
         {% set totalSteps = aSurveyInfo.aQuestionIndex.items ? aSurveyInfo.aQuestionIndex.items|length : 1 %}
         {% set currentStepIndex = 0 %}

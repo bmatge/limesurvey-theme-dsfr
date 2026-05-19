@@ -2071,6 +2071,19 @@
     document.addEventListener("click", globalClickHandler, { capture: true });
   }
 
+  // modules/theme-dsfr/src/ui/stepper-progress.js
+  function initStepperProgress(root = document) {
+    const steppers = root.querySelectorAll(".fr-stepper__steps[data-fr-steps][data-fr-current-step]");
+    steppers.forEach((el) => {
+      const total = parseInt(el.getAttribute("data-fr-steps"), 10);
+      const current = parseInt(el.getAttribute("data-fr-current-step"), 10);
+      if (!Number.isFinite(total) || total <= 0) return;
+      if (!Number.isFinite(current) || current < 0) return;
+      const pct = Math.min(100, Math.max(0, current / total * 100));
+      el.style.setProperty("--fr-progress", `${pct}%`);
+    });
+  }
+
   // modules/theme-dsfr/src/a11y/conditional-aria.js
   function extractQuestionCodes(expression) {
     if (!expression) return [];
@@ -2931,6 +2944,7 @@
     fixDropdownArrayInlineStyles();
     setupStyleObserver();
     initSearchableDropdowns();
+    initStepperProgress();
     initConditionalQuestionsAria();
     setupConditionalQuestionsObserver();
     initConditionalVisibilityNotifier();
@@ -2984,6 +2998,7 @@
     setTimeout(initAllRankingQuestions, 300);
     initRelevanceHandlers();
     initSearchableDropdowns();
+    initStepperProgress();
     setTimeout(createErrorSummary, 200);
   });
   var dropdownResizeTimer;

@@ -2072,6 +2072,25 @@
   }
 
   // modules/theme-dsfr/src/ui/stepper-progress.js
+  var GAP_PX = 4;
+  var COLOR_ACTIVE = "var(--background-active-blue-france, #000091)";
+  var COLOR_DISABLED = "var(--background-disabled-grey, #e5e5e5)";
+  function buildSegmentedGradient(total, current) {
+    const clampedCurrent = Math.min(Math.max(0, current), total);
+    const stops = [];
+    for (let i = 0; i < total; i++) {
+      const startPct = i / total * 100;
+      const endPct = (i + 1) / total * 100;
+      const color = i < clampedCurrent ? COLOR_ACTIVE : COLOR_DISABLED;
+      stops.push(`${color} ${startPct}%`);
+      stops.push(`${color} calc(${endPct}% - ${GAP_PX}px)`);
+      if (i < total - 1) {
+        stops.push(`transparent calc(${endPct}% - ${GAP_PX}px)`);
+        stops.push(`transparent ${endPct}%`);
+      }
+    }
+    return `linear-gradient(to right, ${stops.join(", ")})`;
+  }
   function initStepperProgress(root = document) {
     const steppers = root.querySelectorAll(".fr-stepper__steps[data-fr-steps][data-fr-current-step]");
     steppers.forEach((el) => {
@@ -2079,8 +2098,7 @@
       const current = parseInt(el.getAttribute("data-fr-current-step"), 10);
       if (!Number.isFinite(total) || total <= 0) return;
       if (!Number.isFinite(current) || current < 0) return;
-      const pct = Math.min(100, Math.max(0, current / total * 100));
-      el.style.setProperty("--fr-progress", `${pct}%`);
+      el.style.backgroundImage = buildSegmentedGradient(total, current);
     });
   }
 

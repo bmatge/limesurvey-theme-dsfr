@@ -77,24 +77,15 @@ body > article {
    STEPPER DSFR - Barre de progression universelle
    ============================================
    DSFR officiel limite la barre à 8 étapes (boucle SCSS @for 1→8 dans la
-   lib). Pour supporter N étapes quelconque, on pilote la largeur via une
-   custom property `--fr-progress` calculée à l'exécution par
-   src/ui/stepper-progress.js (current / total × 100 %). Une seule règle
-   au lieu de N×N. */
+   lib). Pour supporter N étapes quelconque, on injecte le `background-image`
+   (linear-gradient multi-stops segmentés) à l'exécution depuis
+   src/ui/stepper-progress.js. Marche pour 1 à 100+ étapes, sans aucune
+   règle spécifique au nombre d'étapes côté CSS. */
 .fr-stepper__steps {
     position: relative;
-    overflow: hidden;
-}
-
-.fr-stepper__steps::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: var(--fr-progress, 0%);
-    background-color: var(--background-action-high-blue-france);
-    transition: width 0.3s ease;
+    /* La transition s'applique sur le background-image quand JS le met à
+       jour (cas d'une navigation pjax qui re-calcule la progression). */
+    transition: background-image 0.3s ease;
 }
 
 /* ============================================

@@ -153,6 +153,7 @@ cd "$TMPDIR_ZIP"
 # Exclut :
 #   - git, DS_Store, dist, release.sh, exemple
 #   - src/ + esbuild.config.mjs (sources JS — le bundle scripts/custom.js est déjà là)
+#   - externalize-data-uris.mjs (script de post-build CSS, pas de prod — cf. ADR-019)
 #   - scripts/update-dsfr.sh (outil de maintenance, pas de prod)
 #   - .github/ (workflows, pas utiles dans le ZIP)
 #   - CONTRIBUTING.md, DECLARATION_RGAA_AUDIT_INITIAL.md (dev-only)
@@ -169,6 +170,7 @@ zip -r "$ZIP_FILE" "$THEME_NAME/" \
     -x "${THEME_NAME}/exemple/*" \
     -x "${THEME_NAME}/src/*" \
     -x "${THEME_NAME}/esbuild.config.mjs" \
+    -x "${THEME_NAME}/externalize-data-uris.mjs" \
     -x "${THEME_NAME}/scripts/update-dsfr.sh" \
     -x "${THEME_NAME}/CONTRIBUTING.md" \
     -x "${THEME_NAME}/DECLARATION_RGAA_AUDIT_INITIAL.md" \

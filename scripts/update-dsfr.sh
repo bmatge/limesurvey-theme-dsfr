@@ -139,6 +139,19 @@ else
     echo "  → aucun badge DSFR détecté dans README.md"
 fi
 
+# --- Externalisation des `data:` URI SVG (conformité CSP `img-src 'self'`) -
+# Le DSFR fraîchement téléchargé embarque ~64 SVG inline encodés en
+# `data:image/svg+xml,…` dans `dsfr.min.css`. Ces ressources sont bloquées
+# par les CSP qui n'autorisent pas le schéma `data:`. On les ré-externalise
+# automatiquement en fichiers `.svg` servis depuis le même origine. Cf. ADR-019.
+echo ""
+echo "▶ Externalisation des data: URI SVG (conformité CSP)..."
+if command -v node >/dev/null 2>&1; then
+    node "${THEME_DIR}/externalize-data-uris.mjs"
+else
+    echo "  ⚠ node introuvable — lance \`node externalize-data-uris.mjs\` à la main avant de commiter."
+fi
+
 # --- Résumé ---------------------------------------------------------------
 echo ""
 echo "═══════════════════════════════════════════════════════════════"

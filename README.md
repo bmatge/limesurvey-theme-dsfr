@@ -63,6 +63,16 @@ Le repo [`bmatge/limesurvey-dsfr-suite`](https://github.com/bmatge/limesurvey-ds
 
 ---
 
+## Conformité CSP
+
+Le thème est compatible avec une CSP **`default-src 'self'`** stricte, sans nécessiter `img-src data:`. Les 74 occurrences d'icônes SVG du DSFR habituellement encodées en `data:image/svg+xml,…` dans les CSS (`dsfr.min.css`, `custom.css`, `theme.css`) sont automatiquement **externalisées** en 46 fichiers `files/icons/inline/<hash>.svg` au build par [`externalize-data-uris.mjs`](externalize-data-uris.mjs), pour rester servies en *same-origin*.
+
+- À rejouer après tout bump DSFR (déjà branché dans `scripts/update-dsfr.sh` et `npm run build:theme`).
+- Idempotent : on peut le rejouer sans risque sur des CSS déjà patchés.
+- Décision et alternatives écartées : ADR-019 (notes internes).
+
+---
+
 ## Documentation
 
 | Document | Pour qui |

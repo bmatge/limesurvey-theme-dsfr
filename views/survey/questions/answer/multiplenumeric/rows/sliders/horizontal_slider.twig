@@ -2,7 +2,7 @@
 <div class="fr-range-group" id="range-group-{{ myfname }}">
     <div class="fr-range">
         <!-- Affichage de la valeur courante -->
-        <span class="fr-range__output" id="output-{{ myfname }}">{{ dispVal|default(slider_middlestart) }}</span>
+        <span class="fr-range__output" id="output-{{ myfname }}">{{ dispVal|default(slider_value) }}</span>
 
         <!-- Input range HTML5 natif -->
         <input
@@ -13,7 +13,7 @@
             min="{{ slider_min }}"
             max="{{ slider_max }}"
             step="{{ slider_accuracy|default('1') }}"
-            value="{{ dispVal|default(slider_middlestart) }}"
+            value="{{ dispVal|default(slider_value) }}"
             {% if slider_reversed == 'true' %}dir="rtl"{% endif %}
             class="answer-item numeric-item slider-item"
             data-slider-orientation="{{ slider_orientation }}"
@@ -62,7 +62,7 @@
     {% endif %}
 
     <!-- Hidden field pour compatibilité LimeSurvey -->
-    <input type="hidden" id="answer{{ myfname }}slid" name="{{ myfname }}slid" value="{{ dispVal }}" class="d-none" />
+    <input type="hidden" id="answer{{ myfname }}slid" name="{{ myfname }}slid" value="{{ dispVal|default(slider_value) }}" class="d-none" />
 </div>
 
 <script>
@@ -103,7 +103,7 @@
         var resetBtn = document.getElementById('answer{{ myfname }}_resetslider');
         if (resetBtn) {
             resetBtn.addEventListener('click', function() {
-                slider.value = '{{ slider_middlestart|default((slider_min + slider_max) / 2) }}';
+                slider.value = '{{ slider_value|default((slider_min + slider_max) / 2) }}';
                 output.textContent = slider.value;
                 if (hiddenField) {
                     hiddenField.value = slider.value;

@@ -1,42 +1,66 @@
 {#
     LimeSurvey - DSFR Theme
-    Stepper DSFR officiel avec données de l'index des questions
+    Stepper DSFR officiel.
 
     Structure conforme : https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/indicateur-d-etapes/
     Traductions : utilise {{ t }} depuis translations.twig
+
+    Données :
+      - aSurveyInfo.progress.{currentstep,total,value} sont peuplés par
+        SurveyRuntimeHelper::run() dès que showprogress=Y et format != 'A',
+        indépendamment du paramètre "questionindex". Source de vérité du
+        compteur d'étapes.
+      - aSurveyInfo.aQuestionIndex.items n'existe que lorsque l'index des
+        questions est activé (incremental ou full). Quand dispo, on enrichit
+        l'affichage avec le libellé d'étape courante et le titre de l'étape
+        suivante.
 #}
 
-{% if aSurveyInfo.showprogress == 'Y' and aSurveyInfo.format != 'A' and not aSurveyInfo.aCompleted and aSurveyInfo.aQuestionIndex.items %}
+{% if aSurveyInfo.showprogress == 'Y' and aSurveyInfo.format != 'A' and not aSurveyInfo.aCompleted %}
     {# Stepper sans margin-bottom : on porte l'espacement bas sur
        #outerframeContainer (cf. css/custom.css) pour que la marge reste
        cohérente même quand le stepper n'est pas rendu (questionnaire
        mono-page, format allinone, etc.). #}
     <!-- DSFR Stepper -->
     <div class="fr-container fr-mt-4w">
-        {# Utiliser les données de l'index des questions #}
-        {% set totalSteps = aSurveyInfo.aQuestionIndex.items ? aSurveyInfo.aQuestionIndex.items|length : 1 %}
-        {% set currentStepIndex = 0 %}
-        {% set currentStepText = '' %}
-        {% set nextStepText = '' %}
+        {% set hasIndex = aSurveyInfo.aQuestionIndex.items is defined and aSurveyInfo.aQuestionIndex.items|length > 0 %}
 
-        {# Trouver l'étape actuelle dans l'index #}
-        {% if aSurveyInfo.aQuestionIndex.items %}
+        {% if hasIndex %}
+            {# Mode index activé : libellés d'étapes + "Étape suivante" #}
+            {% set totalSteps = aSurveyInfo.aQuestionIndex.items|length %}
+            {% set currentStepIndex = 0 %}
+            {% set currentStepText = '' %}
+            {% set nextStepText = '' %}
             {% for index, item in aSurveyInfo.aQuestionIndex.items %}
                 {% if attribute(item.stepStatus, 'index-item-current') is defined and attribute(item.stepStatus, 'index-item-current') == true %}
                     {% set currentStepIndex = index + 1 %}
                     {% set currentStepText = item.text %}
-                    {# Étape suivante #}
                     {% if aSurveyInfo.aQuestionIndex.items[index + 1] is defined %}
                         {% set nextStepText = aSurveyInfo.aQuestionIndex.items[index + 1].text %}
                     {% endif %}
                 {% endif %}
             {% endfor %}
-        {% endif %}
-
-        {# Fallback si pas trouvé #}
-        {% if currentStepIndex == 0 %}
-            {% set currentStepIndex = 1 %}
-            {% set currentStepText = aSurveyInfo.groupname ? aSurveyInfo.groupname : t.current_step %}
+            {% if currentStepIndex == 0 %}
+                {% set currentStepIndex = 1 %}
+                {% set currentStepText = t.current_step %}
+            {% endif %}
+        {% else %}
+            {# Mode index désactivé : on dérive de aSurveyInfo.progress, toujours
+               peuplé par SurveyRuntimeHelper quand showprogress=Y. Pas de libellé
+               d'étape (l'info n'est pas exposée sans index), titre générique. #}
+            {% set totalSteps = aSurveyInfo.progress.total|default(1) %}
+            {% set currentStepIndex = aSurveyInfo.progress.currentstep|default(1) %}
+            {# currentstep peut dépasser total quand on est sur l'écran "Submit"
+               après la dernière étape — on borne pour rester cohérent côté ARIA
+               et côté gradient (cf. clamp dans stepper-progress.js). #}
+            {% if currentStepIndex > totalSteps %}
+                {% set currentStepIndex = totalSteps %}
+            {% endif %}
+            {% if currentStepIndex < 1 %}
+                {% set currentStepIndex = 1 %}
+            {% endif %}
+            {% set currentStepText = t.current_step %}
+            {% set nextStepText = '' %}
         {% endif %}
 
         <div class="fr-stepper"

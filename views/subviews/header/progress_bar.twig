@@ -16,7 +16,11 @@
         suivante.
 #}
 
-{% if aSurveyInfo.showprogress == 'Y' and aSurveyInfo.format != 'A' and not aSurveyInfo.aCompleted %}
+{# Welcome page : `step` (variable globale passée par SurveyRuntimeHelper)
+   vaut 0. Sur cet écran, le compteur d'étapes côté LS n'est pas encore
+   calculé (totalsteps=1, currentstep=1) — afficher le stepper renverrait
+   une barre pleine trompeuse. On masque jusqu'à la 1re vraie étape. #}
+{% if aSurveyInfo.showprogress == 'Y' and aSurveyInfo.format != 'A' and not aSurveyInfo.aCompleted and step is defined and step > 0 %}
     {# Stepper sans margin-bottom : on porte l'espacement bas sur
        #outerframeContainer (cf. css/custom.css) pour que la marge reste
        cohérente même quand le stepper n'est pas rendu (questionnaire
@@ -45,21 +49,32 @@
                 {% set currentStepText = t.current_step %}
             {% endif %}
         {% else %}
-            {# Mode index désactivé : on dérive de aSurveyInfo.progress, toujours
-               peuplé par SurveyRuntimeHelper quand showprogress=Y. Pas de libellé
-               d'étape (l'info n'est pas exposée sans index), titre générique. #}
+            {# Mode index désactivé : on dérive de `step` (variable globale
+               passée par SurveyRuntimeHelper, 1-based, sans soustraction de
+               relevant/hidden) pour le numéro d'étape, et de progress.total
+               (nb d'étapes visibles, calculé par LS) pour le total. Pas de
+               "Étape suivante", mais on récupère le nom du groupe courant
+               dans aSurveyInfo.aGroups. #}
             {% set totalSteps = aSurveyInfo.progress.total|default(1) %}
-            {% set currentStepIndex = aSurveyInfo.progress.currentstep|default(1) %}
-            {# currentstep peut dépasser total quand on est sur l'écran "Submit"
-               après la dernière étape — on borne pour rester cohérent côté ARIA
-               et côté gradient (cf. clamp dans stepper-progress.js). #}
+            {% set currentStepIndex = step %}
+            {# Sur l'écran "Submit" final, step > totalSteps — on borne pour
+               rester cohérent côté ARIA et côté gradient (cf. clamp dans
+               stepper-progress.js). #}
             {% if currentStepIndex > totalSteps %}
                 {% set currentStepIndex = totalSteps %}
             {% endif %}
-            {% if currentStepIndex < 1 %}
-                {% set currentStepIndex = 1 %}
+            {# En mode "group" / "question", aGroups ne contient que le groupe
+               courant (cf. SurveyRuntimeHelper::run() qui filtre sur aStepInfo.gid).
+               On prend le premier nom non vide. #}
+            {% set currentStepText = '' %}
+            {% for _gid, _g in aSurveyInfo.aGroups|default([]) %}
+                {% if currentStepText == '' and _g.name is defined and _g.name %}
+                    {% set currentStepText = _g.name %}
+                {% endif %}
+            {% endfor %}
+            {% if currentStepText == '' %}
+                {% set currentStepText = t.current_step %}
             {% endif %}
-            {% set currentStepText = t.current_step %}
             {% set nextStepText = '' %}
         {% endif %}
 

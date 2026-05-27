@@ -2099,6 +2099,7 @@
       if (!Number.isFinite(total) || total <= 0) return;
       if (!Number.isFinite(current) || current < 0) return;
       el.style.backgroundImage = buildSegmentedGradient(total, current);
+      el.style.backgroundSize = "100% 100%";
     });
   }
 

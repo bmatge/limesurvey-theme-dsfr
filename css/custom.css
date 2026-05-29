@@ -1932,7 +1932,13 @@ select.fr-select:focus,
    ============================================ */
 
 /* Conteneur des boutons - grille responsive */
-.bootstrap-buttons-div {
+/* Padding posé sur le wrapper externe uniquement. Le rendu LimeSurvey de
+   l'option "Autre" attribue la classe `.bootstrap-buttons-div` AUSSI au
+   `.form-check` interne (cas particulier de `answer_row_other.twig` du
+   question theme bootstrap_buttons). Sans exclusion, le padding s'applique
+   deux fois sur cette option et son bouton se retrouve 4px plus bas que
+   ses voisins. */
+.bootstrap-buttons-div:not(.form-check) {
     padding: 0.25rem;
 }
 
@@ -1993,6 +1999,17 @@ select.fr-select:focus,
 .bootstrap-buttons-div label.btn-secondary,
 .bootstrap-buttons-div label.btn-outline-primary {
     /* Les styles ci-dessus prennent le relais */
+}
+
+/* Bloc « Autre : [champ texte] » qui apparaît sous la rangée de boutons
+   quand l'utilisateur a coché l'option "Autre" (List Radio avec other=Y).
+   Le HTML LimeSurvey est `<div class="row row-cols-lg-auto align-items-center
+   mb-3 answer-item" id="div..other"><label class="col-form-label">Autre :</label>
+   <div class="col-12"><input ...></div></div>` — Bootstrap ne pose aucun
+   espacement horizontal entre le label et le champ, ce qui les colle
+   visuellement. On rétablit un gap propre. */
+[id^="div"][id$="other"].row > .col-form-label {
+    margin-right: 0.75rem;
 }
 
 /* Responsive - pleine largeur sur mobile */

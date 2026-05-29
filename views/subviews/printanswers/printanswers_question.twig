@@ -1,12 +1,10 @@
-<div class="fr-grid-row question-container-printanswers" style="page-break-inside:avoid;"> 
-    {% block question_name %}
-    <div class="fr-col-md-4">
-        <b>{{question.question}} ({{question.qid}})</b><br/>
-        <small>{{ gT("Type:") }} ({{question.type}}/{{question.questionclass}})</small>
+{# Base historique (non référencée par printanswers_table, qui inclut
+   directement question_types/template_<class>.twig). Conservée alignée. #}
+<div class="fr-grid-row question-container-printanswers">
+    {% include './subviews/printanswers/partials/_question_header.twig' %}
+    <div class="fr-col-12 fr-col-md-7 printanswers-q__answer">
+        {% block question_answer %}
+            {% if question.answervalue is not empty %}{{ question.answervalue|escape|nl2br }}{% else %}<span class="printanswers-empty">&mdash;</span>{% endif %}
+        {% endblock %}
     </div>
-    {% endblock  %}
-    {% block question_answer %}
-        {{ include('./subviews/printanswers/question_types/template_generic_question.twig') }}
-    {% endblock  %}
 </div>
-

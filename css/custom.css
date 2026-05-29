@@ -3605,3 +3605,115 @@ dialog.fr-modal[open] {
 .dsfr-combobox-option[aria-selected="true"] {
     font-weight: 700;
 }
+
+/* =====================================================================
+   Récapitulatif des réponses (printanswers) — vue HTML navigateur
+   ---------------------------------------------------------------------
+   Habillage sobre DSFR de la page « Imprimer vos réponses ». La largeur
+   des colonnes est portée par les classes fr-col-* (DSFR) ; ici on ne
+   pose que la typographie, les séparateurs et les espacements.
+   Le PDF a sa propre feuille (printanswers_style.twig) car le DSFR n'y
+   est pas chargé et mPDF ne gère pas flexbox.
+   ===================================================================== */
+.printanswers {
+    max-width: 60rem;
+    margin: 0 auto;
+}
+.printanswers__actions {
+    display: flex;
+    justify-content: flex-end;
+}
+.printanswers-title {
+    margin: 0 0 2rem;
+}
+.printanswers-section {
+    margin: 0 0 2.5rem;
+}
+.printanswers-section__title {
+    margin: 0 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-plain-blue-france, #000091);
+    color: var(--text-label-blue-france, #000091);
+}
+
+/* Une question = libellé (gauche) + réponse (droite). break-inside évite
+   qu'une question soit coupée entre deux écrans/colonnes. */
+.question-container-printanswers {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-default-grey, #dddddd);
+    break-inside: avoid;
+}
+.printanswers-section__body .question-container-printanswers:last-child {
+    border-bottom: 0;
+}
+.printanswers-q__label {
+    font-weight: 700;
+    color: var(--text-title-grey, #161616);
+}
+.printanswers-q__answer {
+    color: var(--text-default-grey, #3a3a3a);
+}
+.printanswers-q__answer > p:first-child { margin-top: 0; }
+.printanswers-q__answer > p:last-child { margin-bottom: 0; }
+
+/* Réponse vide / non renseignée */
+.printanswers-empty {
+    color: var(--text-mention-grey, #666666);
+    font-style: italic;
+}
+
+/* Réponses multiples : liste sobre des options retenues, marquées d'un ✓ */
+.printanswers-q__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.printanswers-q__list li {
+    padding: 0.125rem 0;
+}
+.printanswers-q__list li::before {
+    content: "\2713";
+    color: var(--text-default-success, #18753c);
+    font-weight: 700;
+    margin-right: 0.5rem;
+}
+
+/* Sous-questions (tableaux 1 réponse/ligne, numériques multi, textes multi) :
+   chaque ligne = intitulé + valeur. */
+.printanswers-sub {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    padding: 0.25rem 0;
+}
+.printanswers-sub + .printanswers-sub {
+    border-top: 1px dotted var(--border-default-grey, #dddddd);
+}
+.printanswers-sub__label {
+    flex: 1 1 14rem;
+    color: var(--text-mention-grey, #666666);
+}
+.printanswers-sub__value {
+    flex: 1 1 8rem;
+    font-weight: 700;
+    color: var(--text-title-grey, #161616);
+}
+
+/* Classement (ranking) : liste ordonnée sobre */
+.printanswers-q__ranked {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+.printanswers-q__ranked li {
+    padding: 0.125rem 0;
+}
+
+/* Question d'information (boilerplate) : texte pleine largeur, sans réponse */
+.printanswers-boilerplate {
+    color: var(--text-default-grey, #3a3a3a);
+}
+
+/* Tableaux (échelles doubles, multi-flexi) : on s'appuie sur .fr-table. */
+.printanswers-q__answer .fr-table {
+    margin: 0;
+}

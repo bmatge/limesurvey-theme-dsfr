@@ -1,19 +1,15 @@
-<div class="fr-grid-row question-container-printanswers" style="page-break-inside:avoid;">
+<div class="fr-grid-row question-container-printanswers">
     {% include './subviews/printanswers/partials/_question_header.twig' %}
-    <div class="fr-col-lg-8">
-       <div class="fr-grid-row">
-           <div class="fr-col-lg-4 fr-text-right">
-           </div>
-           <div class="fr-col-lg-8 fr-text-left">
-               {{question.answervalue}} - {{question.answeroption.answer}}
-           </div>
-       </div>
-       <div class="fr-grid-row">
-           <div class="fr-col-md-4 text-right">
-           </div>
-           <div class="fr-col-md-8 text-left">
-               {{question.comment.answervalue|escape}}
-           </div>
-       </div>
-   </div>
+    <div class="fr-col-12 fr-col-md-7 printanswers-q__answer">
+        {% if question.answeroption.answer is defined and question.answeroption.answer is not empty %}
+            {{ question.answeroption.answer }}
+        {% elseif question.answervalue is not null and question.answervalue != '' %}
+            {{ question.answervalue|escape }}
+        {% else %}
+            <span class="printanswers-empty">&mdash;</span>
+        {% endif %}
+        {% if question.comment.answervalue is defined and question.comment.answervalue is not empty %}
+            <p class="fr-mt-1v"><em>{{ question.comment.answervalue|escape }}</em></p>
+        {% endif %}
+    </div>
 </div>

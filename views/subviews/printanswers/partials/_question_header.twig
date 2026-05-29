@@ -1,16 +1,15 @@
 {#
-    Partial : En-tête de question pour printanswers
+    Partial : libellé de question pour le récapitulatif des réponses (printanswers).
 
-    Variables attendues :
-    - question.question : Texte de la question
-    - question.qid : ID de la question
-    - question.type : Type de question (code)
-    - question.questionclass : Classe de question
+    Récapitulatif SOBRE : on n'affiche QUE l'intitulé, sans qid ni type.
 
-    Usage :
-    {% include './subviews/printanswers/partials/_question_header.twig' %}
+    On passe l'intitulé par `striptags` : le HTML des questions (collage TinyMCE)
+    contient souvent des styles inline (font-size minuscule) et des artefacts
+    (`<p>&nbsp;</p>`, <br> multiples) que le JS de sanitisation nettoie à l'écran
+    mais PAS dans l'export PDF (mPDF, sans JS, et qui privilégie les styles inline
+    sur la CSS du thème). Réduire à du texte brut garantit une taille homogène et
+    supprime les blancs parasites, à l'écran comme en PDF.
 #}
-<div class="fr-col-md-4">
-    <b>{{question.question}} ({{question.qid}})</b><br/>
-    <small>{{ gT("Type:") }} ({{question.type}}/{{question.questionclass}})</small>
+<div class="fr-col-12 fr-col-md-5 printanswers-q__label">
+    {{ question.question|striptags|trim }}
 </div>

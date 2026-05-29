@@ -1,16 +1,14 @@
-<div class="fr-grid-row question-container-printanswers" style="page-break-inside:avoid;">
+<div class="fr-grid-row question-container-printanswers">
     {% include './subviews/printanswers/partials/_question_header.twig' %}
-    <div class="fr-col-lg-8">
-        {% for iterator, rankedvalue in question.answervalues %}
-            <div class="fr-grid-row">
-                <div class="fr-col-lg-4 fr-text-right">
-                    <b>{{gT('Rank')}} #{{(iterator+1)}}:</b>
-                </div>
-                <div class="fr-col-lg-8 fr-text-left">
-                    {{rankedvalue.value}}  - {{rankedvalue.option.answer}}
-                </div>
-            </div>
-        {% endfor %}
-
+    <div class="fr-col-12 fr-col-md-7 printanswers-q__answer">
+        {% if question.answervalues is not empty %}
+            <ol class="printanswers-q__ranked">
+                {% for rankedvalue in question.answervalues %}
+                    <li>{% if rankedvalue.option.answer is defined and rankedvalue.option.answer is not empty %}{{ rankedvalue.option.answer }}{% else %}{{ rankedvalue.value|escape }}{% endif %}</li>
+                {% endfor %}
+            </ol>
+        {% else %}
+            <span class="printanswers-empty">&mdash;</span>
+        {% endif %}
     </div>
 </div>

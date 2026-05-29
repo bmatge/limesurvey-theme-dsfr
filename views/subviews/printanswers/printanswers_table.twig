@@ -1,37 +1,26 @@
+{#
+    Corps du récapitulatif : titre du questionnaire + sections (groupes) →
+    questions. Sobre : pas d'identifiant de groupe ni de sondage affiché.
+    Chaque question est rendue par son template de type (question_types/).
+#}
 
-{% if (aSurveyInfo.printPdf != 1) %} 
-    <div class="fr-grid-row">
-        <div class="fr-col-sm-12">
-            <h2>{{ gT("Survey name (ID):") }} {{aSurveyInfo.surveyls_title}} ({{aSurveyInfo.sid}})</h2>
-        </div>
-    </div>
-{% endif %} 
+{% if (aSurveyInfo.printPdf != 1) %}
+    <h1 class="fr-h4 printanswers-title">{{ aSurveyInfo.surveyls_title }}</h1>
+{% endif %}
 
-{% for groupid,group in aSurveyInfo.groupArray %}
-    {% if (aSurveyInfo.printPdf == 1) %} 
-    <br pagebreak="true" /> 
+{% for groupid, group in aSurveyInfo.groupArray %}
+    {% if (aSurveyInfo.printPdf == 1) and (not loop.first) %}
+        <br pagebreak="true" />
     {% endif %}
-    <groupsection class="groupSection"> 
-        <div class="fr-grid-row">
-            <div class="fr-col-12">
-                <h3>{{group.group_name}} ({{group.gid}})</h3>
-            </div>
-        </div>
-        <div class="fr-grid-row">
-            <div class="fr-container--fluid fr-col-11 fr-col-md-10 fr-col-offset-1 fr-col-offset-2--lg">
-                {% for questionId,question in group.answerArray %}
+    <section class="printanswers-section">
+        {% if group.group_name %}
+            <h2 class="fr-h6 printanswers-section__title">{{ group.group_name }}</h2>
+        {% endif %}
+        <div class="printanswers-section__body">
+            {% for questionId, question in group.answerArray %}
                 {% set questionTemplate = './subviews/printanswers/question_types/template_' ~ question.questionclass ~ '.twig' %}
                 {{ include(questionTemplate) }}
-                {% endfor %} 
-            </div>
+            {% endfor %}
         </div>
-    </groupsection> 
+    </section>
 {% endfor %}
-
-
-
-
-
-
-
-

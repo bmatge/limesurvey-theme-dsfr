@@ -1,6 +1,10 @@
-<div class="fr-grid-row question-container-printanswers" style="page-break-inside:avoid;">
+<div class="fr-grid-row question-container-printanswers">
     {% include './subviews/printanswers/partials/_question_header.twig' %}
-    <div class="fr-col-lg-8">
-        {{question.answervalue|escape}}
+    <div class="fr-col-12 fr-col-md-7 printanswers-q__answer">
+        {% if question.answervalue is not null and question.answervalue != '' %}
+            {{ question.answervalue|escape|nl2br }}
+        {% else %}
+            <span class="printanswers-empty">&mdash;</span>
+        {% endif %}
     </div>
 </div>

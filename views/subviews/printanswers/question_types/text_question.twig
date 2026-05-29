@@ -1,19 +1,17 @@
-<div class="fr-grid-row question-container-printanswers" style="page-break-inside:avoid;">
+{# Variante texte (non référencée directement par printanswers_table — alignée
+   sur template_generic_question pour cohérence). #}
+<div class="fr-grid-row question-container-printanswers">
     {% include './subviews/printanswers/partials/_question_header.twig' %}
-    <div class="fr-col-lg-8">
-       {% if question.subquestions is empty %}
-               {{question.answervalue | escape}}
-       {% else %}
-               {% for subquestionId, subquestion in question.subquestions %}
-                   <div class="fr-grid-row">
-                       <div class="fr-col-lg-4 fr-text-right">
-                           <b>{{subquestion.question}} ({{subquestion.qid}})</b>
-                       </div>
-                       <div class="fr-col-lg-8 fr-text-left">
-                           {{subquestion.answervalue}}
-                       </div>
-                   </div>
-               {% endfor %}
-       {% endif %}
-   </div>
+    <div class="fr-col-12 fr-col-md-7 printanswers-q__answer">
+        {% if question.subquestions is empty %}
+            {% if question.answervalue is not null and question.answervalue != '' %}{{ question.answervalue|escape|nl2br }}{% else %}<span class="printanswers-empty">&mdash;</span>{% endif %}
+        {% else %}
+            {% for sqid, sq in question.subquestions %}
+                <div class="printanswers-sub">
+                    <span class="printanswers-sub__label">{{ sq.question }}</span>
+                    <span class="printanswers-sub__value">{% if sq.answervalue is not null and sq.answervalue != '' %}{{ sq.answervalue|escape|nl2br }}{% else %}<span class="printanswers-empty">&mdash;</span>{% endif %}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
 </div>

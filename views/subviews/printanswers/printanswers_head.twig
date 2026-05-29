@@ -1,57 +1,39 @@
-
 {#
-    LimeSurvey
-    Copyright (C) 2007-2017 The LimeSurvey Project Team / Louis Gac
-    All rights reserved.
-    License: GNU/GPL License v2 or later, see LICENSE.php
-    LimeSurvey is free software. This version may have been modified pursuant
-    to the GNU General Public License, and as distributed it includes or
-    is derivative of works licensed under the GNU General Public License or
-    other free or open source software licenses.
-    See COPYRIGHT.php for copyright notices and details.
+    En-tête du récapitulatif des réponses.
 
-    (¯`·._.·(¯`·._.· Registration form._.·´¯)·._.·´¯)
+    - En PDF (printPdf == 1) : injecte la feuille de style d'impression sobre.
+    - En HTML : propose les deux exports PDF (PDF standard + queXML) sous forme
+      d'un groupe de boutons DSFR aligné à droite, au-dessus du récapitulatif.
 
-    This is the head for the printanswers table.
-    It is used for the rendering of the responses at the end of the survey.
-
+    Ouvre le conteneur `.fr-container` refermé par printanswers_foot.twig.
 #}
-
-{% if (aSurveyInfo.printPdf == 1) %} 
-{{ include('./subviews/printanswers/printanswers_style.twig') }}
-<style> 
-    body{ 
-        font-size: 11pt;
-        line-height: 80%; 
-    } 
-    div{
-        margin: 0;
-        padding: 0;
-    }
-    .question-container-printanswers{
-        line-height: 125%;
-    }
-</style> 
+{% if (aSurveyInfo.printPdf == 1) %}
+    {{ include('./subviews/printanswers/printanswers_style.twig') }}
 {% endif %}
-{# {{dump(aSurveyInfo.groupArray)}} #}
-<div class="fr-container">
-    {% if (aSurveyInfo.printPdf != 1) %} 
-        <div class="fr-grid-row">
-            <div class="fr-col-sm-6">
-                {{ C.Html.form(aSurveyInfo.printAnswersHeadFormUrl, 'post') }}
-                    {{ gT("Export these responses as PDF:") }} <button class="fr-btn fr-btn--secondary" type="submit">{{ gT("PDF export") }}</button>
-                {{ C.Html.endForm }}
-            </div>
-            <div class="fr-col-sm-6">
-                {{ C.Html.form(aSurveyInfo.printAnswersHeadFormQueXMLUrl, 'post') }}
-                    {{ gT("Export these responses as queXML PDF:") }} <button class="fr-btn fr-btn--secondary" type="submit">{{ gT("queXML PDF export") }}</button>
-                {{ C.Html.endForm }}
-            </div>
-        </div>
-        <div class="fr-grid-row">
-        <br/>
+
+<div class="fr-container fr-py-4w">
+    {% if (aSurveyInfo.printPdf != 1) %}
+        <div class="printanswers__actions fr-mb-4w">
+            <ul class="fr-btns-group fr-btns-group--inline-md fr-btns-group--right fr-btns-group--icon-left">
+                {# Bouton « Exporter en PDF » (mPDF) : affichable/masquable via l'option
+                   de thème `show_pdf_export` (défaut : affiché). Le bouton queXML reste
+                   toujours disponible. #}
+                {% if aSurveyInfo.options.show_pdf_export|default('on') != 'off' %}
+                <li>
+                    {{ C.Html.form(aSurveyInfo.printAnswersHeadFormUrl, 'post') }}
+                        <button class="fr-btn fr-btn--secondary fr-icon-download-line" type="submit">
+                            {{ gT("PDF export") }}
+                        </button>
+                    {{ C.Html.endForm }}
+                </li>
+                {% endif %}
+                <li>
+                    {{ C.Html.form(aSurveyInfo.printAnswersHeadFormQueXMLUrl, 'post') }}
+                        <button class="fr-btn fr-btn--tertiary fr-icon-download-line" type="submit">
+                            {{ gT("queXML PDF export") }}
+                        </button>
+                    {{ C.Html.endForm }}
+                </li>
+            </ul>
         </div>
     {% endif %}
-
-
-

@@ -97,7 +97,7 @@
             <!-- Question de vérification -->
             <div class="fr-input-group" id="antibot-question-group">
                 <label class="fr-label" for="antibot_answer">
-                    {{ selectedQuestion.question }}
+                    <span id="antibot-question-text">{{ selectedQuestion.question }}</span>
                     <span class="fr-hint-text">Répondez en un mot ou un chiffre</span>
                 </label>
                 <input
@@ -112,6 +112,22 @@
                 <div id="antibot-answer-messages" class="fr-messages-group" aria-live="polite">
                 </div>
             </div>
+
+            {# Bouton « Changer la question » : permet à l'utilisateur peu à
+               l'aise avec la question proposée d'en demander une autre.
+               Affiché uniquement si le pool contient au moins 2 questions. #}
+            {% if questions|length > 1 %}
+                <div class="fr-mb-3w">
+                    <button
+                        type="button"
+                        class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-icon-refresh-line fr-btn--icon-left"
+                        id="antibot-refresh-question"
+                        aria-controls="antibot-question-text"
+                    >
+                        Changer la question
+                    </button>
+                </div>
+            {% endif %}
 
             <!-- Message d'erreur JavaScript désactivé -->
             <noscript>
@@ -145,6 +161,11 @@
     var MIN_TIME_SECONDS = {{ timerSeconds }}; // Temps minimum avant soumission (vérification silencieuse)
     var EXPECTED_ANSWER = '{{ selectedQuestion.answer|lower|trim|replace({"'": "\\'"}) }}';
 
+    // Pool complet de questions (sérialisé depuis Twig, identique au server-side).
+    // Utilisé par le bouton "Changer la question" pour piocher une autre question
+    // à la volée, sans rechargement de page.
+    var QUESTIONS_POOL = {{ questions|json_encode|raw }};
+
     // Éléments DOM
     var form = document.getElementById('antibot-form');
     var answerInput = document.getElementById('antibot_answer');
@@ -154,6 +175,9 @@
     var honeypotWebsite = document.getElementById('antibot_website');
     var honeypotEmail = document.getElementById('antibot_email_confirm');
     var questionGroup = document.getElementById('antibot-question-group');
+    var questionTextEl = document.getElementById('antibot-question-text');
+    var questionHashInput = document.getElementById('antibot_question_hash');
+    var refreshBtn = document.getElementById('antibot-refresh-question');
 
     // Timestamp de chargement (pour vérification silencieuse anti-bot)
     var startTime = Date.now();
@@ -254,6 +278,38 @@
 
     // Retirer l'erreur quand l'utilisateur corrige sa réponse
     answerInput.addEventListener('input', clearErrorOnInput);
+
+    // Bouton « Changer la question » : pioche une autre question dans le pool,
+    // différente de la courante. Réinitialise le champ de réponse et tout
+    // état d'erreur, puis redonne le focus à l'input. Le timer anti-bot
+    // n'est PAS réinitialisé (sinon un clic permettrait de contourner la
+    // vérification silencieuse de durée minimale).
+    if (refreshBtn && QUESTIONS_POOL && QUESTIONS_POOL.length > 1) {
+        refreshBtn.addEventListener('click', function() {
+            var currentText = questionTextEl.textContent;
+            var newQuestion;
+            var attempts = 0;
+            do {
+                newQuestion = QUESTIONS_POOL[Math.floor(Math.random() * QUESTIONS_POOL.length)];
+                attempts++;
+            } while (newQuestion.question === currentText && attempts < 10);
+
+            // Mise à jour de la question affichée et de la réponse attendue
+            questionTextEl.textContent = newQuestion.question;
+            EXPECTED_ANSWER = String(newQuestion.answer).toLowerCase().trim();
+            if (questionHashInput) {
+                questionHashInput.value = EXPECTED_ANSWER;
+            }
+
+            // Réinitialiser le champ et purger tout état d'erreur
+            answerInput.value = '';
+            questionGroup.classList.remove('fr-input-group--error');
+            answerInput.classList.remove('fr-input--error');
+            messagesContainer.innerHTML = '';
+
+            answerInput.focus();
+        });
+    }
 
     // Focus sur le champ de réponse
     answerInput.focus();

@@ -1997,6 +1997,11 @@ select.fr-select:focus,
     cursor: pointer;
     text-decoration: none;
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    /* Empêche l'apparition d'un caret de texte dans le label au clic
+       (comportement standard d'un bouton, intégré nativement à .btn Bootstrap
+       mais perdu lors de la redéfinition complète ci-dessus). */
+    -webkit-user-select: none;
+    user-select: none;
 
     /* Style DSFR secondaire par défaut (non sélectionné) */
     background-color: transparent !important;
@@ -3086,6 +3091,18 @@ select.form-select option,
 .ls-dropdown-item {
     width: 100% !important;
     max-width: 400px !important;
+}
+
+/* Liste déroulante + champ "Autre" : empilement vertical sur toutes tailles
+   d'écran (le label DSFR est toujours au-dessus de son input).
+   Ordre : select → label "Si autre, précisez" → input. */
+.ls-dropdown-with-other {
+    max-width: 400px !important;
+    display: block;
+}
+
+.ls-dropdown-with-other > .fr-input-group {
+    max-width: 100%;
 }
 
 /* Pour les tableaux multi-flexi avec colonnes fixes, pas de max-width */

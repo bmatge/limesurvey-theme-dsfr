@@ -36,17 +36,24 @@
             <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
 
                 {% block endtext %}
-                <!-- Success Alert DSFR -->
-                <div class="fr-alert fr-alert--success fr-mb-4w" role="alert">
-                    <h3 class="fr-alert__title">
-                        {{ gT("Thank you!") }}
-                    </h3>
-                    {% if (aSurveyInfo.aCompleted.showDefault == true) %}
-                        <p>{{ gT("Your survey responses have been recorded.") }}</p>
-                    {% else %}
+                {# Message de fin :
+                   - Si le sondage définit un message de fin (surveyls_endtext renseigné
+                     dans les options de questionnaire), on l'affiche tel quel dans
+                     un callout DSFR — on évite le doublon avec un « Merci ! » figé
+                     car le rédacteur fournit déjà son propre titre/contenu.
+                   - Sinon, on affiche l'alerte « Merci ! » + texte par défaut. #}
+                {% if aSurveyInfo.aCompleted.showDefault == false and aSurveyInfo.aCompleted.sEndText %}
+                    <div class="fr-callout fr-mb-4w">
                         {{ aSurveyInfo.aCompleted.sEndText }}
-                    {% endif %}
-                </div>
+                    </div>
+                {% else %}
+                    <div class="fr-alert fr-alert--success fr-mb-4w" role="alert">
+                        <h3 class="fr-alert__title">
+                            {{ gT("Thank you!") }}
+                        </h3>
+                        <p>{{ gT("Your survey responses have been recorded.") }}</p>
+                    </div>
+                {% endif %}
                 {% endblock %}
 
                 {% block assessments %}

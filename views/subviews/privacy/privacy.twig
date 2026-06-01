@@ -20,14 +20,19 @@
 
 <div class="fr-container fr-my-4w">
     <div class="fr-col-12 {{ aSurveyInfo.class.privacycontainer }}" {{ aSurveyInfo.attr.privacycontainer }}>
-        {% if (aSurveyInfo.options.hideprivacyinfo == "off" ) %}
+        {# Affichage de la notice "questionnaire anonyme" :
+           condition robuste — on affiche dès que l'option hideprivacyinfo n'est
+           pas explicitement à "on". L'option n'étant pas exposée par le thème
+           DSFR (cf. config.xml), elle est `undefined` par défaut et l'ancienne
+           condition `== "off"` n'était jamais vraie. #}
+        {% if aSurveyInfo.options.hideprivacyinfo|default('off') != "on" %}
             {% block anonymous %}
                 {% if (aSurveyInfo.anonymized == "Y") %}
-                <h3 class="{{ aSurveyInfo.class.privacyhead }} fr-h4" {{ aSurveyInfo.attr.privacyhead }}>
-                    {{ gT("This survey is anonymous.") }}
-                </h3>
-                <div>
-                    <p class="{{ aSurveyInfo.class.privacybody }}" {{ aSurveyInfo.attr.privacybody }}>
+                <div class="fr-callout fr-icon-lock-line {{ aSurveyInfo.class.privacycontainer }}">
+                    <h3 class="fr-callout__title {{ aSurveyInfo.class.privacyhead }}" {{ aSurveyInfo.attr.privacyhead }}>
+                        {{ gT("This survey is anonymous.") }}
+                    </h3>
+                    <p class="fr-callout__text {{ aSurveyInfo.class.privacybody }}" {{ aSurveyInfo.attr.privacybody }}>
                         {{
                             gT("The record of your survey responses does not contain any identifying information about you, unless a specific survey question explicitly asked for it.")
                         }}

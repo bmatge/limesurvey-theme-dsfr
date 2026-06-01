@@ -2226,6 +2226,57 @@ table.fr-table--bordered {
     .fr-table--bordered table tbody tr td {
         display: table-cell !important;
     }
+
+    /* Normalisation de la première colonne d'en-tête : éviter le « double
+       liseré » causé par la combinaison .fr-table + .fr-table--bordered
+       (chacune ajoute sa bordure de droite). On force border-right unique. */
+    .fr-table table thead th:first-child,
+    .fr-table--bordered table thead th:first-child {
+        border-left: 0 !important;
+    }
+}
+
+/* ============================================
+   BORDURES TABLEAUX LINÉARISÉS MOBILE
+   Cohérence visuelle : 4 bordures sur chaque carte (au lieu de partielles).
+   ============================================ */
+@media (max-width: 767px) {
+    .fr-table table tbody tr,
+    .fr-table--bordered table tbody tr,
+    div[class*="fr-table"] table tbody tr,
+    table.radio-array tbody tr,
+    table.questions-list tbody tr,
+    table.dropdown-array tbody tr,
+    table.table tbody tr {
+        border: 1px solid var(--border-default-grey, #ddd) !important;
+        border-radius: 0 !important;
+        background-color: var(--background-default-grey, #fff) !important;
+    }
+}
+
+/* ============================================
+   LISTRADIO + "AUTRE" — layout inline desktop
+   Le radio "Autre :" et son champ texte associé sont rendus dans deux
+   conteneurs frères (.fr-radio-group + .fr-input-group) à l'intérieur du
+   même .fr-fieldset__element. Par défaut ils s'empilent verticalement, le
+   champ apparaît décalé sous le label. Sur desktop on les place sur la
+   même ligne (motif « Autre : [champ] »). Sur mobile, empilement naturel
+   pour préserver la lisibilité.
+   ============================================ */
+@media (min-width: 768px) {
+    /* :has() ciblage : élément fieldset qui contient le radio "Autre" (id SOTH…) */
+    .fr-fieldset__element.radio-item.answer-item:has(> .fr-radio-group input[id^="SOTH"]) {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .fr-fieldset__element.radio-item.answer-item:has(> .fr-radio-group input[id^="SOTH"]) > .fr-input-group {
+        margin: 0;
+        flex: 1 1 240px;
+        max-width: 420px;
+    }
 }
 
 /* ============================================

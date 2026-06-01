@@ -116,6 +116,34 @@ Puis purger `tmp/assets/`. Aucune action n'est nécessaire pour une installation
 
 ---
 
+## Stratégie de configuration recommandée
+
+Pour limiter la maintenance et les pertes de configuration, centraliser les réglages selon trois niveaux :
+
+| Niveau | Stocké dans | Rôle |
+|---|---|---|
+| **Défauts génériques** (organisme) | **`config.xml`** (valeurs par défaut des `<options>`) | Livrés avec le thème, **restaurés à une réinstallation/reset**. C'est la source de vérité durable (ex. `header_title`, `marianne_text`, mentions légales par défaut). |
+| **Réglages par instance** | **Options globales du thème** (ligne `template_configuration` avec `sid = NULL`) | Ajustements propres à une instance LimeSurvey, éditables depuis *Configuration > Thèmes > DSFR > Options*. **Non** restaurés à un reset → ne pas y mettre ce qui doit survivre à une réinstallation. |
+| **Spécificités d'un sondage** | **Options du thème par sondage** (`sid = <id>`) | **Uniquement** ce qui diffère pour un sondage donné. Tout le reste reste sur **« Hériter »** et suit automatiquement le global. |
+
+Conséquences pratiques :
+
+- **Garder les défauts génériques dans `config.xml`** (pas seulement dans la ligne globale en base) : ils résistent à un *« Réinitialiser ce thème »* et sont versionnés avec le code.
+- **Faire hériter les sondages** : moins de surcharges par sondage = moins de risque de perte lors d'une réinstallation, et une seule édition globale se propage partout.
+- Les **nouvelles options** ajoutées au `config.xml` apparaissent par héritage sur les sondages existants, sans aucune action en base.
+
+Pour remettre un sondage en **héritage total** (⚠️ efface ses surcharges propres — à réserver aux sondages qui doivent suivre 100 % le global) :
+
+```sql
+UPDATE lime_template_configuration
+SET options = 'inherit'
+WHERE template_name = 'dsfr' AND sid = <SID>;
+```
+
+Puis purger `tmp/assets/` et `tmp/runtime/`. Pour ne réhériter que certains champs, utiliser plutôt le sélecteur **« Hériter »** de chaque option dans l'UI.
+
+---
+
 ## Conformité CSP
 
 Le thème est compatible avec une CSP **`default-src 'self'`** stricte, sans nécessiter `img-src data:`. Les 74 occurrences d'icônes SVG du DSFR habituellement encodées en `data:image/svg+xml,…` dans les CSS (`dsfr.min.css`, `custom.css`, `theme.css`) sont automatiquement **externalisées** en 46 fichiers `files/icons/inline/<hash>.svg` au build par [`externalize-data-uris.mjs`](externalize-data-uris.mjs), pour rester servies en *same-origin*.

@@ -28,6 +28,13 @@ Version centrée sur la **configurabilité** du thème et la **fiabilité des mi
   `organization_name`, qui n'était **jamais déclarée** dans `config.xml` (code
   mort, toujours vide et inéditable).
 - `apiVersion` `3` → `3.0` (alignement sur le format des thèmes standards).
+- Bannière console : URL pointée vers le dépôt public `mef-snum-miweb/limesurvey-theme-dsfr`.
+
+### Corrigé
+
+- URL par défaut du site gouvernemental dans le sondage d'exemple :
+  `gouvernement.fr` → `info.gouv.fr` (le premier redirige vers le second).
+  Contribution de **Sébastien Malot** (PR #2).
 
 ### Documentation
 

@@ -53,6 +53,12 @@ Thème LimeSurvey conforme au [Système de Design de l'État (DSFR)](https://www
 2. S'assurer que les fichiers appartiennent à l'utilisateur du serveur web (ex. `chown -R www-data:www-data upload/themes/survey/dsfr`).
 3. Depuis l'administration : **Configuration > Thèmes** → le thème **DSFR** apparaît, l'activer sur les sondages souhaités.
 
+> **Bien choisir le répertoire.** LimeSurvey a deux dossiers de thèmes :
+> - `upload/themes/survey/` (config `userthemerootdir`) — thèmes **utilisateur**, **écrivable**, **préservé lors des mises à jour du core LimeSurvey**. **➜ installer `dsfr` ici.**
+> - `themes/survey/` (config `standardthemerootdir`) — thèmes **livrés avec LimeSurvey** (fruity, vanilla…), **écrasés à chaque mise à jour du core**. **Ne pas y placer `dsfr`** (risque de disparition à une MAJ LimeSurvey).
+>
+> Ne jamais avoir le thème dans **les deux** dossiers à la fois (résolution de chemin ambiguë, doublon dans la liste).
+
 ### Import `.zip` via le back-office (déconseillé)
 
 Possible uniquement si l'instance autorise l'upload de SVG côté serveur. Pour cela, ajouter `svg` aux listes blanches dans `application/config/config.php` :
@@ -86,6 +92,14 @@ au remplacement des fichiers. Deux conséquences :
   fait donc reconfigurer tous les sondages. **À proscrire.**
 - **Un simple remplacement de fichiers ne touche aucune ligne en base** : les configurations
   globale et par sondage sont conservées. C'est la procédure normale de mise à jour.
+
+> **L'upload web ne sait PAS mettre à jour un thème de sondage existant.** Le contrôleur
+> d'import (`Themes::checkDestDir`) refuse l'extraction si le dossier du thème existe déjà :
+> *« Template 'dsfr' does already exist. »*. Il n'existe aucun « mettre à jour en place »
+> par le back-office pour un thème de sondage. Conséquence : pour réimporter par le web, il
+> faudrait d'abord **supprimer le thème** — et la seule voie UI pour le supprimer est
+> *Désinstaller*, qui **efface la config par sondage**. **La mise à jour passe donc
+> obligatoirement par le filesystem.**
 
 ### Procédure de mise à jour non destructive
 

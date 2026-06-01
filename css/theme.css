@@ -1460,7 +1460,13 @@ li.ls-group-dynamic {
 .ls-table-wrapper table.table-array-radio td,
 .ls-table-wrapper table.radio-array th,
 .ls-table-wrapper table.radio-array td {
-    border: 1px solid var(--border-default-grey, #ddd);
+    /* Pas de bordure par cellule : le thead a déjà son trait 2px via
+       background-image: linear-gradient (cf. règle .fr-table thead th plus
+       bas), et un border 1px ici se cumulait pour donner un « double trait »
+       sous l'en-tête. De plus, les bordures verticales entre th créaient des
+       coupures dans le soulignement gradient à chaque colonne. Séparation
+       visuelle des rows assurée par les fonds alternés DSFR et le border
+       du <table>. */
     padding: 0.75rem;
     text-align: left;
 }
